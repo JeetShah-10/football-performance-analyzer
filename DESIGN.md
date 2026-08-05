@@ -1,60 +1,63 @@
-# DESIGN SYSTEM & ANTI-SLOP RULES (DESIGN.md)
+# DESIGN SYSTEM & COMPLETE ANTI-SLOP SPECIFICATION (DESIGN.md)
 
-This document establishes strict design taste, frontend engineering standards, and anti-slop rules for all human and AI contributors (Antigravity IDE, Cursor, Claude, Windsurf).
-
----
-
-## 🚫 FORBIDDEN "VIBECODED" & AI-SLOP PATTERNS (STRICT)
-
-### 1. Visual & Aesthetic Bans
-- **NO "AI Purple" Gradients:** Absolutely NO deep purple/indigo gradients (`from-purple-600 to-indigo-600`), neon glows, or glowing borders.
-- **NO Pure Black or Pure White:** Never use `#000000` or `#FFFFFF` for primary backgrounds/text. Use Zinc tone scale (`#09090b` / `zinc-950` for dark backgrounds, `#09090b` for primary text on `#fafafa` / `zinc-50`).
-- **NO Outer/Fuzzy Glows:** Avoid generic centered box-shadow glows. Use tight, subtle, y-axis offset shadows (`shadow-sm` or `shadow-md` in Tailwind) or subtle border-driven separation (`border-zinc-800`).
-- **NO Pill-Shaped Desktop Buttons:** Avoid `rounded-full` buttons for primary CTA desktop components. Use `rounded-md` or `rounded-lg` for a sleek SaaS aesthetic.
-- **NO Generic Fonts or Cursive Accents:** Use clean modern typography (Inter, Outfit, or monospaced stats fonts like JetBrains Mono). No cursive fonts or generic browser serif fallbacks.
-- **NO Emoji Icons as UI Components:** Do not use raw emojis (e.g. ⚽, 🚀, 🔥) as primary UI action icons. Use clean SVG icon sets (Lucide/Heroicons tuned to matching stroke widths).
-
-### 2. Copy & Content Bans
-- **NO Fake Metrics or Social Proof:** Never generate fake visitor counters, fake customer review numbers ("Used by 10,000+ players!"), or artificial star ratings.
-- **NO Generic Vague Headlines:** Never output vague marketing slop like "Unlock Your Potential", "Transform Your Game", or "The Future of Analytics". Write real, contextual football stats copy (e.g., "K-Means Archetype Profiling for Top 5 European Leagues").
-- **NO Lorem Ipsum:** All placeholder content must be real, domain-relevant football stats and player profiles.
-- **NO Em-Dashes or AI Formatting Quirks:** Avoid excessive em-dashes (—), overused bulleted buzzwords, or robotically structured sales copy.
+This document serves as the absolute authority for visual taste, technical SEO, performance, accessibility, and anti-slop rules for all human and AI coders (Antigravity IDE, Cursor, Claude, Windsurf).
 
 ---
 
-## 📐 COMPONENT & LAYOUT PRINCIPLES
+## 🚫 EXHAUSTIVE ANTI-SLOP & FORBIDDEN PATTERNS CHECKLIST
 
-### 1. Spacing & Whitespace
-- **Generous Padding:** Prefer more whitespace. When in doubt, increase layout container padding (`p-6` / `p-8`).
-- **Subtle Borders:** Use 1px subtle borders (`border-zinc-800` in dark mode) instead of heavy shadows for visual depth.
+Every item below is strictly **FORBIDDEN**. Code reviews and AI pre-flight checks must reject any PR containing these flaws:
 
-### 2. Engineering & Web Quality Checklist (65-Gate Gatekeeper)
-- **HTML Hierarchy:** Exactly ONE `<h1>` tag per page. Proper `<h2>` and `<h3>` visual and semantic hierarchy.
-- **MetaData & SEO:** Every route must define a unique page title, valid `<meta name="description">`, `og:image`, `<meta name="viewport">`, and `<html lang="en">` attribute.
-- **Favicon & Assets:** Valid favicon SVG/PNG linked; no missing favicon 404 warnings.
-- **Error Handling & 404:** A dedicated, polished 404 Page Component and empty data fallbacks (no white screens of death or unhandled promise exceptions).
-- **Accessibility:** All `<img>` tags must have descriptive `alt` text. Interactive elements (`<button>`, `<a>`) must have accessible names and focus rings (`focus-visible:ring-2`).
-- **Clean Console:** ZERO console errors or unhandled runtime warnings in browser dev tools.
+### 🎨 Visual & Aesthetic Flaws
+1. **Purple Gradients:** No cliché AI neon purple/indigo text or background gradients (`from-purple-600 to-indigo-600`).
+2. **AI Slop Photos:** No generic Midjourney/AI stock photos of unrealistically hyper-perfect people or futuristic glowing objects.
+3. **Pill-Shaped Desktop Buttons:** No generic `rounded-full` buttons for desktop primary actions.
+4. **Pure Colors:** No pure `#000000` black or `#FFFFFF` white. Use the Zinc scale (`#0b0f17` slate background, `#f9fafb` text).
+5. **Text-Only Unstyled Logos:** No generic plain text rendered with standard system font as the application logo.
+6. **Low-Contrast Hero Text Colour:** No illegible or poorly contrasted hero headline colors.
+7. **Cursive / Script Fonts:** No decorative cursive fonts or script fallbacks.
+8. **Emoji Icons:** No raw emoji characters (⚽, 🚀, 🔥, 💡) used as primary UI icons or buttons.
+9. **Jittery Scroll Animations:** No intrusive scroll-jacking or over-animated parallax that slows down navigation.
+
+### 📝 Content & Copy Flaws
+10. **Vague Hero Headlines:** No meaningless fluff like "Unlock Your Potential", "Transform Your Game", or "Next-Gen AI Platform".
+11. **Fake Metrics & Statistics:** No fabricated stats or unverified numbers.
+12. **Fake Visitor Count:** No artificial "🔥 42 people are viewing this right now" widgets.
+13. **Fake Customer Count & Reviews:** No fake "Used by 10,000+ players" badges or fake review cards with stock photos.
+14. **Excessive Em-Dashes (—):** No robotic AI formatting with excessive em-dashes.
+15. **Lorem Ipsum:** Zero generic placeholder text anywhere in the codebase.
+
+### 🌐 SEO, HTML & Web Standards Flaws
+16. **Same Page Titles:** No copy-pasting the same `<title>` tag across routes; every page MUST have a distinct, descriptive title.
+17. **Multiple H1s or No H1:** Every route must contain EXACTLY ONE `<h1>` tag.
+18. **No Meta Description:** Missing `<meta name="description">` tag.
+19. **No OpenGraph Image (`og:image`):** Missing social sharing preview images.
+20. **No Structured Data:** Missing JSON-LD structured data schemas.
+21. **No Canonical Tag:** Missing `<link rel="canonical">` tags on routes.
+22. **No `llms.txt`:** Missing `llms.txt` documentation for AI crawlers.
+23. **AI-Blocked `robots.txt`:** Incorrectly configured `robots.txt` that blocks search indexing or AI documentation readers.
+24. **No Favicon:** Missing SVG/PNG favicon leading to 404 browser logs.
+25. **No `sitemap.xml`:** Missing XML sitemap for search crawlers.
+26. **No Lang Attribution:** Missing `<html lang="en">` on the root HTML document.
+27. **Empty View-Source Shell:** SSR/static shell rendering completely empty body without fallbacks.
+
+### ⚙️ Engineering, Accessibility & Compliance Flaws
+28. **No 404 Page:** Missing a dedicated, polished custom 404 Error page component.
+29. **Missing Alt Text:** Images missing descriptive `alt` tags (`<img alt="...">`).
+30. **Console Errors:** ZERO runtime errors or unhandled warnings in browser developer tools.
+31. **Massive JS Bundles:** Unsplit code resulting in massive bundle sizes. Code splitting is required.
+32. **Broken Buttons & Handlers:** Dead or unhandled click events (`onClick={() => {}}`).
+33. **Lazy One-Page Site:** Packaging a multi-feature system as a single superficial landing page instead of a real routed application.
+34. **No Privacy Policy & Terms Links:** Missing required legal footer links (`/privacy`, `/terms`).
 
 ---
 
-## 🎨 TACTICAL FOOTBALL PITCH PALETTE
+## 🛠️ REQUIRED TECHNICAL SPECIFICATIONS
 
-| Element | Dark Mode Token | Tailwind Equivalent |
-| :--- | :--- | :--- |
-| **Background (Main)** | `#0b0f17` (Deep Pitch Slate) | `bg-[#0b0f17]` |
-| **Surface / Card** | `#111827` (Gray-900 / Zinc-900) | `bg-zinc-900/80` |
-| **Primary Accent** | `#10b981` (Pitch Emerald) | `text-emerald-500` / `bg-emerald-500` |
-| **Secondary Accent** | `#3b82f6` (Tactical Blue) | `text-blue-500` |
-| **Border** | `#1f2937` (Gray-800) | `border-zinc-800` |
-| **Primary Text** | `#f9fafb` (Gray-50) | `text-zinc-50` |
-| **Muted Text** | `#9ca3af` (Gray-400) | `text-zinc-400` |
-
----
-
-## 🛡️ PRE-COMMIT CHECKLIST FOR AI CODERS
-Before submitting code, any AI assistant MUST verify:
-1. Did I introduce any purple gradients or glowing shadow slop? $\rightarrow$ **NO**
-2. Did I leave any `console.log`, missing `alt` attributes, or default titles? $\rightarrow$ **NO**
-3. Is all text realistic, football-relevant copy? $\rightarrow$ **YES**
-4. Does the UI look like a high-end data platform rather than an AI boilerplate template? $\rightarrow$ **YES**
+| Category | Mandated Standard |
+| :--- | :--- |
+| **Typography** | Inter / Outfit for body; JetBrains Mono / Monospace for football stats |
+| **Primary Theme** | Deep Pitch Slate (`#0b0f17`), Card (`#111827`), Emerald Accent (`#10b981`) |
+| **Borders & Depth** | 1px subtle borders (`border-zinc-800`) over heavy fuzzy drop shadows |
+| **Icons** | SVG Icon sets (Heroicons / Lucide tuned to matching stroke widths) |
+| **Routing & SEO** | React Router / Vite with route-level metadata and dedicated 404 page |
