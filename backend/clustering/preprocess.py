@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import numpy as np
 from sklearn.preprocessing import StandardScaler
 
 FEATURE_COLUMNS = [
@@ -18,44 +19,49 @@ MINUTES_THRESHOLD = 450
 def load_and_preprocess_data(raw_csv_path: str):
     """
     Loads raw Transfermarkt CSV, filters low-minute outliers (<450 mins),
-    calculates per-90 metrics, and standardizes features using StandardScaler.
+    calculates per-90 metrics, computes percentile ranks, and standardizes features.
     """
     if not os.path.exists(raw_csv_path):
         raise FileNotFoundError(f"Raw dataset not found at {raw_csv_path}")
 
     df = pd.read_csv(raw_csv_path)
 
-    # 1. Filter out low-minute noise (players with < 450 total minutes played)
-    # Excludes extreme per-90 outliers (e.g. 1 goal in 20 mins = 4.5 goals/90)
+    # Filter out low-minute noise
     df_filtered = df[df['minutes_played'] >= MINUTES_THRESHOLD].copy()
 
-    # 2. Engineer per-90 performance metrics
-    df_filtered['goals_per90'] = (df_filtered['goals'] / df_filtered['minutes_played']) * 90
-    df_filtered['assists_per90'] = (df_filtered['assists'] / df_filtered['minutes_played']) * 90
-    df_filtered['shots_per90'] = (df_filtered['shots'] / df_filtered['minutes_played']) * 90
-    df_filtered['key_passes_per90'] = (df_filtered['key_passes'] / df_filtered['minutes_played']) * 90
-    df_filtered['tackles_per90'] = (df_filtered['tackles'] / df_filtered['minutes_played']) * 90
-    df_filtered['interceptions_per90'] = (df_filtered['interceptions'] / df_filtered['minutes_played']) * 90
-    df_filtered['progressive_passes_per90'] = (df_filtered['progressive_passes'] / df_filtered['minutes_played']) * 90
-    df_filtered['successful_dribbles_per90'] = (df_filtered['successful_dribbles'] / df_filtered['minutes_played']) * 90
+    # Position Group fallback if missing
+    if 'position_group' not in df_filtered.columns:
+        df_filtered['position_group'] = df_filtered['position'].apply(
+            lambda p: 'Defender' if any(k in str(p).upper() for k in ['DF', 'DEF', 'BACK'])
+            else ('Midfielder' if any(k in str(p).upper() for k in ['MF', 'MID']) else 'Forward')
+        )
 
-    # Round float per-90 values for clean reporting
+    # Engineer per-90 performance metrics
+    df_filtered['goals_per90'] = ((df_filtered['goals'] / df_filtered['minutes_played']) * 90).round(2)
+    df_filtered['assists_per90'] = ((df_filtered['assists'] / df_filtered['minutes_played']) * 90).round(2)
+    df_filtered['shots_per90'] = ((df_filtered['shots'] / df_filtered['minutes_played']) * 90).round(2)
+    df_filtered['key_passes_per90'] = ((df_filtered['key_passes'] / df_filtered['minutes_played']) * 90).round(2)
+    df_filtered['tackles_per90'] = ((df_filtered['tackles'] / df_filtered['minutes_played']) * 90).round(2)
+    df_filtered['interceptions_per90'] = ((df_filtered['interceptions'] / df_filtered['minutes_played']) * 90).round(2)
+    df_filtered['progressive_passes_per90'] = ((df_filtered['progressive_passes'] / df_filtered['minutes_played']) * 90).round(2)
+    df_filtered['successful_dribbles_per90'] = ((df_filtered['successful_dribbles'] / df_filtered['minutes_played']) * 90).round(2)
+
+    # Calculate Percentile Ranks (0 - 100%) for radar chart rendering
+    percentile_df = pd.DataFrame(index=df_filtered.index)
     for col in FEATURE_COLUMNS:
-        df_filtered[col] = df_filtered[col].round(2)
+        percentile_df[f"{col}_pct"] = (df_filtered[col].rank(pct=True) * 100).round(1)
 
-    # 3. Fit StandardScaler on per-90 feature matrix (z-score normalization: mean=0, std=1)
+    # Standardize features using StandardScaler (z-score normalization: mean=0, std=1)
     scaler = StandardScaler()
     scaled_features = scaler.fit_transform(df_filtered[FEATURE_COLUMNS])
     scaled_df = pd.DataFrame(scaled_features, columns=[f"{c}_scaled" for c in FEATURE_COLUMNS], index=df_filtered.index)
 
-    # Combine original metadata + per90 stats + scaled features
-    processed_df = pd.concat([df_filtered, scaled_df], axis=1)
+    # Combine metadata + per90 stats + percentiles + scaled features
+    processed_df = pd.concat([df_filtered, percentile_df, scaled_df], axis=1)
 
     return processed_df, scaler
 
 if __name__ == "__main__":
-    raw_path = os.path.join(os.path.dirname(__file__), "..", "data", "raw", "transfermarkt_players.csv")
+    raw_path = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "data", "raw", "transfermarkt_players.csv"))
     df_proc, scaler = load_and_preprocess_data(raw_path)
-    print(f"[SUCCESS] Successfully preprocessed {len(df_proc)} players (Filtered {44 - len(df_proc)} low-minute outliers).")
-    print("Feature column means:\n", df_proc[[f"{c}_scaled" for c in FEATURE_COLUMNS]].mean().round(4))
-    print("Feature column stds:\n", df_proc[[f"{c}_scaled" for c in FEATURE_COLUMNS]].std().round(4))
+    print(f"[SUCCESS] Successfully preprocessed {len(df_proc)} players with per-90 metrics & percentiles.")
