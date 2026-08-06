@@ -37,7 +37,7 @@ def train_and_export_pipeline():
 
     # Calculate Silhouette Score for validation
     score = silhouette_score(X_scaled, cluster_labels)
-    print(f"📊 K-Means Silhouette Score (k=4): {score:.4f}")
+    print(f"[INFO] K-Means Silhouette Score (k=4): {score:.4f}")
 
     # 3. Fit PCA (n_components=2) for 2D Scatter Plot Coordinates
     pca = PCA(n_components=2, random_state=42)
@@ -66,8 +66,8 @@ def train_and_export_pipeline():
     }
     joblib.dump(artifacts, model_output_path)
 
-    print(f"✅ Successfully exported processed CSV to: {csv_output_path}")
-    print(f"✅ Successfully exported model artifacts to: {model_output_path}")
+    print(f"[SUCCESS] Successfully exported processed CSV to: {csv_output_path}")
+    print(f"[SUCCESS] Successfully exported model artifacts to: {model_output_path}")
 
     return df_processed, score
 

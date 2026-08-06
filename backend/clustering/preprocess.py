@@ -56,6 +56,6 @@ def load_and_preprocess_data(raw_csv_path: str):
 if __name__ == "__main__":
     raw_path = os.path.join(os.path.dirname(__file__), "..", "data", "raw", "transfermarkt_players.csv")
     df_proc, scaler = load_and_preprocess_data(raw_path)
-    print(f"✅ Successfully preprocessed {len(df_proc)} players (Filtered {44 - len(df_proc)} low-minute outliers).")
+    print(f"[SUCCESS] Successfully preprocessed {len(df_proc)} players (Filtered {44 - len(df_proc)} low-minute outliers).")
     print("Feature column means:\n", df_proc[[f"{c}_scaled" for c in FEATURE_COLUMNS]].mean().round(4))
     print("Feature column stds:\n", df_proc[[f"{c}_scaled" for c in FEATURE_COLUMNS]].std().round(4))
