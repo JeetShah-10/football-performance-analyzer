@@ -5,16 +5,22 @@
 - **Minimal Dependencies**: Standard libraries first. Use `shadcn/ui` and GSAP/Framer for UI.
 - **No AI Slop / Vibecoding**: Enforce strict design taste, no purple gradients, no fake copy, clean console. Refer to [DESIGN.md](../DESIGN.md).
 - **Security & Hardening**: Enforce rate limiting, server-side secrets, input sanitization, database RLS, and error masking. Refer to [SECURITY.md](../SECURITY.md).
-- **Simplification Comments**: Annotate deliberate simplifications with `// ponytail:` comments.
+- **Product Requirements**: Refer to [PRD.md](../PRD.md).
 
 ---
 
-## 👥 Multi-Developer Team Rules & Safety Contracts
-This project is worked on by 3 team members in parallel. To ensure Antigravity IDE respects team boundaries:
+## 👥 Multi-Developer Team Matrix & Safety Contracts
+This project is worked on by 4 team members:
 
-1. **Design Taste & Anti-Slop Rules**: Refer to [DESIGN.md](../DESIGN.md) & [design-taste.md](rules/design-taste.md)
-2. **Security & Hardening Rules**: Refer to [SECURITY.md](../SECURITY.md) & [security.md](rules/security.md)
-3. **Collaboration & Data/API Safety Contract**: Refer to [collaboration-contract.md](rules/collaboration-contract.md)
-4. **Data Science Lead (Member 1)**: Refer to [role-ds.md](rules/role-ds.md)
-5. **Backend Lead (Member 2)**: Refer to [role-backend.md](rules/role-backend.md)
-6. **Frontend Lead (Member 3)**: Refer to [role-frontend.md](rules/role-frontend.md)
+1. **Jeet Shah (Lead & ML Spec)**: Data Science & ML Pipeline (`feature/ds-pipeline`)
+2. **Dev (Full-Stack)**: Backend FastAPI & Frontend Integration (`feature/fastapi-api`, `feature/react-ui`)
+3. **Pooja (Full-Stack)**: Frontend Visualizations & Backend Support (`feature/react-ui`, `feature/fastapi-api`)
+4. **Vishvam (Docs & Non-Tech Lead)**: Documentation, PRD, & Viva Reports (`docs/`, `PRD.md`)
+
+### Reference Documents:
+- **Design Taste & Anti-Slop**: Refer to [DESIGN.md](../DESIGN.md) & [design-taste.md](rules/design-taste.md)
+- **Security & Hardening**: Refer to [SECURITY.md](../SECURITY.md) & [security.md](rules/security.md)
+- **Collaboration & Data/API Safety Contract**: Refer to [collaboration-contract.md](rules/collaboration-contract.md)
+- **Data Science Rules**: Refer to [role-ds.md](rules/role-ds.md)
+- **Backend Rules**: Refer to [role-backend.md](rules/role-backend.md)
+- **Frontend Rules**: Refer to [role-frontend.md](rules/role-frontend.md)

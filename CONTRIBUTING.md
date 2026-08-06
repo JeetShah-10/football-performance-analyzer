@@ -1,26 +1,27 @@
 # Contributing & Team Collaboration Guide
 
-Welcome to the **Football Player Style Dashboard** project repository! This project is split into 3 core domains to ensure clean ownership, clear viva evaluation, and parallel development without code collisions.
+Welcome to the **Football Player Style Dashboard** project repository! This project is split into clean team domains to ensure smooth parallel development and clean viva evaluation.
 
 ---
 
-## 👥 Team Roles & Ownership
+## 👥 Team Member Roles & Matrix
 
-| Role | Domain / Scope | Feature Branch | Core Deliverable |
+| Team Member | Domain & Ownership | Feature Branch | Core Deliverable |
 | :--- | :--- | :--- | :--- |
-| **Member 1: Data Science Lead** | Data Cleaning, Per-90 Engineering, KMeans, PCA, `.pkl` Artifact Export | `feature/ds-pipeline` | `notebooks/`, `backend/clustering/`, Model artifacts |
-| **Member 2: Backend Lead** | FastAPI Server, Pydantic Schemas, API Endpoints, Model Serving | `feature/fastapi-api` | `backend/main.py`, OpenAPI contract, pytest suite |
-| **Member 3: Frontend Lead** | React (Vite), Dashboard Layout, Scatter Plot, Radar Charts, GSAP/shadcn UI | `feature/react-ui` | `frontend/src/`, UI Components, Pages |
+| **Jeet Shah** | Data Science & ML Lead + Cross-Stack Architect | `feature/ds-pipeline` | Data cleaning, per-90 metrics, K-Means, PCA, similarity engine, `.pkl` exports. |
+| **Dev** | Full-Stack Developer (Backend + Frontend) | `feature/fastapi-api` / `feature/react-ui` | FastAPI endpoints, Pydantic models, React dashboard components. |
+| **Pooja** | Full-Stack Developer (Frontend + Backend) | `feature/react-ui` / `feature/fastapi-api` | React Radar charts, player comparison view, UI polish, API error handling. |
+| **Vishvam** | Documentation & Non-Tech Lead | `main` / `docs` | PRD maintenance, viva documentation, report generation, system diagrams. |
 
 ---
 
 ## 🌿 Git Branching Workflow
 
 1. **Never commit directly to `main`** during feature development.
-2. Checkout your assigned branch:
-   - DS Lead: `git checkout feature/ds-pipeline`
-   - Backend Lead: `git checkout feature/fastapi-api`
-   - Frontend Lead: `git checkout feature/react-ui`
+2. Checkout your assigned feature branch:
+   - Data Science (Jeet): `git checkout feature/ds-pipeline`
+   - Backend (Dev & Pooja): `git checkout feature/fastapi-api`
+   - Frontend (Pooja & Dev): `git checkout feature/react-ui`
 3. Pull updates from `main` regularly:
    ```bash
    git fetch origin
@@ -32,13 +33,9 @@ Welcome to the **Football Player Style Dashboard** project repository! This proj
 
 ## 🤖 Antigravity AI IDE Instructions for Team Members
 
-When any team member opens this repository in **Antigravity IDE**, the IDE automatically reads the context rules in `.agents/`:
-- **Rules File**: [.agents/AGENTS.md](file:///.agents/AGENTS.md)
+Antigravity IDE automatically enforces rules across `.agents/`:
+- **PRD Specification**: [PRD.md](PRD.md)
+- **AI Rules File**: [.agents/AGENTS.md](file:///.agents/AGENTS.md)
+- **Design Taste**: [DESIGN.md](DESIGN.md)
+- **Security & Hardening**: [SECURITY.md](SECURITY.md)
 - **Collaboration Contracts**: [.agents/rules/collaboration-contract.md](file:///.agents/rules/collaboration-contract.md)
-- **Role Rules**:
-  - DS Lead: [.agents/rules/role-ds.md](file:///.agents/rules/role-ds.md)
-  - Backend Lead: [.agents/rules/role-backend.md](file:///.agents/rules/role-backend.md)
-  - Frontend Lead: [.agents/rules/role-frontend.md](file:///.agents/rules/role-frontend.md)
-
-> [!IMPORTANT]
-> Antigravity AI agents will enforce boundaries so that changes made by one team member do NOT break the contracts relied upon by another team member.
