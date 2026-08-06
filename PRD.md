@@ -96,15 +96,18 @@ This project serves as a dual university mini-project submission:
 
 ---
 
-## 6. Phase Execution Roadmap
+## 6. Phase Execution Roadmap & Current Status
 
-- **Phase 0**: Project & Context Setup *(Completed)*
-- **Phase 1**: Data Cleaning & EDA *(In Progress)*
-- **Phase 2**: Per-90 Feature Engineering & Scaling
-- **Phase 3**: K-Means Clustering & Silhouette Validation
-- **Phase 4**: Similarity Engine & Artifact Export
-- **Phase 5**: FastAPI Endpoint Implementation
-- **Phase 6**: React Dashboard & Visualizations
-- **Phase 7**: Integration Polish & Error Handling
-- **Phase 8**: Production Deployment (Render + Vercel)
-- **Phase 9**: Final Viva Documentation & Demo
+| Phase | Description | Status | Responsible Lead | Key Artifacts / Deliverables |
+| :--- | :--- | :--- | :--- | :--- |
+| **Phase 0** | Project & Context Setup | ✅ **COMPLETED** | Jeet & Team | `.agents/AGENTS.md`, `PRD.md`, `DESIGN.md`, `SECURITY.md`, Git branches |
+| **Phase 1** | Data Cleaning & EDA | ✅ **COMPLETED** | Jeet Shah | 1.89M match appearances aggregated, 29,530 Kaggle players cleaned, `01_eda.ipynb` |
+| **Phase 2** | Per-90 Feature Engineering & Scaling | ✅ **COMPLETED** | Jeet Shah | 8 per-90 metrics, 0–100% percentile ranks, `StandardScaler` normalization |
+| **Phase 3** | Position-Grouped K-Means Clustering | ✅ **COMPLETED** | Jeet Shah | Position-Grouped K-Means ($k=3..4$), Silhouette score `0.2234`, PCA 2D coordinates |
+| **Phase 4** | Similarity Engine & Artifact Export | ✅ **COMPLETED** | Jeet Shah | Cosine `NearestNeighbors` engine, `model.pkl` & `players_processed.csv` exported |
+| **Phase 5** | FastAPI Endpoint Implementation | ⏳ **NEXT UP** | Dev & Pooja | REST API (`/players`, `/players/{id}`, `/clusters`, `/similar/{id}`), rate limiting |
+| **Phase 6** | React Dashboard & Visualizations | ⏳ **UPCOMING** | Pooja & Dev | Vite + React, Tailwind CSS, PCA Scatter Plot, Hybrid Radar Chart, Compare View |
+| **Phase 7** | Integration Polish & Error Handling | ⏳ **UPCOMING** | Dev, Pooja, Jeet | Security audit, error masking, zero-slop checklist verification |
+| **Phase 8** | Production Deployment | ⏳ **UPCOMING** | Dev & Pooja | FastAPI on Render / Railway, React UI on Vercel |
+| **Phase 9** | Final Viva Documentation & Demo | 🔄 **IN PROGRESS** | Vishvam & Jeet | Viva dataset guide [`docs/viva_dataset_guide.md`](docs/viva_dataset_guide.md), report, presentation |
+
