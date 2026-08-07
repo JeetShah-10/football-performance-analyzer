@@ -27,12 +27,14 @@ wheels/
 # Data & ML Artifacts
 backend/data/raw/*
 !backend/data/raw/.gitkeep
+!backend/data/raw/DATASET_METADATA.json
 backend/data/processed/*
 !backend/data/processed/.gitkeep
-*.pkl
+!backend/data/processed/players_processed.csv
+!backend/data/processed/model.pkl
+!backend/clustering/silhouette_report.json
 *.joblib
 *.h5
-*.csv
 
 # Node / Frontend
 frontend/node_modules/
