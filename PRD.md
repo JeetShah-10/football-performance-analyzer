@@ -18,9 +18,9 @@ This project serves as a dual university mini-project submission:
 | Team Member | Primary Focus Area | Secondary Focus Area | Key Deliverables & Responsibilities |
 | :--- | :--- | :--- | :--- |
 | **Jeet Shah (Lead & ML Spec)** | Data Science & ML Pipeline | Full-Stack Guidance | Raw data cleaning, per-90 metric engineering, K-Means clustering, PCA, model evaluation, `.pkl` export, cross-stack integration oversight. |
-| **Dev** | Backend & Frontend | Full-Stack Development | FastAPI endpoints (`/players`, `/similar`), Pydantic schemas, React UI components, API client integration. |
-| **Pooja** | Frontend & Backend | Full-Stack Development | React UI components (Radar Charts, Compare View), dashboard styling (Tailwind + `shadcn/ui`), FastAPI error handling. |
-| **Vishvam** | Documentation & Non-Tech | Project Management | Project PRD maintenance, viva documentation, report generation, system architecture diagrams, user user-guides. |
+| **Dev** | Backend API & Security | Server Infrastructure | FastAPI REST endpoints (`/players`, `/clusters`, `/similar`), Pydantic schemas, CORS, rate limiting, error masking. |
+| **Pooja** | Frontend & UI/UX | Visual Analytics | React UI components (PCA 2D Plot, Radar Charts, Compare View), dashboard styling (Tailwind + `shadcn/ui`), client-side state. |
+| **Vishvam** | Documentation & Non-Tech | Project Management | Project PRD maintenance, viva documentation, report generation, system architecture diagrams, user guides. |
 
 ---
 
@@ -69,7 +69,7 @@ This project serves as a dual university mini-project submission:
 - **Algorithm**: `NearestNeighbors(n_neighbors=5, metric='cosine')` trained in the high-dimensional scaled feature space (not PCA space).
 - **Output**: Returns top $N$ closest player matches for any selected target player.
 
-### FR-4: REST API Layer (Dev & Pooja)
+### FR-4: REST API Layer (Dev)
 - **Framework**: FastAPI with Pydantic response contracts and slowapi rate-limiting.
 - **Endpoints**:
   - `GET /players`: Returns summarized player list with cluster labels and PCA coordinates.
@@ -77,7 +77,7 @@ This project serves as a dual university mini-project submission:
   - `GET /clusters`: Returns metadata and centroid metric profiles for all clusters.
   - `GET /similar/{id}?n=5`: Returns top $N$ similar players.
 
-### FR-5: React Frontend Dashboard (Dev & Pooja)
+### FR-5: React Frontend Dashboard (Pooja)
 - **Overview Screen**: Interactive PCA 2D Scatter Plot colored by cluster archetype with search and position filters.
 - **Player Detail Screen**: Metric Radar Chart comparing individual player stats against their cluster centroid average.
 - **Compare View**: Side-by-side radar and statistical metric comparison between two players.
@@ -105,9 +105,9 @@ This project serves as a dual university mini-project submission:
 | **Phase 2** | Per-90 Feature Engineering & Scaling | ✅ **COMPLETED** | Jeet Shah | 8 per-90 metrics, 0–100% percentile ranks, `StandardScaler` normalization |
 | **Phase 3** | Position-Grouped K-Means Clustering | ✅ **COMPLETED** | Jeet Shah | Position-Grouped K-Means ($k=3..4$), Silhouette score `0.2234`, PCA 2D coordinates |
 | **Phase 4** | Similarity Engine & Artifact Export | ✅ **COMPLETED** | Jeet Shah | Cosine `NearestNeighbors` engine, `model.pkl` & `players_processed.csv` exported |
-| **Phase 5** | FastAPI Endpoint Implementation | ⏳ **NEXT UP** | Dev & Pooja | REST API (`/players`, `/players/{id}`, `/clusters`, `/similar/{id}`), rate limiting |
-| **Phase 6** | React Dashboard & Visualizations | ⏳ **UPCOMING** | Pooja & Dev | Vite + React, Tailwind CSS, PCA Scatter Plot, Hybrid Radar Chart, Compare View |
+| **Phase 5** | FastAPI Endpoint Implementation | ⏳ **NEXT UP** | Dev | REST API (`/players`, `/players/{id}`, `/clusters`, `/similar/{id}`), rate limiting |
+| **Phase 6** | React Dashboard & Visualizations | ⏳ **UPCOMING** | Pooja | Vite + React, Tailwind CSS, PCA Scatter Plot, Hybrid Radar Chart, Compare View |
 | **Phase 7** | Integration Polish & Error Handling | ⏳ **UPCOMING** | Dev, Pooja, Jeet | Security audit, error masking, zero-slop checklist verification |
-| **Phase 8** | Production Deployment | ⏳ **UPCOMING** | Dev & Pooja | FastAPI on Render / Railway, React UI on Vercel |
+| **Phase 8** | Production Deployment | ⏳ **UPCOMING** | Dev (Backend) & Pooja (Frontend) | FastAPI on Render / Railway, React UI on Vercel |
 | **Phase 9** | Final Viva Documentation & Demo | 🔄 **IN PROGRESS** | Vishvam & Jeet | Viva dataset guide [`docs/viva_dataset_guide.md`](docs/viva_dataset_guide.md), report, presentation |
 

@@ -1,6 +1,6 @@
 # PHASE 5 IMPLEMENTATION PLAN: HIGH-END FASTAPI BACKEND ARCHITECTURE
 **Project**: Football Player Style Dashboard  
-**Lead Developers**: Dev & Pooja (Full-Stack)  
+**Lead Developer**: Dev (Backend Lead)  
 **Architect**: Jeet Shah  
 **Date**: 2026-08-07
 

@@ -13,8 +13,8 @@
 This project is worked on by 4 team members:
 
 1. **Jeet Shah (Lead & ML Spec)**: Data Science & ML Pipeline (`feature/ds-pipeline`)
-2. **Dev (Full-Stack)**: Backend FastAPI & Frontend Integration (`feature/fastapi-api`, `feature/react-ui`)
-3. **Pooja (Full-Stack)**: Frontend Visualizations & Backend Support (`feature/react-ui`, `feature/fastapi-api`)
+2. **Dev (Backend Lead)**: Backend FastAPI, REST API & Security (`feature/fastapi-api`)
+3. **Pooja (Frontend Lead)**: React Dashboard, Tailwind UI & Visualizations (`feature/react-ui`)
 4. **Vishvam (Docs & Non-Tech Lead)**: Documentation, PRD, & Viva Reports (`docs/`, `PRD.md`)
 
 ### Reference Documents:
