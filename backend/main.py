@@ -20,8 +20,7 @@ logger = logging.getLogger("football_backend")
 # Bare paths (/players, /players/{id}, /clusters, /similar/{id}) are canonical per docs/api-contract.md.
 # Alias paths under /api/* are also mounted for backward compatibility.
 
-# Rate Limiter setup (60 requests/minute per client IP)
-limiter = Limiter(key_func=get_remote_address, default_limits=["60/minute"])
+from backend.limiter import limiter
 
 
 @asynccontextmanager

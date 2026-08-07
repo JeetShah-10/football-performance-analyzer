@@ -136,7 +136,7 @@ def train_and_export_fbref_pipeline():
     print(f"[INFO] 2D PCA Explained Variance: PC1={explained_var[0]*100:.2f}%, PC2={explained_var[1]*100:.2f}%, Total={total_var*100:.2f}%")
 
     # 3. COSINE NEAREST NEIGHBORS SIMILARITY ENGINE
-    # Train on 8D scaled feature space
+    # Note: Cross-position similarity matching is intentional — similarity operates on the shared 8D scaled feature space across all outfield players.
     nn_model = NearestNeighbors(n_neighbors=10, metric='cosine')
     nn_model.fit(X_full)
 

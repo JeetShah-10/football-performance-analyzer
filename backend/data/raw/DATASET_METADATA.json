@@ -1,0 +1,7 @@
+{
+  "dataset_name": "hubertsidorowicz/football-players-stats-2024-2025",
+  "source": "FBref Big-5 European Leagues 2024-2025 Full-Season (267 Columns)",
+  "download_date": "2026-08-07",
+  "season": "2024-2025",
+  "notes": "Frozen raw FBref full 38-game dataset with 267 advanced metrics (npxG, xAG, KP, PrgP, PrgC, Tkl, Int, Succ). Zero synthetic stats."
+}

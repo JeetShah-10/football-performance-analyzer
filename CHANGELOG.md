@@ -43,3 +43,4 @@ The raw dataset source was completely replaced from Kaggle Transfermarkt to the 
 6. **Cluster Signature Stats:** Computed features with largest std-dev $Z$-score deviation per cluster and saved alongside archetype names.
 7. **Similarity Search Fix:** `get_similar_players()` queries $N+1$ neighbors and strips the self-match at index 0.
 8. **Dataset Freezing:** Frozen local raw data at `backend/data/raw/players_data-2024_2025.csv` and created `DATASET_METADATA.json`.
+9. **Defensive Archetype Disambiguation (Van Dijk Validation Example):** Virgil van Dijk's `Tkl_per90` sits at the 10.4th percentile among defenders while his `Int_per90` sits at the 71.2nd percentile. This demonstrates that the feature model separates "winning the ball through anticipation/positioning" from "winning the ball through physical duels" rather than treating defensive contribution as an undifferentiated single number.

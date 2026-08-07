@@ -98,7 +98,8 @@ Returns metadata, centroid profiles, and signature stats for all tactical archet
 ### `GET /similar/{player_id}?n=5`
 Returns top $N$ closest tactical matches for a player using Cosine distance in 8D scaled feature space.
 
-> **Note:** Explicitly excludes the query player itself from nearest neighbor results.
+> **Note:** Explicitly excludes the query player itself from nearest neighbor results.  
+> **Note on Cross-Position Matching:** Cross-position matches (e.g. Midfielder returned for a Forward) are deliberate — similarity operates across the shared 8D scaled feature space to capture functional tactical style regardless of primary position labels.
 
 #### Response (`200 OK`):
 ```json
