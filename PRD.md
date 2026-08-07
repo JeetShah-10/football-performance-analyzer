@@ -55,15 +55,15 @@ This project serves as a dual university mini-project submission:
 ## 4. Functional Requirements
 
 ### FR-1: Data Processing & Feature Engineering (Jeet)
-- **Input**: Kaggle Transfermarkt player statistics CSV.
+- **Input**: FBref Big-5 European Leagues 2024–2025 full-season dataset (`hubertsidorowicz/football-players-stats-2024-2025`).
 - **Minutes Filter**: Exclude low-sample outliers (`minutes_played < 450`).
-- **Per-90 Normalization**: Calculate `(stat / total_minutes) * 90` for goals, assists, key passes, tackles, interceptions, progressive passes, etc.
+- **Per-90 Normalization**: Calculate `(stat / total_minutes) * 90` for goals, assists, key passes, tackles, interceptions, progressive passes, carries, take-ons.
 - **Feature Scaling**: Standardize features using `StandardScaler` ($\mu=0, \sigma=1$).
 
 ### FR-2: Clustering & Visual Dimension Reduction (Jeet)
-- **Algorithms**: `KMeans(n_clusters=k)` evaluated across $k \in [2, 10]$ using Elbow Method (Inertia) and Silhouette Score.
-- **Archetype Labeling**: Human-readable naming of cluster centroids (e.g., *Poacher*, *Deep-Lying Playmaker*, *Ball-Winning Midfielder*).
-- **PCA 2D Coordinates**: Apply Principal Component Analysis (PCA) to reduce feature space to 2 dimensions (`pca_x`, `pca_y`) strictly for scatter plot rendering.
+- **Algorithms**: `KMeans(n_clusters=k)` evaluated across $k \in [2, 6]$ per position group independently using Silhouette Score.
+- **Archetype Labeling**: Human-readable naming of cluster centroids (e.g., *Stopper / Defensive Destroyer*, *Deep-Lying Playmaker*, *Dynamic Winger / Dribbler*).
+- **PCA 2D Coordinates**: Apply Principal Component Analysis (PCA) to reduce feature space to 2 dimensions (`pca_x`, `pca_y`) explaining 67.23% variance strictly for scatter plot rendering.
 
 ### FR-3: Similarity Engine (Jeet & Dev)
 - **Algorithm**: `NearestNeighbors(n_neighbors=5, metric='cosine')` trained in the high-dimensional scaled feature space (not PCA space).
@@ -101,9 +101,9 @@ This project serves as a dual university mini-project submission:
 | Phase | Description | Status | Responsible Lead | Key Artifacts / Deliverables |
 | :--- | :--- | :--- | :--- | :--- |
 | **Phase 0** | Project & Context Setup | ✅ **COMPLETED** | Jeet & Team | `.agents/AGENTS.md`, `PRD.md`, `DESIGN.md`, `SECURITY.md`, Git branches |
-| **Phase 1** | Data Cleaning & EDA | ✅ **COMPLETED** | Jeet Shah | 1.89M match appearances aggregated, 29,530 Kaggle players cleaned, `01_eda.ipynb` |
-| **Phase 2** | Per-90 Feature Engineering & Scaling | ✅ **COMPLETED** | Jeet Shah | 8 per-90 metrics, 0–100% percentile ranks, `StandardScaler` normalization |
-| **Phase 3** | Position-Grouped K-Means Clustering | ✅ **COMPLETED** | Jeet Shah | Position-Grouped K-Means ($k=3..4$), Silhouette score `0.2234`, PCA 2D coordinates |
+| **Phase 1** | Data Cleaning & EDA | ✅ **COMPLETED** | Jeet Shah | 2,854 FBref rows cleaned, 212 GKs dropped, multi-club rows merged, 1,802 players retained |
+| **Phase 2** | Per-90 Feature Engineering & Scaling | ✅ **COMPLETED** | Jeet Shah | 8 real per-90 metrics, position-grouped 0–100% percentiles, `StandardScaler` normalization |
+| **Phase 3** | Position-Grouped K-Means Clustering | ✅ **COMPLETED** | Jeet Shah | Position-Grouped K-Means ($k=2$), Peak Silhouette scores (Defenders: 0.2958, Midfielders: 0.2820, Forwards: 0.3176), 2D PCA |
 | **Phase 4** | Similarity Engine & Artifact Export | ✅ **COMPLETED** | Jeet Shah | Cosine `NearestNeighbors` engine, `model.pkl` & `players_processed.csv` exported |
 | **Phase 5** | FastAPI Endpoint Implementation | ✅ **COMPLETED** | Dev | REST API (`/players`, `/players/{id}`, `/clusters`, `/similar/{id}`), rate limiting |
 | **Phase 6** | React Dashboard & Visualizations | ⏳ **UPCOMING** | Pooja | Vite + React, Tailwind CSS, PCA Scatter Plot, Hybrid Radar Chart, Compare View |

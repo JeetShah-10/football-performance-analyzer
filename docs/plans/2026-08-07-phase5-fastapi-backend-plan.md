@@ -45,17 +45,17 @@ backend/
 ### `GET /health`
 - **Response**: `{"status": "online", "dataset": "FBref 2024-2025", "total_players": 1802}`
 
-### `GET /api/players`
+### `GET /players`
 - **Query Params**: `position_group` (Defender|Midfielder|Forward), `league`, `search`, `limit` (default 100)
 - **Response**: List of `PlayerSummary`
 
-### `GET /api/players/{player_id}`
+### `GET /players/{player_id}`
 - **Response**: Full `PlayerDetail` with per-90 stats and percentiles
 
-### `GET /api/clusters`
+### `GET /clusters`
 - **Response**: List of `ClusterSummary` with signature stats and descriptions
 
-### `GET /api/similar/{player_id}?n=5`
+### `GET /similar/{player_id}?n=5`
 - **Query Params**: `n` (default 5, max 20)
 - **Response**: Top $N$ similar players (self-match excluded)
 
