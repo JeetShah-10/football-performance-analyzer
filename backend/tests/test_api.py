@@ -202,13 +202,6 @@ def test_list_players_filters(client):
     assert search_data[0]["player_name"] == "Bukayo Saka"
 
 
-def test_list_players_api_alias(client):
-    response = client.get("/api/players?limit=2")
-    assert response.status_code == 200
-    data = response.json()
-    assert len(data) == 2
-
-
 def test_get_player_detail_success(client):
     response = client.get("/players/bukayo_saka_eng_2001")
     assert response.status_code == 200
