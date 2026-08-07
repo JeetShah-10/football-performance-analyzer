@@ -48,10 +48,10 @@ def freeze_dataset_metadata(raw_dir: str):
     meta_path = os.path.join(raw_dir, "DATASET_METADATA.json")
     meta = {
         "dataset_name": "hubertsidorowicz/football-players-stats-2024-2025",
-        "source": "FBref Big-5 European Leagues 2024-2025",
+        "source": "FBref Big-5 European Leagues 2024-2025 Full-Season (267 Columns)",
         "download_date": "2026-08-07",
         "season": "2024-2025",
-        "notes": "Frozen raw FBref single-season data. Zero synthetic stats."
+        "notes": "Frozen raw FBref full 38-game dataset with 267 advanced metrics (npxG, xAG, KP, PrgP, PrgC, Tkl, Int, Succ). Zero synthetic stats."
     }
     with open(meta_path, "w", encoding="utf-8") as f:
         json.dump(meta, f, indent=2)
@@ -71,9 +71,7 @@ def process_fbref_dataset(raw_dir: str):
     
     raw_csv = os.path.join(raw_dir, "players_data-2024_2025.csv")
     if not os.path.exists(raw_csv):
-        raw_csv = os.path.join(raw_dir, "players_data_light-2024_2025.csv")
-    if not os.path.exists(raw_csv):
-        raise FileNotFoundError(f"FBref raw dataset CSV not found in {raw_dir}")
+        raise FileNotFoundError(f"FBref raw dataset CSV not found at {raw_csv}")
 
     print(f"[INFO] Reading raw FBref CSV: {raw_csv}")
     df_raw = pd.read_csv(raw_csv)
@@ -152,7 +150,7 @@ def process_fbref_dataset(raw_dir: str):
 
     output_path = os.path.join(raw_dir, "fbref_cleaned_players.csv")
     df_filtered.to_csv(output_path, index=False)
-    print(f"[SUCCESS] Cleaned FBref dataset saved to {output_path} ({len(df_filtered)} players)")
+    print(f"[SUCCESS] Cleaned 2024-2025 FBref dataset saved to {output_path} ({len(df_filtered)} players)")
     return df_filtered
 
 if __name__ == "__main__":
