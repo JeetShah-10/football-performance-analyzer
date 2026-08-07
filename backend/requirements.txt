@@ -4,3 +4,7 @@ pandas
 scikit-learn
 joblib
 pydantic
+slowapi
+httpx
+pytest
+
