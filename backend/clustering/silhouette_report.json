@@ -1,0 +1,38 @@
+{
+  "Defender": {
+    "player_count": 748,
+    "scores": {
+      "2": 0.2958,
+      "3": 0.2094,
+      "4": 0.1743,
+      "5": 0.186,
+      "6": 0.1851
+    },
+    "chosen_k": 2,
+    "best_silhouette_score": 0.2958
+  },
+  "Midfielder": {
+    "player_count": 603,
+    "scores": {
+      "2": 0.282,
+      "3": 0.2564,
+      "4": 0.1877,
+      "5": 0.181,
+      "6": 0.1534
+    },
+    "chosen_k": 2,
+    "best_silhouette_score": 0.282
+  },
+  "Forward": {
+    "player_count": 451,
+    "scores": {
+      "2": 0.3176,
+      "3": 0.2444,
+      "4": 0.2068,
+      "5": 0.1872,
+      "6": 0.1861
+    },
+    "chosen_k": 2,
+    "best_silhouette_score": 0.3176
+  }
+}
