@@ -19,6 +19,14 @@ All API responses are serialized JSON with standard HTTP status codes:
 ### `GET /players`
 Returns summary list of all outfield players passing the minutes threshold (Min >= 450).
 
+#### Query Parameters:
+- `position_group` (optional): Filter by position group (`Defender`, `Midfielder`, `Forward`).
+- `league` (optional): Partial string match on league (e.g. `La Liga`, `Premier League`).
+- `search` (optional): Partial string match on player name or squad.
+- `u21_only` (optional, default `false`): Convenience wrapper to filter players aged 21 or under (`max_age <= 21`).
+- `limit` (optional, default `100`): Pagination limit.
+- `offset` (optional, default `0`): Pagination offset.
+
 #### Response (`200 OK`):
 ```json
 [
@@ -30,6 +38,7 @@ Returns summary list of all outfield players passing the minutes threshold (Min 
     "position": "FW,MF",
     "position_group": "Forward",
     "minutes_played": 1850,
+    "age": 22,
     "cluster_id": 1,
     "cluster_name": "Dynamic Winger / Dribbler",
     "pca_x": 1.425,
@@ -41,7 +50,7 @@ Returns summary list of all outfield players passing the minutes threshold (Min 
 ---
 
 ### `GET /players/{player_id}`
-Returns detailed player statistics with per-90 values and position-group percentile ranks (0–100%).
+Returns detailed player statistics with per-90 values, position-group percentile ranks (0–100%), and GMM soft-clustering probability distributions.
 
 #### Response (`200 OK`):
 ```json
@@ -53,8 +62,13 @@ Returns detailed player statistics with per-90 values and position-group percent
   "position": "FW,MF",
   "position_group": "Forward",
   "minutes_played": 1850,
+  "age": 22,
   "cluster_id": 1,
   "cluster_name": "Dynamic Winger / Dribbler",
+  "gmm_probabilities": {
+    "Forward Archetype 1 (Low PrgC)": 0.0,
+    "Forward Archetype 2 (High PrgC)": 1.0
+  },
   "pca_x": 1.425,
   "pca_y": -0.812,
   "stats": {
@@ -95,8 +109,12 @@ Returns metadata, centroid profiles, and signature stats for all tactical archet
 
 ---
 
-### `GET /similar/{player_id}?n=5`
+### `GET /similar/{player_id}?n=5&u21_only=false`
 Returns top $N$ closest tactical matches for a player using Cosine distance in 8D scaled feature space.
+
+#### Query Parameters:
+- `n` (optional, default `5`): Number of similar candidates to return (1 to 20).
+- `u21_only` (optional, default `false`): When `true`, filters results strictly to candidates aged 21 or under (`age <= 21`).
 
 > **Note:** Explicitly excludes the query player itself from nearest neighbor results.  
 > **Note on Cross-Position Matching:** Cross-position matches (e.g. Midfielder returned for a Forward) are deliberate — similarity operates across the shared 8D scaled feature space to capture functional tactical style regardless of primary position labels.

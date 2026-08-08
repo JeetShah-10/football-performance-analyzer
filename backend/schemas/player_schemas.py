@@ -33,6 +33,7 @@ class PlayerDetail(BaseModel):
     age: Optional[int] = None
     cluster_id: int
     cluster_name: str
+    gmm_probabilities: Dict[str, float] = Field(default_factory=dict, description="GMM soft-clustering probability distribution")
     pca_x: float
     pca_y: float
     stats: Dict[str, StatPercentile]

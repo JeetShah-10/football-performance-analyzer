@@ -14,14 +14,17 @@ def list_players(
     position_group: Optional[str] = None,
     league: Optional[str] = None,
     search: Optional[str] = None,
+    u21_only: bool = Query(False, description="Convenience wrapper to filter players aged 21 or under"),
     limit: int = Query(100, ge=1, le=1000),
     offset: int = Query(0, ge=0),
 ) -> List[PlayerSummary]:
     service = AnalyticsService.get_instance()
+    max_age = 21 if u21_only else None
     return service.list_players(
         position_group=position_group,
         league=league,
         search=search,
+        max_age=max_age,
         limit=limit,
         offset=offset,
     )

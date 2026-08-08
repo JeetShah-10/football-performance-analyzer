@@ -1,4 +1,5 @@
 import os
+import json
 import joblib
 import pandas as pd
 import numpy as np
@@ -65,7 +66,7 @@ class AnalyticsService:
 
     @classmethod
     def get_instance(cls) -> 'AnalyticsService':
-        if cls._instance is None:
+        if cls._instance is None or 'gmm_probabilities_json' not in cls._instance.df.columns:
             cls._instance = cls()
         return cls._instance
 
@@ -146,6 +147,19 @@ class AnalyticsService:
             pct_val = float(row.get(pct_col, 50.0))
             stats_dict[feat] = StatPercentile(value=round(val, 3), percentile=round(pct_val, 1))
 
+        # Parse GMM probabilities JSON
+        gmm_probs = {}
+        gmm_json_raw = row.get('gmm_probabilities_json')
+        if isinstance(gmm_json_raw, str) and len(gmm_json_raw) > 2:
+            try:
+                gmm_probs = json.loads(gmm_json_raw)
+            except Exception:
+                gmm_probs = {}
+        elif isinstance(gmm_json_raw, dict):
+            gmm_probs = gmm_json_raw
+
+        age_val = row.get('Age', row.get('age'))
+
         return PlayerDetail(
             player_id=str(row.get('player_id', '')),
             player_name=str(row.get('player_name', '')),
@@ -154,8 +168,10 @@ class AnalyticsService:
             position=str(row.get('position', row.get('Pos', ''))),
             position_group=str(row.get('position_group', '')),
             minutes_played=int(row.get('minutes_played', row.get('Min', 0))),
+            age=int(float(age_val)) if age_val is not None and not pd.isna(age_val) else None,
             cluster_id=int(row.get('cluster_id', 0)),
             cluster_name=str(row.get('cluster_name', '')),
+            gmm_probabilities=gmm_probs,
             pca_x=float(row.get('pca_x', 0.0)),
             pca_y=float(row.get('pca_y', 0.0)),
             stats=stats_dict,
@@ -183,7 +199,6 @@ class AnalyticsService:
                     )
                     for s in sig_stats_data
                 ]
-
                 result[pos_group].append(
                     ClusterSummary(
                         cluster_id=cid,
@@ -195,7 +210,7 @@ class AnalyticsService:
 
         return result
 
-    def get_similar_players(self, player_id: str, n: int = 5) -> List[SimilarPlayerResponse]:
+    def get_similar_players(self, player_id: str, n: int = 5, u21_only: bool = False, max_age: Optional[int] = None) -> List[SimilarPlayerResponse]:
         target = self.get_player_by_id(player_id)
         if not target:
             return []
@@ -217,16 +232,26 @@ class AnalyticsService:
 
         X_target = self.df.loc[[target_idx], available_scaled_cols].values
 
-        distances, indices = self.nn_model.kneighbors(X_target, n_neighbors=min(n + 10, len(self.df)))
+        # Determine age limit (u21_only convenience wrapper)
+        effective_max_age = 21 if u21_only else max_age
+
+        distances, indices = self.nn_model.kneighbors(X_target, n_neighbors=min(n + 50, len(self.df)))
 
         results: List[SimilarPlayerResponse] = []
         for idx, dist in zip(indices[0], distances[0]):
             if idx == target_idx:
                 continue  # Exclude self match
+
+            matched_row = self.df.iloc[idx]
+
+            if effective_max_age is not None:
+                age_v = matched_row.get('Age', matched_row.get('age'))
+                if age_v is None or pd.isna(age_v) or float(age_v) > effective_max_age:
+                    continue
+
             if len(results) >= n:
                 break
 
-            matched_row = self.df.iloc[idx]
             sim_score = max(0.0, round((1.0 - float(dist)) * 100.0, 2))
 
             results.append(

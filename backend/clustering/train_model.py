@@ -118,13 +118,77 @@ def train_and_export_fbref_pipeline():
 
         position_models[pos_group] = kmeans_final
 
-    # Save silhouette report JSON
-    json_report_path = os.path.join(base_dir, "silhouette_report.json")
-    with open(json_report_path, "w", encoding="utf-8") as f:
-        json.dump(silhouette_report, f, indent=2)
-    print(f"[INFO] Silhouette sweep report saved to {json_report_path}")
+    # 2. GMM SOFT-CLUSTERING PER POSITION GROUP (n_components=2, 3, 4)
+    from sklearn.mixture import GaussianMixture
+    
+    gmm_report = {}
+    gmm_models = {}
+    gmm_component_labels = {}
 
-    # 2. PCA 2D PROJECTION
+    df_proc['gmm_probabilities_json'] = "{}"
+
+    for pos_group in ['Defender', 'Midfielder', 'Forward']:
+        sub_df = df_proc[df_proc['position_group'] == pos_group]
+        X_sub = sub_df[scaled_feature_cols].values
+        
+        bics = {}
+        aics = {}
+        for n_comp in range(2, 5):
+            gmm_test = GaussianMixture(n_components=n_comp, random_state=42, n_init=5)
+            gmm_test.fit(X_sub)
+            bics[str(n_comp)] = round(float(gmm_test.bic(X_sub)), 2)
+            aics[str(n_comp)] = round(float(gmm_test.aic(X_sub)), 2)
+
+        # Select best n_components based on minimum BIC
+        best_gmm_comp = int(min(bics, key=lambda k: bics[k]))
+        gmm_report[pos_group] = {
+            "player_count": len(sub_df),
+            "bic_scores": bics,
+            "aic_scores": aics,
+            "chosen_n_components": best_gmm_comp,
+            "best_bic": bics[str(best_gmm_comp)]
+        }
+
+        # Train final GMM model for this position group
+        gmm_final = GaussianMixture(n_components=best_gmm_comp, random_state=42, n_init=5)
+        gmm_final.fit(X_sub)
+        gmm_models[pos_group] = gmm_final
+
+        # Compute GMM component probabilities for all players in this position group
+        probs = gmm_final.predict_proba(X_sub)
+
+        # Define GMM component labels based on signature stats
+        comp_labels = []
+        for c in range(best_gmm_comp):
+            # Compute weighted signature stats for component c
+            comp_mean = gmm_final.means_[c]
+            pos_mean = X_sub.mean(axis=0)
+            pos_std = X_sub.std(axis=0)
+            z_diffs = (comp_mean - pos_mean) / np.where(pos_std == 0, 1, pos_std)
+            top_feat_idx = np.argmax(np.abs(z_diffs))
+            top_feat = FBREF_FEATURE_COLUMNS[top_feat_idx]
+            z_val = z_diffs[top_feat_idx]
+            direction = "High" if z_val > 0 else "Low"
+            label_name = f"{pos_group} Archetype {c+1} ({direction} {top_feat.replace('_per90', '')})"
+            comp_labels.append(label_name)
+
+        gmm_component_labels[pos_group] = comp_labels
+
+        # Assign JSON formatted probability dict to each player in sub_df
+        for idx_pos, (original_idx, row) in enumerate(sub_df.iterrows()):
+            prob_dict = {
+                comp_labels[c]: round(float(probs[idx_pos, c]), 4)
+                for c in range(best_gmm_comp)
+            }
+            df_proc.loc[original_idx, 'gmm_probabilities_json'] = json.dumps(prob_dict)
+
+    # Save GMM report JSON
+    gmm_report_path = os.path.join(base_dir, "gmm_report.json")
+    with open(gmm_report_path, "w", encoding="utf-8") as f:
+        json.dump(gmm_report, f, indent=2)
+    print(f"[INFO] GMM BIC/AIC sweep report saved to {gmm_report_path}")
+
+    # 3. PCA 2D PROJECTION
     X_full = df_proc[scaled_feature_cols].values
     pca = PCA(n_components=2, random_state=42)
     pca_coords = pca.fit_transform(X_full)
@@ -135,12 +199,11 @@ def train_and_export_fbref_pipeline():
     total_var = float(explained_var.sum())
     print(f"[INFO] 2D PCA Explained Variance: PC1={explained_var[0]*100:.2f}%, PC2={explained_var[1]*100:.2f}%, Total={total_var*100:.2f}%")
 
-    # 3. COSINE NEAREST NEIGHBORS SIMILARITY ENGINE
-    # Note: Cross-position similarity matching is intentional — similarity operates on the shared 8D scaled feature space across all outfield players.
+    # 4. COSINE NEAREST NEIGHBORS SIMILARITY ENGINE
     nn_model = NearestNeighbors(n_neighbors=10, metric='cosine')
     nn_model.fit(X_full)
 
-    # 4. EXPORT ARTIFACTS
+    # 5. EXPORT ARTIFACTS
     csv_output_path = os.path.join(processed_dir, "players_processed.csv")
     model_output_path = os.path.join(processed_dir, "model.pkl")
 
@@ -149,6 +212,8 @@ def train_and_export_fbref_pipeline():
     artifacts = {
         'scaler': scaler,
         'position_models': position_models,
+        'gmm_models': gmm_models,
+        'gmm_component_labels': gmm_component_labels,
         'pca': pca,
         'nn_model': nn_model,
         'cluster_signatures': cluster_signatures,

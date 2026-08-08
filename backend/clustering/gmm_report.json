@@ -1,0 +1,47 @@
+{
+  "Defender": {
+    "player_count": 748,
+    "bic_scores": {
+      "2": 8912.06,
+      "3": 8832.09,
+      "4": 8891.01
+    },
+    "aic_scores": {
+      "2": 8501.11,
+      "3": 8213.35,
+      "4": 8064.49
+    },
+    "chosen_n_components": 3,
+    "best_bic": 8832.09
+  },
+  "Midfielder": {
+    "player_count": 603,
+    "bic_scores": {
+      "2": 10216.05,
+      "3": 10265.26,
+      "4": 10429.27
+    },
+    "aic_scores": {
+      "2": 9824.28,
+      "3": 9675.4,
+      "4": 9641.33
+    },
+    "chosen_n_components": 2,
+    "best_bic": 10216.05
+  },
+  "Forward": {
+    "player_count": 451,
+    "bic_scores": {
+      "2": 7904.11,
+      "3": 7970.53,
+      "4": 8098.97
+    },
+    "aic_scores": {
+      "2": 7538.19,
+      "3": 7419.59,
+      "4": 7363.02
+    },
+    "chosen_n_components": 2,
+    "best_bic": 7904.11
+  }
+}
