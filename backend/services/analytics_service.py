@@ -117,6 +117,8 @@ class AnalyticsService:
         summaries = []
         for row in sliced.to_dict(orient='records'):
             age_val = row.get('Age', row.get('age'))
+            photo_ref = row.get('photo_ref')
+            photo_url = str(photo_ref) if photo_ref and not pd.isna(photo_ref) else None
             summaries.append(
                 PlayerSummary(
                     player_id=str(row.get('player_id', '')),
@@ -129,6 +131,7 @@ class AnalyticsService:
                     age=int(float(age_val)) if age_val is not None and not pd.isna(age_val) else None,
                     cluster_id=int(row.get('cluster_id', 0)),
                     cluster_name=str(row.get('cluster_name', '')),
+                    photo_url=photo_url,
                     pca_x=float(row.get('pca_x', 0.0)),
                     pca_y=float(row.get('pca_y', 0.0)),
                 )
@@ -159,6 +162,8 @@ class AnalyticsService:
             gmm_probs = gmm_json_raw
 
         age_val = row.get('Age', row.get('age'))
+        photo_ref = row.get('photo_ref')
+        photo_url = str(photo_ref) if photo_ref and not pd.isna(photo_ref) else None
 
         return PlayerDetail(
             player_id=str(row.get('player_id', '')),
@@ -171,6 +176,7 @@ class AnalyticsService:
             age=int(float(age_val)) if age_val is not None and not pd.isna(age_val) else None,
             cluster_id=int(row.get('cluster_id', 0)),
             cluster_name=str(row.get('cluster_name', '')),
+            photo_url=photo_url,
             gmm_probabilities=gmm_probs,
             pca_x=float(row.get('pca_x', 0.0)),
             pca_y=float(row.get('pca_y', 0.0)),
@@ -254,6 +260,9 @@ class AnalyticsService:
 
             sim_score = max(0.0, round((1.0 - float(dist)) * 100.0, 2))
 
+            photo_ref = matched_row.get('photo_ref')
+            photo_url = str(photo_ref) if photo_ref and not pd.isna(photo_ref) else None
+
             results.append(
                 SimilarPlayerResponse(
                     player_id=str(matched_row.get('player_id', '')),
@@ -263,6 +272,7 @@ class AnalyticsService:
                     position_group=str(matched_row.get('position_group', '')),
                     cluster_name=str(matched_row.get('cluster_name', '')),
                     similarity_score=sim_score,
+                    photo_url=photo_url,
                 )
             )
 

@@ -18,6 +18,7 @@ class PlayerSummary(BaseModel):
     age: Optional[int] = None
     cluster_id: int
     cluster_name: str
+    photo_url: Optional[str] = Field(default=None, description="Resolved Wikimedia Commons photo URL or local demo photo path")
     pca_x: float
     pca_y: float
 
@@ -33,6 +34,7 @@ class PlayerDetail(BaseModel):
     age: Optional[int] = None
     cluster_id: int
     cluster_name: str
+    photo_url: Optional[str] = Field(default=None, description="Resolved Wikimedia Commons photo URL or local demo photo path")
     gmm_probabilities: Dict[str, float] = Field(default_factory=dict, description="GMM soft-clustering probability distribution")
     pca_x: float
     pca_y: float
@@ -65,6 +67,7 @@ class SimilarPlayerResponse(BaseModel):
     position_group: str
     cluster_name: str
     similarity_score: float
+    photo_url: Optional[str] = Field(default=None, description="Resolved Wikimedia Commons photo URL or local demo photo path")
 
 
 class HealthResponse(BaseModel):
