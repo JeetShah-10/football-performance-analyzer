@@ -81,6 +81,7 @@ class AnalyticsService:
         position_group: Optional[str] = None,
         league: Optional[str] = None,
         search: Optional[str] = None,
+        max_age: Optional[int] = None,
         limit: int = 100,
         offset: int = 0,
     ) -> List[PlayerSummary]:
@@ -98,6 +99,11 @@ class AnalyticsService:
                 filtered_df[col_league].astype(str).str.contains(league.strip(), case=False, na=False)
             ]
 
+        if max_age is not None:
+            col_age = 'Age' if 'Age' in filtered_df.columns else 'age'
+            if col_age in filtered_df.columns:
+                filtered_df = filtered_df[filtered_df[col_age] <= max_age]
+
         if search:
             query = search.strip().lower()
             name_match = filtered_df['player_name'].astype(str).str.lower().str.contains(query, na=False)
@@ -109,6 +115,7 @@ class AnalyticsService:
 
         summaries = []
         for row in sliced.to_dict(orient='records'):
+            age_val = row.get('Age', row.get('age'))
             summaries.append(
                 PlayerSummary(
                     player_id=str(row.get('player_id', '')),
@@ -118,6 +125,7 @@ class AnalyticsService:
                     position=str(row.get('position', row.get('Pos', ''))),
                     position_group=str(row.get('position_group', '')),
                     minutes_played=int(row.get('minutes_played', row.get('Min', 0))),
+                    age=int(float(age_val)) if age_val is not None and not pd.isna(age_val) else None,
                     cluster_id=int(row.get('cluster_id', 0)),
                     cluster_name=str(row.get('cluster_name', '')),
                     pca_x=float(row.get('pca_x', 0.0)),

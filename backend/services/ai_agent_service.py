@@ -40,12 +40,13 @@ class AIScoutAgentService:
         return str(pred)
 
     def extract_entities(self, query: str) -> Dict[str, Any]:
-        """Rule-based entity extraction (fuzzy player name matching, age limits, position keywords)."""
+        """Rule-based entity extraction (fuzzy player name matching, age limits, position keywords, league)."""
         clean_q = query.lower()
         entities = {
             "matched_players": [],
             "position_group": None,
             "max_age": None,
+            "league": None,
             "limit": 5
         }
 
@@ -55,49 +56,62 @@ class AIScoutAgentService:
             entities["max_age"] = int(age_match.group(1))
 
         # 2. Position Group Keyword Extraction
-        if any(w in clean_q for w in ["defender", "cb", "lb", "rb", "fullback", "stopper"]):
+        if any(w in clean_q for w in ["defender", "defenders", "cb", "lb", "rb", "fullback", "stopper"]):
             entities["position_group"] = "Defender"
-        elif any(w in clean_q for w in ["midfielder", "cm", "dm", "am", "playmaker"]):
+        elif any(w in clean_q for w in ["midfielder", "midfielders", "cm", "dm", "am", "playmaker"]):
             entities["position_group"] = "Midfielder"
-        elif any(w in clean_q for w in ["forward", "winger", "striker", "finisher", "fw"]):
+        elif any(w in clean_q for w in ["forward", "forwards", "winger", "wingers", "striker", "strikers", "finisher", "fw"]):
             entities["position_group"] = "Forward"
+
+        # 3. League Keyword Extraction
+        if "la liga" in clean_q or "laliga" in clean_q:
+            entities["league"] = "La Liga"
+        elif "premier league" in clean_q or "epl" in clean_q:
+            entities["league"] = "Premier League"
+        elif "serie a" in clean_q:
+            entities["league"] = "Serie A"
+        elif "bundesliga" in clean_q:
+            entities["league"] = "Bundesliga"
+        elif "ligue 1" in clean_q:
+            entities["league"] = "Ligue 1"
 
         # Clean query text: strip possessives and extra punctuation
         clean_text = re.sub(r"['’]s\b", "", clean_q)
         clean_text = re.sub(r'[^a-z0-9\s]', ' ', clean_text)
-        words = [w for w in clean_text.split() if len(w) > 2 and w not in ["tell", "about", "style", "compare", "and", "like", "find", "show", "under", "with", "who", "plays"]]
+        
+        # Strict stopwords list to prevent false positive single-word player matches (e.g. "young" -> Ashley Young)
+        stop_words = {
+            "young", "strong", "best", "top", "fast", "great", "good", "old", "new",
+            "tell", "about", "style", "compare", "and", "like", "find", "show", "under", "with",
+            "who", "plays", "are", "the", "forwards", "defenders", "midfielders", "players",
+            "player", "scout", "replacements", "strikers", "wingers", "league", "liga", "la",
+            "premier", "serie", "bundesliga", "ligue"
+        }
+        
+        words = [w for w in clean_text.split() if len(w) > 2]
+        candidate_words = [w for w in words if w not in stop_words]
 
-        # 3a. Multi-word phrase exact/partial match against full player names (prioritize full names)
+        # 4a. Multi-word phrase exact/partial match against full player names
         for i in range(len(words)):
-            for j in range(len(words), i, -1):
+            for j in range(len(words), i + 1, -1):
                 phrase = " ".join(words[i:j])
+                if phrase in ["la liga", "premier league", "serie a", "bundesliga", "ligue 1"]:
+                    continue
                 for full_name_lower, player_obj in self.player_names_map.items():
-                    # Strip accents for robust string match
                     name_clean = re.sub(r'[^a-z0-9\s]', ' ', full_name_lower)
                     if phrase == name_clean or (len(phrase) > 4 and phrase in name_clean):
                         if player_obj not in entities["matched_players"]:
                             entities["matched_players"].append(player_obj)
 
-        # 3b. If no multi-word match, check individual surname/firstname matches
+        # 4b. Single-word match ONLY using non-stopword candidate words
         if not entities["matched_players"]:
-            for w in words:
+            for w in candidate_words:
                 for full_name_lower, player_obj in self.player_names_map.items():
                     name_parts = [part for part in re.sub(r'[^a-z0-9\s]', ' ', full_name_lower).split() if len(part) > 2]
                     if w in name_parts:
                         if player_obj not in entities["matched_players"]:
                             entities["matched_players"].append(player_obj)
                             break
-
-        # Fallback to difflib fuzzy matching if no exact word matches found
-        if not entities["matched_players"]:
-            for i in range(len(words)):
-                for j in range(i + 1, min(i + 4, len(words) + 1)):
-                    phrase = " ".join(words[i:j])
-                    matches = difflib.get_close_matches(phrase, self.player_names_list, n=1, cutoff=0.75)
-                    if matches:
-                        player_obj = self.player_names_map[matches[0]]
-                        if player_obj not in entities["matched_players"]:
-                            entities["matched_players"].append(player_obj)
 
         return entities
 
@@ -177,15 +191,32 @@ class AIScoutAgentService:
 
         else: # find_by_criteria
             pos = entities["position_group"]
-            backend_methods_called.append(f"AnalyticsService.list_players(position_group='{pos}', limit=5)")
-            players = self.analytics_service.list_players(position_group=pos, limit=5)
+            max_age = entities["max_age"]
+            league = entities["league"]
+            
+            call_kwargs = {}
+            if pos: call_kwargs["position_group"] = pos
+            if league: call_kwargs["league"] = league
+            if max_age is not None: call_kwargs["max_age"] = max_age
+            call_kwargs["limit"] = 5
+
+            kwargs_str = ", ".join([f"{k}='{v}'" if isinstance(v, str) else f"{k}={v}" for k, v in call_kwargs.items()])
+            backend_methods_called.append(f"AnalyticsService.list_players({kwargs_str})")
+            
+            players = self.analytics_service.list_players(
+                position_group=pos,
+                league=league,
+                max_age=max_age,
+                limit=5
+            )
             
             rows_text = ""
             for p in players:
-                rows_text += f"- **{p.player_name}** ({p.squad}, {p.league}) — Archetype: *{p.cluster_name}*\n"
+                age_str = f", Age {p.age}" if p.age is not None else ""
+                rows_text += f"- **{p.player_name}** ({p.squad}, {p.league}{age_str}) — Archetype: *{p.cluster_name}*\n"
 
             report_markdown = f"""### 🎯 Criteria Scouting Results: {pos or 'All Positions'}
-**Applied Filters**: Position Group: `{pos or 'Any'}`, Max Age: `{entities['max_age'] or 'Any'}`  
+**Applied Filters**: Position Group: `{pos or 'Any'}`, League: `{league or 'Any'}`, Max Age: `{max_age or 'Any'}`  
 
 #### Matched Player Candidates:
 {rows_text}
@@ -197,7 +228,8 @@ class AIScoutAgentService:
             "extracted_entities": {
                 "matched_players": [p.player_name for p in entities["matched_players"]],
                 "position_group": entities["position_group"],
-                "max_age": entities["max_age"]
+                "max_age": entities["max_age"],
+                "league": entities["league"]
             },
             "backend_methods_called": backend_methods_called,
             "report_markdown": report_markdown

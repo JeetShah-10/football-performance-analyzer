@@ -15,6 +15,7 @@ class PlayerSummary(BaseModel):
     position: str
     position_group: str
     minutes_played: int
+    age: Optional[int] = None
     cluster_id: int
     cluster_name: str
     pca_x: float
@@ -29,6 +30,7 @@ class PlayerDetail(BaseModel):
     position: str
     position_group: str
     minutes_played: int
+    age: Optional[int] = None
     cluster_id: int
     cluster_name: str
     pca_x: float
