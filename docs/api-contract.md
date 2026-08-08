@@ -66,8 +66,8 @@ Returns detailed player statistics with per-90 values, position-group percentile
   "cluster_id": 1,
   "cluster_name": "Dynamic Winger / Dribbler",
   "gmm_probabilities": {
-    "Forward Archetype 1 (Low PrgC)": 0.0,
-    "Forward Archetype 2 (High PrgC)": 1.0
+    "Clinical Finisher / Poacher": 0.0,
+    "Dynamic Winger / Dribbler": 1.0
   },
   "pca_x": 1.425,
   "pca_y": -0.812,
