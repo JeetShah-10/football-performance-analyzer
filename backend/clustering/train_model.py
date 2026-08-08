@@ -157,20 +157,28 @@ def train_and_export_fbref_pipeline():
         # Compute GMM component probabilities for all players in this position group
         probs = gmm_final.predict_proba(X_sub)
 
-        # Define GMM component labels based on signature stats
-        comp_labels = []
-        for c in range(best_gmm_comp):
-            # Compute weighted signature stats for component c
-            comp_mean = gmm_final.means_[c]
-            pos_mean = X_sub.mean(axis=0)
-            pos_std = X_sub.std(axis=0)
-            z_diffs = (comp_mean - pos_mean) / np.where(pos_std == 0, 1, pos_std)
-            top_feat_idx = np.argmax(np.abs(z_diffs))
-            top_feat = FBREF_FEATURE_COLUMNS[top_feat_idx]
-            z_val = z_diffs[top_feat_idx]
-            direction = "High" if z_val > 0 else "Low"
-            label_name = f"{pos_group} Archetype {c+1} ({direction} {top_feat.replace('_per90', '')})"
-            comp_labels.append(label_name)
+        # Human-readable archetype mapping for GMM components based on signature stats
+        gmm_archetype_maps = {
+            'Defender': {
+                0: "Stopper / Defensive Destroyer",
+                1: "Attacking Fullback / Playmaker",
+                2: "Ball-Playing Defender"
+            },
+            'Midfielder': {
+                0: "Box-to-Box / Pressing Engine",
+                1: "Deep-Lying Playmaker"
+            },
+            'Forward': {
+                0: "Clinical Finisher / Poacher",
+                1: "Dynamic Winger / Dribbler"
+            }
+        }
+
+        # Define GMM component labels
+        comp_labels = [
+            gmm_archetype_maps[pos_group].get(c, f"{pos_group} Archetype {c+1}")
+            for c in range(best_gmm_comp)
+        ]
 
         gmm_component_labels[pos_group] = comp_labels
 
