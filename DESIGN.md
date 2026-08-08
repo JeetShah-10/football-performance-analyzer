@@ -61,3 +61,11 @@ Every item below is strictly **FORBIDDEN**. Code reviews and AI pre-flight check
 | **Borders & Depth** | 1px subtle borders (`border-zinc-800`) over heavy fuzzy drop shadows |
 | **Icons** | SVG Icon sets (Heroicons / Lucide tuned to matching stroke widths) |
 | **Routing & SEO** | React Router / Vite with route-level metadata and dedicated 404 page |
+
+---
+
+## 🤖 HONEST AI & ML TERMINOLOGY SPECIFICATION
+
+To ensure complete academic honesty and accuracy for university evaluation:
+1. **AI Scout Agent**: Described as a composite pipeline consisting of a **trained TF-IDF + Logistic Regression Intent Classifier** (88.24% test accuracy), a **rule-based fuzzy entity extractor** (`difflib` against 1,802 database names), and **templated report synthesis**. It must NOT be described as "autonomous generative AI" or an "end-to-end neural network".
+2. **Supervised Position Classifier**: Described as a **trained multi-class classification model** (`LogisticRegression` vs `RandomForest`) evaluated on an 80/20 stratified split (81.16% test accuracy), with confusion matrix reports saved in `position_classifier_report.json`.

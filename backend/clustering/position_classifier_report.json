@@ -1,0 +1,176 @@
+{
+  "dataset_size": 1802,
+  "train_size": 1441,
+  "test_size": 361,
+  "classes": [
+    "Defender",
+    "Forward",
+    "Midfielder"
+  ],
+  "models": {
+    "LogisticRegression": {
+      "accuracy": 0.8116,
+      "confusion_matrix": [
+        [
+          134,
+          1,
+          15
+        ],
+        [
+          1,
+          79,
+          10
+        ],
+        [
+          30,
+          11,
+          80
+        ]
+      ],
+      "classification_report": {
+        "Defender": {
+          "precision": 0.8121212121212121,
+          "recall": 0.8933333333333333,
+          "f1-score": 0.8507936507936508,
+          "support": 150.0
+        },
+        "Forward": {
+          "precision": 0.8681318681318682,
+          "recall": 0.8777777777777778,
+          "f1-score": 0.8729281767955801,
+          "support": 90.0
+        },
+        "Midfielder": {
+          "precision": 0.7619047619047619,
+          "recall": 0.6611570247933884,
+          "f1-score": 0.7079646017699115,
+          "support": 121.0
+        },
+        "accuracy": 0.8116343490304709,
+        "macro avg": {
+          "precision": 0.814052614052614,
+          "recall": 0.8107560453014999,
+          "f1-score": 0.810562143119714,
+          "support": 361.0
+        },
+        "weighted avg": {
+          "precision": 0.809253535015308,
+          "recall": 0.8116343490304709,
+          "f1-score": 0.8084385051102745,
+          "support": 361.0
+        }
+      }
+    },
+    "RandomForest": {
+      "accuracy": 0.7673,
+      "confusion_matrix": [
+        [
+          131,
+          3,
+          16
+        ],
+        [
+          0,
+          78,
+          12
+        ],
+        [
+          37,
+          16,
+          68
+        ]
+      ],
+      "classification_report": {
+        "Defender": {
+          "precision": 0.7797619047619048,
+          "recall": 0.8733333333333333,
+          "f1-score": 0.8238993710691824,
+          "support": 150.0
+        },
+        "Forward": {
+          "precision": 0.8041237113402062,
+          "recall": 0.8666666666666667,
+          "f1-score": 0.8342245989304813,
+          "support": 90.0
+        },
+        "Midfielder": {
+          "precision": 0.7083333333333334,
+          "recall": 0.5619834710743802,
+          "f1-score": 0.6267281105990783,
+          "support": 121.0
+        },
+        "accuracy": 0.7673130193905817,
+        "macro avg": {
+          "precision": 0.7640729831451482,
+          "recall": 0.7673278236914601,
+          "f1-score": 0.7616173601995806,
+          "support": 361.0
+        },
+        "weighted avg": {
+          "precision": 0.7618940528206027,
+          "recall": 0.7673130193905817,
+          "f1-score": 0.7603856535917152,
+          "support": 361.0
+        }
+      }
+    }
+  },
+  "chosen_model": "LogisticRegression",
+  "boundary_misclassifications": [
+    {
+      "player_id": "edimilson_fernandes_ch_sui_1996_0",
+      "player_name": "Edimilson Fernandes",
+      "actual_position_group": "Midfielder",
+      "predicted_position_group": "Defender",
+      "cluster_name": "Box-to-Box / Pressing Engine",
+      "pca_x": -1.763,
+      "pca_y": -0.286,
+      "minutes_played": 1105,
+      "explanation": "Sits near the Midfielder/Defender positional boundary in 8D metric space."
+    },
+    {
+      "player_id": "luis_rioja_es_esp_1993_0",
+      "player_name": "Luis Rioja",
+      "actual_position_group": "Midfielder",
+      "predicted_position_group": "Defender",
+      "cluster_name": "Deep-Lying Playmaker",
+      "pca_x": 1.229,
+      "pca_y": 0.14,
+      "minutes_played": 2854,
+      "explanation": "Sits near the Midfielder/Defender positional boundary in 8D metric space."
+    },
+    {
+      "player_id": "joris_chotard_fr_fra_2001_0",
+      "player_name": "Joris Chotard",
+      "actual_position_group": "Midfielder",
+      "predicted_position_group": "Defender",
+      "cluster_name": "Box-to-Box / Pressing Engine",
+      "pca_x": -1.569,
+      "pca_y": -0.088,
+      "minutes_played": 1892,
+      "explanation": "Sits near the Midfielder/Defender positional boundary in 8D metric space."
+    },
+    {
+      "player_id": "matteo_pessina_it_ita_1997_0",
+      "player_name": "Matteo Pessina",
+      "actual_position_group": "Midfielder",
+      "predicted_position_group": "Defender",
+      "cluster_name": "Box-to-Box / Pressing Engine",
+      "pca_x": -1.84,
+      "pca_y": -0.122,
+      "minutes_played": 854,
+      "explanation": "Sits near the Midfielder/Defender positional boundary in 8D metric space."
+    },
+    {
+      "player_id": "ibrahim_sangar__ci_civ_1997_0",
+      "player_name": "Ibrahim Sangar\u00e9",
+      "actual_position_group": "Midfielder",
+      "predicted_position_group": "Defender",
+      "cluster_name": "Box-to-Box / Pressing Engine",
+      "pca_x": -2.36,
+      "pca_y": 1.823,
+      "minutes_played": 590,
+      "explanation": "Sits near the Midfielder/Defender positional boundary in 8D metric space."
+    }
+  ]
+}

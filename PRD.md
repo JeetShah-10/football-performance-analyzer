@@ -69,13 +69,12 @@ This project serves as a dual university mini-project submission:
 - **Algorithm**: `NearestNeighbors(n_neighbors=5, metric='cosine')` trained in the high-dimensional scaled feature space (not PCA space).
 - **Output**: Returns top $N$ closest player matches for any selected target player.
 
-### FR-4: REST API Layer (Dev)
+### FR-4: AI Scout Agent & REST API Layer (Dev & Jeet)
 - **Framework**: FastAPI with Pydantic response contracts and slowapi rate-limiting.
-- **Endpoints**:
-  - `GET /players`: Returns summarized player list with cluster labels and PCA coordinates.
-  - `GET /players/{id}`: Returns detailed per-90 stats and cluster centroid comparison data.
-  - `GET /clusters`: Returns metadata and centroid metric profiles for all clusters.
-  - `GET /similar/{id}?n=5`: Returns top $N$ similar players.
+- **Trained Intent Layer**: TF-IDF + Logistic Regression model trained on 84 sample query dataset (88.24% test accuracy) predicting query intents (`find_similar`, `find_by_criteria`, `explain_player`, `compare_players`).
+- **Entity Extraction**: Rule-based matching (fuzzy player name matching via `difflib` against 1,802 database names, regex age limits, position keywords).
+- **Report Synthesizer**: Template-based Markdown report generation over real retrieved `AnalyticsService` metrics.
+- **Supervised Position Classifier**: `LogisticRegression` classifier (81.16% test accuracy) trained on 8 per-90 metrics predicting position groups (`Defender`, `Midfielder`, `Forward`), with confusion matrix evaluation saved in `position_classifier_report.json`.
 
 ### FR-5: React Frontend Dashboard (Pooja)
 - **Overview Screen**: Interactive PCA 2D Scatter Plot colored by cluster archetype with search and position filters.

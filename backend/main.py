@@ -8,7 +8,7 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
 
-from backend.routers import players, clusters, similarity
+from backend.routers import players, clusters, similarity, scout_agent
 from backend.schemas.player_schemas import HealthResponse
 from backend.services.analytics_service import AnalyticsService
 
@@ -95,3 +95,4 @@ def health_check():
 app.include_router(players.router)
 app.include_router(clusters.router)
 app.include_router(similarity.router)
+app.include_router(scout_agent.router)
