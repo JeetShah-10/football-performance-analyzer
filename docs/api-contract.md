@@ -133,3 +133,39 @@ Returns top $N$ closest tactical matches for a player using Cosine distance in 8
   }
 ]
 ```
+
+---
+
+### `POST /scout-agent/query`
+Natural language AI Scout Agent endpoint powering intent classification, fuzzy entity extraction, candidate querying, and synthesized report generation.
+
+#### Request Body (`application/json`):
+```json
+{
+  "query": "find young forwards under 22 in la liga similar to Saka"
+}
+```
+
+#### Response (`200 OK`):
+```json
+{
+  "intent": "find_by_criteria",
+  "entities": {
+    "position": "Forward",
+    "max_age": 22,
+    "league": "La Liga"
+  },
+  "result_type": "player_list",
+  "data": [
+    {
+      "player_id": "lamine_yamal_es_esp_2007_0",
+      "player_name": "Lamine Yamal",
+      "squad": "Barcelona",
+      "league": "es La Liga",
+      "position_group": "Forward",
+      "cluster_name": "Dynamic Winger / Dribbler"
+    }
+  ],
+  "synthesized_response": "Found 4 players matching criteria (Position: Forward, Max Age: 22, League: La Liga)..."
+}
+```
