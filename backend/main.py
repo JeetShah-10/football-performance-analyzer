@@ -17,8 +17,9 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("football_backend")
 
 # NOTE FOR FRONTEND LEAD (Pooja):
-# Bare paths (/players, /players/{id}, /clusters, /similar/{id}) are canonical per docs/api-contract.md.
-# Alias paths under /api/* are also mounted for backward compatibility.
+# Canonical paths per docs/api-contract.md: /players, /players/{id}, /clusters, /similar/{id}, /scout-agent/query.
+# No /api/* aliases exist — use bare paths only.
+
 
 from backend.limiter import limiter
 
