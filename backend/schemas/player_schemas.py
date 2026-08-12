@@ -20,6 +20,15 @@ class PlayerSummary(BaseModel):
     cluster_name: str
     pca_x: float
     pca_y: float
+    # Per-90 metrics for client-side filtering
+    npxG_per90: float = 0.0
+    xAG_per90: float = 0.0
+    KP_per90: float = 0.0
+    PrgP_per90: float = 0.0
+    PrgC_per90: float = 0.0
+    Tkl_per90: float = 0.0
+    Int_per90: float = 0.0
+    Succ_per90: float = 0.0
 
 
 class PlayerDetail(BaseModel):

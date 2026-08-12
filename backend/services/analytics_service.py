@@ -131,6 +131,14 @@ class AnalyticsService:
                     cluster_name=str(row.get('cluster_name', '')),
                     pca_x=float(row.get('pca_x', 0.0)),
                     pca_y=float(row.get('pca_y', 0.0)),
+                    npxG_per90=round(float(row.get('npxG_per90', 0.0)), 3),
+                    xAG_per90=round(float(row.get('xAG_per90', 0.0)), 3),
+                    KP_per90=round(float(row.get('KP_per90', 0.0)), 3),
+                    PrgP_per90=round(float(row.get('PrgP_per90', 0.0)), 3),
+                    PrgC_per90=round(float(row.get('PrgC_per90', 0.0)), 3),
+                    Tkl_per90=round(float(row.get('Tkl_per90', 0.0)), 3),
+                    Int_per90=round(float(row.get('Int_per90', 0.0)), 3),
+                    Succ_per90=round(float(row.get('Succ_per90', 0.0)), 3),
                 )
             )
         return summaries

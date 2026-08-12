@@ -1,0 +1,14 @@
+# Football Player Style Dashboard - AI Documentation
+
+This project uses React, Tailwind CSS v4, Recharts, and Framer Motion. 
+It integrates with a FastAPI backend on port 8000 for clustering and similarity inference.
+
+## Key Features
+- **Tactical PCA Cluster Map**: Visualizes high-dimensional player data in 2D space.
+- **Percentile Radar Charts**: 8-axis per-90 metrics mapped against positional peers.
+- **GMM Soft-Clustering**: Probabilistic tactical DNA breakdowns.
+- **U21 Similarity Engine**: Cosine distance similarity scouting for prospects.
+- **AI Scout Chat**: Natural language intent classification and structured search.
+
+## Theme & Anti-Slop
+This project strictly enforces `DESIGN.md`. The theme relies on Zinc and Emerald tones (`#10b981`), completely banning AI-cliché purple gradients, excessive rounded-full desktop buttons, pure blacks (`#000`), and pure whites (`#FFF`).

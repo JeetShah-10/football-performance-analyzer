@@ -222,15 +222,21 @@ class AIScoutAgentService:
 {rows_text}
 """
 
+        entities_dict = {
+            "matched_players": [p.player_name for p in entities["matched_players"]],
+            "position_group": entities["position_group"],
+            "max_age": entities["max_age"],
+            "league": entities["league"]
+        }
+
         return {
             "query": query,
             "predicted_intent": predicted_intent,
-            "extracted_entities": {
-                "matched_players": [p.player_name for p in entities["matched_players"]],
-                "position_group": entities["position_group"],
-                "max_age": entities["max_age"],
-                "league": entities["league"]
-            },
+            "intent": predicted_intent,
+            "extracted_entities": entities_dict,
+            "entities": entities_dict,
             "backend_methods_called": backend_methods_called,
-            "report_markdown": report_markdown
+            "report_markdown": report_markdown,
+            "synthesized_response": report_markdown
         }
+
