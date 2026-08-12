@@ -343,7 +343,7 @@ export default function FootballDashboard() {
             position_group: p.position_group,
             age: p.age,
             similarity_score: 96 - idx * 2,
-            photo: `/images/players/${p.player_id}.jpg`,
+            photo: getPlayerImage(p),
             ring: CLUSTER_COLORS[idx % CLUSTER_COLORS.length],
           }));
         setSimilarPlayers(matches);
@@ -462,7 +462,7 @@ export default function FootballDashboard() {
           name: found.player_name,
           club: found.squad,
           accent: accents[idx % accents.length],
-          photo: `/images/players/${found.player_id}.jpg`,
+          photo: getPlayerImage(found),
         });
       }
     });
@@ -479,7 +479,7 @@ export default function FootballDashboard() {
             name: p.player_name,
             club: p.squad,
             accent: accents[accentIdx % accents.length],
-            photo: `/images/players/${p.player_id}.jpg`,
+            photo: getPlayerImage(p),
           });
         }
       });
