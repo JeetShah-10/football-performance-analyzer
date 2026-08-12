@@ -55,5 +55,4 @@ frontend/*.local
 .DS_Store
 Thumbs.db
 scratch/
-backend/data/player_images.zip
 
