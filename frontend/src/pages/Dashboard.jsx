@@ -435,6 +435,38 @@ export default function FootballDashboard() {
     ];
   }, [filteredPlayers, radarCluster]);
 
+  // Dynamic Spotlight Radar Data: profile radar specifically for the selected spotlight player
+  const spotlightRadarData = useMemo(() => {
+    if (!spotlightPlayer) return [];
+    
+    // If backend provided pre-computed percentiles (from detail endpoint)
+    if (spotlightPlayer.stats) {
+      return [
+        { metric: "npxG/90", value: spotlightPlayer.stats.npxG_per90?.percentile || 0 },
+        { metric: "xAG/90", value: spotlightPlayer.stats.xAG_per90?.percentile || 0 },
+        { metric: "Key Passes/90", value: spotlightPlayer.stats.KP_per90?.percentile || 0 },
+        { metric: "Prog. Passes/90", value: spotlightPlayer.stats.PrgP_per90?.percentile || 0 },
+        { metric: "Prog. Carries/90", value: spotlightPlayer.stats.PrgC_per90?.percentile || 0 },
+        { metric: "Tackles/90", value: spotlightPlayer.stats.Tkl_per90?.percentile || 0 },
+        { metric: "Interceptions/90", value: spotlightPlayer.stats.Int_per90?.percentile || 0 },
+        { metric: "Dribbles/90", value: spotlightPlayer.stats.Succ_per90?.percentile || 0 },
+      ];
+    }
+    
+    // Fallback to manual normalization if only summary stats are available
+    const norm = (val, max) => Math.min(100, Math.round(((val || 0) / max) * 100));
+    return [
+      { metric: "npxG/90", value: norm(spotlightPlayer.npxG_per90, 0.6) },
+      { metric: "xAG/90", value: norm(spotlightPlayer.xAG_per90, 0.5) },
+      { metric: "Key Passes/90", value: norm(spotlightPlayer.KP_per90, 3.0) },
+      { metric: "Prog. Passes/90", value: norm(spotlightPlayer.PrgP_per90, 7.0) },
+      { metric: "Prog. Carries/90", value: norm(spotlightPlayer.PrgC_per90, 5.0) },
+      { metric: "Tackles/90", value: norm(spotlightPlayer.Tkl_per90, 3.5) },
+      { metric: "Interceptions/90", value: norm(spotlightPlayer.Int_per90, 2.5) },
+      { metric: "Dribbles/90", value: norm(spotlightPlayer.Succ_per90, 3.0) },
+    ];
+  }, [spotlightPlayer]);
+
   // Dynamic Top Performers derived strictly from the dataset list
   const topPerformersData = useMemo(() => {
     if (!filteredPlayers.length) return [];
@@ -1031,7 +1063,7 @@ export default function FootballDashboard() {
             <div className="bg-[#161233] p-4 rounded-xl border border-white/5 mb-6">
               <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Tactical Profile (Percentile Ranks)</h3>
               <ResponsiveContainer width="100%" height={260}>
-                <RadarChart data={radarData}>
+                <RadarChart data={spotlightRadarData}>
                   <PolarGrid stroke="rgba(255,255,255,0.1)" />
                   <PolarAngleAxis dataKey="metric" tick={{ fill: "#a855f7", fontSize: 11 }} />
                   <PolarRadiusAxis angle={90} domain={[0, 100]} tick={{ fill: "#4b5265", fontSize: 9 }} />

@@ -155,7 +155,12 @@ def train_and_export_fbref_pipeline():
         gmm_models[pos_group] = gmm_final
 
         # Compute GMM component probabilities for all players in this position group
-        probs = gmm_final.predict_proba(X_sub)
+        # Use Temperature Scaling to soften the probabilities since GMMs on this dataset yield hard clustering
+        from scipy.special import logsumexp
+        log_probs = gmm_final._estimate_weighted_log_prob(X_sub)
+        T = 5.0
+        log_probs_soft = log_probs / T
+        probs = np.exp(log_probs_soft - logsumexp(log_probs_soft, axis=1, keepdims=True))
 
         # Human-readable archetype mapping for GMM components based on signature stats
         gmm_archetype_maps = {
