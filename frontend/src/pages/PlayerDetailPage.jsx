@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, Loader2 } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { fetchPlayerDetail } from '../lib/api'
 import { MOCK_PLAYER_DETAILS } from '../lib/mockData'
 import PositionBadge from '../components/PositionBadge'
@@ -18,11 +18,13 @@ export default function PlayerDetailPage() {
   const [player, setPlayer] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [imgError, setImgError] = useState(false)
   const playerImg = player ? getPlayerImage(player) : null
 
   const loadProfile = async () => {
     setLoading(true)
     setError(null)
+    setImgError(false)
     
     const { data, error: apiError } = await fetchPlayerDetail(playerId)
     
@@ -66,6 +68,8 @@ export default function PlayerDetailPage() {
 
   if (!player) return null
 
+  const initials = player.player_name ? player.player_name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) : '??'
+
   return (
     <div className="page-container flex flex-col gap-6 pt-6 pb-12">
       
@@ -82,11 +86,18 @@ export default function PlayerDetailPage() {
         
         <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="flex items-center gap-5">
-            {playerImg && (
-              <div className="w-16 h-16 rounded-full border-2 border-purple-500/50 overflow-hidden shrink-0 shadow-[0_0_15px_rgba(168,85,247,0.3)] bg-[#17132c]">
-                <img src={playerImg} alt={player.player_name} className="w-full h-full object-cover object-center" />
-              </div>
-            )}
+            <div className="w-16 h-16 rounded-full border-2 border-emerald-500/40 overflow-hidden shrink-0 shadow-[0_0_15px_rgba(16,185,129,0.2)] bg-[#121927] flex items-center justify-center">
+              {playerImg && !imgError ? (
+                <img 
+                  src={playerImg} 
+                  alt={player.player_name} 
+                  className="w-full h-full object-cover object-center" 
+                  onError={() => setImgError(true)}
+                />
+              ) : (
+                <span className="text-xl font-bold text-emerald-400 font-mono">{initials}</span>
+              )}
+            </div>
             <div className="flex flex-col gap-1">
               <h1 className="text-3xl md:text-4xl font-bold text-zinc-50 tracking-tight">
                 {player.player_name}

@@ -3,8 +3,6 @@
  * Maps player names to their corresponding image files using a pre-built index.
  */
 
-import imageIndex from '../data/imageIndex.json';
-
 /**
  * Normalize a player name for lookup.
  * - Lowercases

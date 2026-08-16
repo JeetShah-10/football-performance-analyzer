@@ -5,7 +5,6 @@ import { fetchPlayers, fetchPlayerDetail, fetchSimilar } from '../lib/api'
 import { MOCK_PLAYERS, MOCK_PLAYER_DETAILS, MOCK_SIMILAR_U21 } from '../lib/mockData'
 import RadarChart from '../components/RadarChart'
 import ClusterTag from '../components/ClusterTag'
-import ErrorState from '../components/ErrorState'
 
 export default function U21ScoutingTab() {
   const [search, setSearch] = useState('')
@@ -21,7 +20,6 @@ export default function U21ScoutingTab() {
   const [u21Stats, setU21Stats] = useState(null)
   
   const [loadingMatches, setLoadingMatches] = useState(false)
-  const [error, setError] = useState(null)
 
   // Debounce search
   useEffect(() => {
@@ -60,7 +58,6 @@ export default function U21ScoutingTab() {
     setU21Matches([])
     setSelectedU21(null)
     setU21Stats(null)
-    setError(null)
     setLoadingMatches(true)
 
     // 1. Fetch full stats for target

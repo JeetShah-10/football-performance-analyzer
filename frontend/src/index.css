@@ -1,9 +1,114 @@
 @import "tailwindcss";
 
-html, body, #root {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  min-height: 100vh;
-  background-color: #060510;
+@font-face {
+  font-family: 'Baftiva';
+  src: url('./fonts/baftiva-font/BaftivaThin-2vRel.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    /* Eleven Redesign: Dark-Navy & Orange-Red Palette */
+    --bg-page: #000C12;
+    --bg-card: #03151F;
+    --border: #0A222E;
+    --border-hover: #102D3A;
+    --accent: #FF3C00;
+    --accent-hover: #FF6A33;
+    --accent-pressed: #CC2F00;
+    --accent-wash-bg: #2E1207;
+    --accent-pop-text: #FF9466;
+    --text-primary: #F5F1EB;
+    --text-secondary: #8FA3AD;
+    --text-muted: #5A7280;
+    --pos-defender: #3AA6D9;
+    --pos-midfielder: #E8B33D;
+    --pos-forward: #E8437A;
+
+    /* Legacy surface & accent tokens */
+    --bg-obsidian: #000C12;
+    --surface-card: #03151F;
+    --surface-border: #0A222E;
+    --accent-cyan: #3AA6D9;
+    --accent-emerald: #E8B33D;
+    --accent-gold: #FF6A33;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, .font-heading {
+    font-family: 'Plus Jakarta Sans', 'Space Grotesk', sans-serif;
+  }
+
+  .font-display {
+    font-family: 'Plus Jakarta Sans', 'Syne', sans-serif;
+  }
+
+  .font-syne {
+    font-family: 'Syne', sans-serif;
+  }
+
+  .font-baftiva {
+    font-family: 'Baftiva', 'Space Grotesk', sans-serif;
+  }
+
+  .font-mono, td, .stat-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-page);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-hover);
+}
+
+/* Reusable Utilities */
+.glass-header {
+  background: rgba(0, 12, 18, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.glass-card {
+  background: rgba(3, 21, 31, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+}
+
+.glass-card-hover {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card-hover:hover {
+  border-color: var(--border-hover);
+  box-shadow: 0 0 24px rgba(255, 60, 0, 0.12);
+  transform: translateY(-2px);
 }

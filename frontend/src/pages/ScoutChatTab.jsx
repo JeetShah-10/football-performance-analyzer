@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Send, Bot, User, Loader2, Sparkles, Terminal, Code2, ArrowRight } from 'lucide-react'
+import { Send, Bot, User, Loader2, Sparkles, Terminal, ArrowRight } from 'lucide-react'
 import { postScoutQuery } from '../lib/api'
 import { MOCK_SCOUT_RESPONSE } from '../lib/mockData'
 

@@ -1,16 +1,65 @@
-# React + Vite
+# Eleven — Frontend Web Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+The interactive client interface for **Eleven — Football Intelligence Platform**, built with React 19, Vite, Tailwind CSS, Framer Motion, and Recharts.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## ⚡ Tech Stack & UI Architecture
 
-## React Compiler
+* **Framework**: React 19 (SPA Architecture with React Router DOM)
+* **Build Tooling**: Vite 8 (Hot Module Replacement, optimized chunks)
+* **Styling & Theme**: Tailwind CSS with custom Apple Liquid Glassmorphism (`backdrop-blur-2xl`, `backdrop-saturate-[180%]`, specular top-rim bevel highlights)
+* **Animation & Physics**: Framer Motion (`useSpring`, layout transitions, magnetic cursor tracking)
+* **Data Visualizations**: Recharts (Custom 8D Metric Radar Charts, Dual Player Comparison Polygons)
+* **Icons**: Lucide React
+* **Linting & Code Hygiene**: Oxlint (0 errors)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the Oxlint configuration
+## 📂 Project Structure
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+```
+frontend/src/
+├── assets/                  # Hero background, player cutout, and display fonts
+│   ├── BaftivaThin.ttf      # Brand display typeface
+│   ├── hero-bg.jpg          # Full-bleed tactical stadium backdrop
+│   └── hero-player.webp     # Monumental grounded player cutout
+├── components/              # Reusable UI modules & design spells
+│   ├── DualRadarCompare.jsx # 2-player overlapping percentile radar
+│   ├── HeroSearch.jsx       # Weighted relevance & fuzzy autocomplete engine
+│   ├── Navbar.jsx           # Floating Apple liquid glass navigation capsule
+│   ├── RadarChart.jsx       # 8D normalized player performance radar
+│   ├── SimilarPlayers.jsx   # Cosine nearest-neighbor peer recommendation
+│   └── SplashLoader.jsx     # Cinematic startup intro sequence
+├── lib/                     # API helpers and constants
+│   ├── api.js               # Axios instance with rate-limit and error handling
+│   └── constants.js         # Positional colors, radar metrics, and leagues
+├── pages/                   # Application views
+│   ├── DirectoryTab.jsx     # 1,802-player directory with multi-filter grid
+│   ├── GMMTab.jsx           # 7 Gaussian Mixture Model tactical archetypes
+│   ├── HomeTab.jsx          # Non-F11 locked landing hero with Design Spells
+│   ├── PitchMapTab.jsx      # 2D PCA dimension-reduced scatter map
+│   ├── PlayerDetailPage.jsx # Comprehensive 8D player profile with peer comparison
+│   ├── ScoutChatTab.jsx     # Natural language AI scout terminal
+│   └── U21ScoutingTab.jsx   # Next-gen wonderkid replacement scouting
+├── App.jsx                  # Root router with splash gate & toast notifications
+└── index.css                # Custom font declarations & glassmorphic utility classes
+```
+
+---
+
+## 🚀 Running Locally
+
+```bash
+# 1. Install dependencies
+npm install
+
+# 2. Run Vite development server
+npm run dev
+
+# 3. Lint codebase with Oxlint
+npm run lint
+
+# 4. Create production build
+npm run build
+```

@@ -1,71 +1,57 @@
-# DESIGN SYSTEM & COMPLETE ANTI-SLOP SPECIFICATION (DESIGN.md)
+# Design System & Visual Architecture — Eleven
 
-This document serves as the absolute authority for visual taste, technical SEO, performance, accessibility, and anti-slop rules for all human and AI coders (Antigravity IDE, Cursor, Claude, Windsurf).
+<!-- impeccable:design-schema 1 -->
 
----
+## Visual World
+- **Theme**: Opta Vision Precision Sports Analytics × Apple Liquid Glassmorphism × EA FC Ultimate Tactical Visuals
+- **Mode**: Persuade, Operate & Experience (High-density sports analytics with tactile glassmorphic UI and 60fps micro-interactions)
 
-## 🚫 EXHAUSTIVE ANTI-SLOP & FORBIDDEN PATTERNS CHECKLIST
+## Color Palette
+```css
+:root {
+  /* Obsidian Base Canvas */
+  --bg-obsidian: #05080C;
+  --surface-glass: #060A10;
+  --surface-card: #080C14;
+  --surface-border: rgba(255, 255, 255, 0.12);
+  --surface-border-highlight: rgba(255, 255, 255, 0.22);
+  
+  /* Primary Accent & Signal Light */
+  --accent-orange: #FF4E32;
+  --accent-orange-glow: rgba(255, 78, 50, 0.35);
+  --accent-orange-block: #FF3C00;
+  
+  /* Positional & Metric Hues */
+  --pos-defender: #3AA6D9;
+  --pos-midfielder: #10b981;
+  --pos-forward: #E8B33D;
+  --pos-wonderkid: #E8437A;
 
-Every item below is strictly **FORBIDDEN**. Code reviews and AI pre-flight checks must reject any PR containing these flaws:
+  /* High-Contrast Typography */
+  --text-primary: #FFFFFF;
+  --text-secondary: #9BB1BC;
+  --text-muted: #64748b;
+}
+```
 
-### 🎨 Visual & Aesthetic Flaws
-1. **Purple Gradients:** No cliché AI neon purple/indigo text or background gradients (`from-purple-600 to-indigo-600`).
-2. **AI Slop Photos:** No generic Midjourney/AI stock photos of unrealistically hyper-perfect people or futuristic glowing objects.
-3. **Pill-Shaped Desktop Buttons:** No generic `rounded-full` buttons for desktop primary actions.
-4. **Pure Colors:** No pure `#000000` black or `#FFFFFF` white. Use the Zinc scale (`#0b0f17` slate background, `#f9fafb` text).
-5. **Text-Only Unstyled Logos:** No generic plain text rendered with standard system font as the application logo.
-6. **Low-Contrast Hero Text Colour:** No illegible or poorly contrasted hero headline colors.
-7. **Cursive / Script Fonts:** No decorative cursive fonts or script fallbacks.
-8. **Emoji Icons:** No raw emoji characters (⚽, 🚀, 🔥, 💡) used as primary UI icons or buttons.
-9. **Jittery Scroll Animations:** No intrusive scroll-jacking or over-animated parallax that slows down navigation.
+## Typography Scale
+- **Display Headings**: Baftiva / Space Grotesk (`font-display font-black italic tracking-tighter`).
+- **Body & Controls**: Inter (`font-sans font-medium font-semibold`).
+- **Data & Telemetry**: JetBrains Mono (`font-mono tabular-nums tracking-widest`).
 
-### 📝 Content & Copy Flaws
-10. **Vague Hero Headlines:** No meaningless fluff like "Unlock Your Potential", "Transform Your Game", or "Next-Gen AI Platform".
-11. **Fake Metrics & Statistics:** No fabricated stats or unverified numbers.
-12. **Fake Visitor Count:** No artificial "🔥 42 people are viewing this right now" widgets.
-13. **Fake Customer Count & Reviews:** No fake "Used by 10,000+ players" badges or fake review cards with stock photos.
-14. **Excessive Em-Dashes (—):** No robotic AI formatting with excessive em-dashes.
-15. **Lorem Ipsum:** Zero generic placeholder text anywhere in the codebase.
+## Layout & Spatial Architecture
+- **Floating Liquid Glass Navbar**: Fixed capsule (`top-3.5 sm:top-4 w-full max-w-7xl 2xl:max-w-[1536px] px-4 sm:px-6 lg:px-8`), `backdrop-blur-2xl backdrop-saturate-[180%] bg-[#060A10]/60 border border-white/[0.12] border-t-white/[0.22] shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_20px_50px_rgba(0,0,0,0.7)]`.
+- **Strict 100dvh Non-F11 Hero Lock**: Form-fitted for standard windowed laptop (1440x780) and desktop (1920x920) browser viewports with zero initial scroll bars.
+- **Monumental Centered Player Cutout**: `hero-player.webp` scaled (`max-w-[1950px]`, `max-h-[98vh]`), grounded flush at `bottom-0` with atmospheric base fade mask.
+- **Edge-to-Edge Stadium Atmosphere**: `hero-bg.jpg` full-bleed `object-cover object-center` (`brightness-78 contrast-112`) with pitch details visible in the bottom-left quadrant.
 
-### 🌐 SEO, HTML & Web Standards Flaws
-16. **Same Page Titles:** No copy-pasting the same `<title>` tag across routes; every page MUST have a distinct, descriptive title.
-17. **Multiple H1s or No H1:** Every route must contain EXACTLY ONE `<h1>` tag.
-18. **No Meta Description:** Missing `<meta name="description">` tag.
-19. **No OpenGraph Image (`og:image`):** Missing social sharing preview images.
-20. **No Structured Data:** Missing JSON-LD structured data schemas.
-21. **No Canonical Tag:** Missing `<link rel="canonical">` tags on routes.
-22. **No `llms.txt`:** Missing `llms.txt` documentation for AI crawlers.
-23. **AI-Blocked `robots.txt`:** Incorrectly configured `robots.txt` that blocks search indexing or AI documentation readers.
-24. **No Favicon:** Missing SVG/PNG favicon leading to 404 browser logs.
-25. **No `sitemap.xml`:** Missing XML sitemap for search crawlers.
-26. **No Lang Attribution:** Missing `<html lang="en">` on the root HTML document.
-27. **Empty View-Source Shell:** SSR/static shell rendering completely empty body without fallbacks.
+## Micro-Interactions & Design Spells
+- **Design Spell 4 (Kickoff Scroll Cue)**: Spring magnetic cursor tracking (`useSpring` damping: 18, stiffness: 300) with animated pulsing orange kickoff beacon (`animate-ping`).
+- **Design Spell 5 (Terminal HUD Search Badge)**: Real-time dynamic Opta scouting HUD badge (`[● 10 NODES]`) pulsing during active query resolution.
+- **Weighted Relevance Search**: Sub-millisecond diacritic-insensitive fuzzy search ranking star players (Haaland, Kane, Yamal, Pedri) above club name collisions.
 
-### ⚙️ Engineering, Accessibility & Compliance Flaws
-28. **No 404 Page:** Missing a dedicated, polished custom 404 Error page component.
-29. **Missing Alt Text:** Images missing descriptive `alt` tags (`<img alt="...">`).
-30. **Console Errors:** ZERO runtime errors or unhandled warnings in browser developer tools.
-31. **Massive JS Bundles:** Unsplit code resulting in massive bundle sizes. Code splitting is required.
-32. **Broken Buttons & Handlers:** Dead or unhandled click events (`onClick={() => {}}`).
-33. **Lazy One-Page Site:** Packaging a multi-feature system as a single superficial landing page instead of a real routed application.
-34. **No Privacy Policy & Terms Links:** Missing required legal footer links (`/privacy`, `/terms`).
-
----
-
-## 🛠️ REQUIRED TECHNICAL SPECIFICATIONS
-
-| Category | Mandated Standard |
-| :--- | :--- |
-| **Typography** | Inter / Outfit for body; JetBrains Mono / Monospace for football stats |
-| **Primary Theme** | Deep Pitch Slate (`#0b0f17`), Card (`#111827`), Emerald Accent (`#10b981`) |
-| **Borders & Depth** | 1px subtle borders (`border-zinc-800`) over heavy fuzzy drop shadows |
-| **Icons** | SVG Icon sets (Heroicons / Lucide tuned to matching stroke widths) |
-| **Routing & SEO** | React Router / Vite with route-level metadata and dedicated 404 page |
-
----
-
-## 🤖 HONEST AI & ML TERMINOLOGY SPECIFICATION
-
-To ensure complete academic honesty and accuracy for university evaluation:
-1. **AI Scout Agent**: Described as a composite pipeline consisting of a **trained TF-IDF + Logistic Regression Intent Classifier** (88.24% test accuracy), a **rule-based fuzzy entity extractor** (`difflib` against 1,802 database names), and **templated report synthesis**. It must NOT be described as "autonomous generative AI" or an "end-to-end neural network".
-2. **Supervised Position Classifier**: Described as a **trained multi-class classification model** (`LogisticRegression` vs `RandomForest`) evaluated on an 80/20 stratified split (81.16% test accuracy), with confusion matrix reports saved in `position_classifier_report.json`.
+## Quality Floor & Anti-Slop Bans
+- ❌ No generic purple gradients (`from-purple-600 to-indigo-600`).
+- ❌ No broken image icon boxes (`onError` initials fallback required on all player cards).
+- ❌ No unstyled text logo (custom SVG "11" monogram required).
+- ❌ Zero browser console errors or unhandled warnings across all routes.
