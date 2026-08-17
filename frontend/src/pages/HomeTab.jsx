@@ -68,7 +68,7 @@ export default function HomeTab() {
       {/* ========================================================================= */}
       {/* 1. HERO SECTION (100dvh VIEWPORT LOCKED FOR NORMAL NON-F11 BROWSERS)      */}
       {/* ========================================================================= */}
-      <div className="relative w-full h-[100dvh] min-h-[580px] max-h-[1080px] flex flex-col justify-between pt-12 sm:pt-14 pb-2 overflow-hidden z-20">
+      <div className="relative w-full h-[100dvh] min-h-[580px] max-h-[1080px] flex flex-col justify-between pt-12 sm:pt-14 pb-2 overflow-visible z-20">
         
         {/* Full-Bleed Edge-to-Edge hero-bg.jpg Backdrop (z-0, balanced visibility & brightened bottom-left corner) */}
         <div className="absolute inset-0 w-full h-full pointer-events-none select-none z-0 overflow-hidden">
@@ -83,11 +83,11 @@ export default function HomeTab() {
         </div>
 
         {/* Hero Content: Vertically Centered with Left Column Elevated */}
-        <div className="relative z-20 max-w-7xl 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 flex items-center min-h-0">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center w-full h-full">
+        <div className="relative z-20 max-w-7xl 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 flex items-center min-h-0 overflow-visible">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center w-full h-full overflow-visible">
             
             {/* Left Column: Shifted Inward/Rightward for Tighter Balance */}
-            <div className="lg:col-span-5 relative z-30 flex flex-col justify-center lg:pl-8 xl:pl-14 lg:translate-x-4">
+            <div className="lg:col-span-5 relative z-30 flex flex-col justify-center lg:pl-8 xl:pl-14 lg:translate-x-4 overflow-visible">
               
               {/* Eyebrow Tag */}
               <div className="flex items-center gap-2.5 mb-1.5 sm:mb-2">
@@ -113,8 +113,8 @@ export default function HomeTab() {
               <HeroSearch className="mb-0" />
             </div>
 
-            {/* Right Column: Giant Grounded Player Trio Centralized & Monumental */}
-            <div className="lg:col-span-7 relative z-10 flex items-end justify-center lg:justify-center self-end h-full overflow-visible pointer-events-none">
+            {/* Right Column: Giant Grounded Player Trio Centralized & Contained */}
+            <div className="lg:col-span-7 relative z-10 flex items-end justify-center lg:justify-center self-end h-full overflow-hidden pointer-events-none">
               <div className="relative w-full flex justify-center items-end">
                 <img
                   src={heroPlayerImg}
