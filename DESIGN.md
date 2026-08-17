@@ -3,36 +3,41 @@
 <!-- impeccable:design-schema 1 -->
 
 ## Visual World
-- **Theme**: Opta Vision Precision Sports Analytics × Apple Liquid Glassmorphism × EA FC Ultimate Tactical Visuals
-- **Mode**: Persuade, Operate & Experience (High-density sports analytics with tactile glassmorphic UI and 60fps micro-interactions)
+- **Theme**: Luxury Sports Intelligence × Tactical Maroon & Crimson Ember × Apple Liquid Glassmorphism
+- **Mode**: Persuade, Operate & Experience (High-density sports analytics with tactile dark glassmorphic surfaces, rich maroon depth, and 60fps micro-interactions)
 
-## Color Palette
+## Color Palette — Crimson Ember & Luxury Tactical Spectrum
 ```css
 :root {
-  /* Obsidian Base Canvas */
-  --bg-obsidian: #05080C;
-  --surface-glass: #060A10;
-  --surface-card: #080C14;
-  --surface-border: rgba(255, 255, 255, 0.12);
+  /* 1. Base Canvas & Glass Surfaces */
+  --bg-obsidian: #04070A;           /* Deep obsidian carbon backdrop */
+  --surface-card: #090D14;          /* Dark matte charcoal card container */
+  --surface-maroon: #16070B;        /* Deep luxury maroon tinted surface */
+  --surface-border: rgba(255, 255, 255, 0.08); /* 1px hairline border */
   --surface-border-highlight: rgba(255, 255, 255, 0.22);
   
-  /* Primary Accent & Signal Light */
-  --accent-orange: #FF4E32;
-  --accent-orange-glow: rgba(255, 78, 50, 0.35);
-  --accent-orange-block: #FF3C00;
-  
-  /* Positional & Metric Hues */
-  --pos-defender: #3AA6D9;
-  --pos-midfielder: #10b981;
-  --pos-forward: #E8B33D;
-  --pos-wonderkid: #E8437A;
+  /* 2. Cohesive Warm Tactical Spectrum (Maroon -> Crimson -> Coral Pink -> Tactical Orange) */
+  --color-maroon-deep: #2A080F;     /* Deep burgundy shadow & tinted badge backgrounds */
+  --color-maroon-rich: #4D0E1A;     /* Rich maroon border & secondary stat pill */
+  --color-crimson-core: #C8102E;    /* Championship crimson - bold, regal, sharp */
+  --color-bright-red: #E61E38;      /* Searing race-track red for primary signals & highlights */
+  --color-ember-coral: #FF4359;     /* Hot coral-pink-orange bridge (vibrant, modern, high contrast) */
+  --color-tactical-orange: #FF3C00; /* Opta pitch orange for high-energy transitions & primary CTA */
+  --color-warm-amber: #FF7A00;      /* Fiery amber for metric callouts & subtle gradient stops */
 
-  /* High-Contrast Typography */
-  --text-primary: #FFFFFF;
-  --text-secondary: #9BB1BC;
-  --text-muted: #64748b;
+  /* 3. High-Contrast Typography & Data Neutrals */
+  --text-primary: #F8FAFC;          /* Crisp studio white */
+  --text-secondary: #94A3B8;        /* Clean slate grey */
+  --text-muted: #64748B;            /* Muted telemetry grey */
 }
 ```
+
+## Module Signature Accents within the Tactical Warm Spectrum:
+1. **Module 1 (Dual Radar)**: `#E61E38` (Bright Red / Searing Crimson)
+2. **Module 2 (2D Pitch Map)**: `#FF7A00` (Warm Amber / Pitch Gold)
+3. **Module 3 (7 GMM Archetypes)**: `#FF3C00` (Tactical Pitch Orange)
+4. **Module 4 (U21 Wonderkid)**: `#FF4359` (Ember Coral / Hot Red-Pink)
+5. **Module 5 (Scout AI Terminal)**: `#C8102E` (Championship Deep Crimson)
 
 ## Typography Scale
 - **Display Headings**: Baftiva / Space Grotesk (`font-display font-black italic tracking-tighter`).
@@ -45,13 +50,8 @@
 - **Monumental Centered Player Cutout**: `hero-player.webp` scaled (`max-w-[1950px]`, `max-h-[98vh]`), grounded flush at `bottom-0` with atmospheric base fade mask.
 - **Edge-to-Edge Stadium Atmosphere**: `hero-bg.jpg` full-bleed `object-cover object-center` (`brightness-78 contrast-112`) with pitch details visible in the bottom-left quadrant.
 
-## Micro-Interactions & Design Spells
-- **Design Spell 4 (Kickoff Scroll Cue)**: Spring magnetic cursor tracking (`useSpring` damping: 18, stiffness: 300) with animated pulsing orange kickoff beacon (`animate-ping`).
-- **Design Spell 5 (Terminal HUD Search Badge)**: Real-time dynamic Opta scouting HUD badge (`[● 10 NODES]`) pulsing during active query resolution.
-- **Weighted Relevance Search**: Sub-millisecond diacritic-insensitive fuzzy search ranking star players (Haaland, Kane, Yamal, Pedri) above club name collisions.
-
 ## Quality Floor & Anti-Slop Bans
-- ❌ No generic purple gradients (`from-purple-600 to-indigo-600`).
+- ❌ No generic purple/blue gradients (`from-purple-600 to-indigo-600`).
+- ❌ No neon Christmas lights or uncontrolled multi-color glow halos.
 - ❌ No broken image icon boxes (`onError` initials fallback required on all player cards).
-- ❌ No unstyled text logo (custom SVG "11" monogram required).
 - ❌ Zero browser console errors or unhandled warnings across all routes.

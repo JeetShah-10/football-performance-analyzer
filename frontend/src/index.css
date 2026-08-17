@@ -112,3 +112,58 @@
   box-shadow: 0 0 24px rgba(255, 60, 0, 0.12);
   transform: translateY(-2px);
 }
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - 1.5rem));
+  }
+}
+
+.animate-marquee {
+  animation: marquee var(--duration, 35s) linear infinite;
+}
+
+@keyframes border-beam {
+  100% {
+    offset-distance: 100%;
+  }
+}
+
+@keyframes retro-grid {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(56px);
+  }
+}
+
+.animate-retro-grid {
+  animation: retro-grid 12s linear infinite;
+  will-change: transform;
+}
+
+@keyframes shimmer-slide {
+  to {
+    transform: translate(calc(100cqw - 100%), 0);
+  }
+}
+
+@keyframes spin-around {
+  0% {
+    transform: translateZ(0) rotate(0);
+  }
+  15%, 35% {
+    transform: translateZ(0) rotate(90deg);
+  }
+  65%, 85% {
+    transform: translateZ(0) rotate(270deg);
+  }
+  100% {
+    transform: translateZ(0) rotate(360deg);
+  }
+}
+
