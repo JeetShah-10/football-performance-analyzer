@@ -87,7 +87,7 @@ export default function HomeTab() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center w-full h-full overflow-visible">
             
             {/* Left Column: Shifted Inward/Rightward for Tighter Balance */}
-            <div className="lg:col-span-5 relative z-30 flex flex-col justify-center lg:pl-8 xl:pl-14 lg:translate-x-4 overflow-visible">
+            <div className="lg:col-span-5 xl:col-span-5 relative z-30 flex flex-col justify-center lg:pl-8 xl:pl-14 lg:translate-x-4 overflow-visible">
               
               {/* Eyebrow Tag */}
               <div className="flex items-center gap-2.5 mb-1.5 sm:mb-2">
@@ -113,18 +113,21 @@ export default function HomeTab() {
               <HeroSearch className="mb-0" />
             </div>
 
-            {/* Right Column: Giant Grounded Player Trio Centralized & Contained */}
-            <div className="lg:col-span-7 relative z-10 flex items-end justify-center lg:justify-center self-end h-full overflow-hidden pointer-events-none">
-              <div className="relative w-full flex justify-center items-end">
-                <img
-                  src={heroPlayerImg}
-                  alt="Eleven Featured Player"
-                  className="w-full max-w-[950px] sm:max-w-[1150px] lg:max-w-[1450px] xl:max-w-[1700px] 2xl:max-w-[1950px] max-h-[76vh] sm:max-h-[85vh] lg:max-h-[94vh] xl:max-h-[98vh] h-auto object-contain object-bottom drop-shadow-[0_30px_70px_rgba(0,0,0,0.98)] filter brightness-75 contrast-110 saturate-85 transition-all lg:translate-x-0 xl:translate-x-4 2xl:translate-x-8 translate-y-2 lg:translate-y-4 [mask-image:linear-gradient(to_bottom,black_65%,rgba(0,0,0,0.85)_82%,rgba(0,0,0,0.2)_95%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_65%,rgba(0,0,0,0.85)_82%,rgba(0,0,0,0.2)_95%,transparent_100%)]"
-                  loading="eager"
-                />
-              </div>
-            </div>
+            {/* Spacer for Right Column on Large Screens */}
+            <div className="hidden lg:block lg:col-span-7 xl:col-span-7 h-full pointer-events-none" />
 
+          </div>
+        </div>
+
+        {/* Absolute Grounded Player Cutout Layer (z-10, Anchored directly to bottom-0 of hero section) */}
+        <div className="absolute inset-x-0 bottom-0 top-0 pointer-events-none z-10 overflow-hidden flex items-end justify-center lg:justify-end max-w-7xl 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="w-full lg:w-[62%] xl:w-[65%] 2xl:w-[68%] h-full flex items-end justify-center lg:justify-center">
+            <img
+              src={heroPlayerImg}
+              alt="Eleven Featured Player"
+              className="w-full max-w-[950px] sm:max-w-[1150px] lg:max-w-[1450px] xl:max-w-[1700px] 2xl:max-w-[1950px] max-h-[80vh] sm:max-h-[86vh] lg:max-h-[93vh] xl:max-h-[98vh] h-auto object-contain object-bottom drop-shadow-[0_30px_70px_rgba(0,0,0,0.98)] filter brightness-75 contrast-110 saturate-85 transition-all translate-y-0 lg:translate-y-1 [mask-image:linear-gradient(to_bottom,black_75%,rgba(0,0,0,0.9)_88%,rgba(0,0,0,0.3)_96%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_75%,rgba(0,0,0,0.9)_88%,rgba(0,0,0,0.3)_96%,transparent_100%)]"
+              loading="eager"
+            />
           </div>
         </div>
 
