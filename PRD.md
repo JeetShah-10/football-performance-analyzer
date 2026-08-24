@@ -102,11 +102,11 @@ This project serves as a dual university mini-project submission:
 | **Phase 0** | Project & Context Setup | ✅ **COMPLETED** | Jeet & Team | `.agents/AGENTS.md`, `PRD.md`, `DESIGN.md`, `SECURITY.md`, Git branches |
 | **Phase 1** | Data Cleaning & EDA | ✅ **COMPLETED** | Jeet Shah | 2,854 FBref rows cleaned, 212 GKs dropped, multi-club rows merged, 1,802 players retained |
 | **Phase 2** | Per-90 Feature Engineering & Scaling | ✅ **COMPLETED** | Jeet Shah | 8 real per-90 metrics, position-grouped 0–100% percentiles, `StandardScaler` normalization |
-| **Phase 3** | Position-Grouped K-Means Clustering | ✅ **COMPLETED** | Jeet Shah | Position-Grouped K-Means ($k=2$), Peak Silhouette scores (Defenders: 0.2958, Midfielders: 0.2820, Forwards: 0.3176), 2D PCA |
+| **Phase 3** | Position-Grouped K-Means Clustering | ✅ **COMPLETED** | Jeet Shah | Position-Grouped K-Means ($k=4$), GMM Soft Probabilities ($P(C_k \mid x)$), 2D PCA |
 | **Phase 4** | Similarity Engine & Artifact Export | ✅ **COMPLETED** | Jeet Shah | Cosine `NearestNeighbors` engine, `model.pkl` & `players_processed.csv` exported |
-| **Phase 5** | FastAPI Endpoint Implementation | ✅ **COMPLETED** | Dev | REST API (`/players`, `/players/{id}`, `/clusters`, `/similar/{id}`), rate limiting |
-| **Phase 6** | React Dashboard & Visualizations | ⏳ **UPCOMING** | Pooja | Vite + React, Tailwind CSS, PCA Scatter Plot, Hybrid Radar Chart, Compare View |
-| **Phase 7** | Integration Polish & Error Handling | ⏳ **UPCOMING** | Dev, Pooja, Jeet | Security audit, error masking, zero-slop checklist verification |
-| **Phase 8** | Production Deployment | ⏳ **UPCOMING** | Dev (Backend) & Pooja (Frontend) | FastAPI on Render / Railway, React UI on Vercel |
-| **Phase 9** | Final Viva Documentation & Demo | 🔄 **IN PROGRESS** | Vishvam & Jeet | Viva dataset guide [`docs/viva_dataset_guide.md`](docs/viva_dataset_guide.md), report, presentation |
+| **Phase 5** | FastAPI Endpoint Implementation | ✅ **COMPLETED** | Dev | REST API (`/players`, `/players/{id}`, `/clusters`, `/similar/{id}`, `/scout-agent/query`), rate limiting |
+| **Phase 6** | React Dashboard & Visualizations | ✅ **COMPLETED** | Pooja | Vite + React 19, Tailwind CSS, PCA Scatter Studio, GMM Gaussian Studio, Compare Arena |
+| **Phase 7** | Integration Polish & Error Handling | ✅ **COMPLETED** | Dev, Pooja, Jeet | 52 automated tests, OWASP security headers, error masking, zero-slop checklist verification |
+| **Phase 8** | AI Scout Intelligence Terminal | ✅ **COMPLETED** | Jeet & Dev | TF-IDF ML Intent Routing, rule-based entity extraction, interactive mini-cards |
+| **Phase 9** | Final Viva Documentation & ADRs | ✅ **COMPLETED** | Vishvam & Jeet | 5 formal ADRs in `docs/decisions/`, `viva_dataset_guide.md`, `api-contract.md` |
 

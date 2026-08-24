@@ -136,6 +136,18 @@ Returns top $N$ closest tactical matches for a player using Cosine distance in 8
 
 ---
 
+### `GET /players/{player_id}/image`
+Retrieves the real headshot photo for a player from the backend's in-memory sanitized archive.
+
+#### Path Parameters:
+- `player_id`: The unique normalized identifier of the player.
+
+#### Response (`200 OK` or `404 Not Found`):
+- Content-Type: `image/jpeg` or `image/png`
+- Returns binary image stream directly. If unavailable, returns `404` with fallback avatar rendered by frontend.
+
+---
+
 ### `POST /scout-agent/query`
 Natural language AI Scout Agent endpoint powering intent classification, fuzzy entity extraction, candidate querying, and synthesized report generation.
 
@@ -149,23 +161,38 @@ Natural language AI Scout Agent endpoint powering intent classification, fuzzy e
 #### Response (`200 OK`):
 ```json
 {
-  "intent": "find_by_criteria",
-  "entities": {
+  "query": "find young forwards under 22 in la liga similar to Saka",
+  "predicted_intent": "find_by_criteria",
+  "confidence_score": 0.942,
+  "extracted_entities": {
+    "target_player": "Bukayo Saka",
     "position": "Forward",
-    "max_age": 22,
-    "league": "La Liga"
+    "league": "La Liga",
+    "max_age": 22
   },
-  "result_type": "player_list",
-  "data": [
+  "backend_methods_called": [
+    "predict_intent",
+    "extract_entities",
+    "list_players"
+  ],
+  "latency_ms": 15.2,
+  "report_markdown": "### 🎯 AI Scout Intelligence Report\n\n**Criteria Evaluated:**\n- Target Position: **Forward**\n- League: **es La Liga**\n- Max Age: **22**\n\n#### Identified Candidates (4 players found):\n1. **Lamine Yamal** (Barcelona | Age 17 | Dynamic Winger / Dribbler)\n2. ...",
+  "players_data": [
     {
       "player_id": "lamine_yamal_es_esp_2007_0",
       "player_name": "Lamine Yamal",
       "squad": "Barcelona",
       "league": "es La Liga",
+      "position": "FW",
       "position_group": "Forward",
-      "cluster_name": "Dynamic Winger / Dribbler"
+      "minutes_played": 1920,
+      "age": 17,
+      "cluster_id": 1,
+      "cluster_name": "Dynamic Winger / Dribbler",
+      "pca_x": 1.58,
+      "pca_y": -0.92
     }
-  ],
-  "synthesized_response": "Found 4 players matching criteria (Position: Forward, Max Age: 22, League: La Liga)..."
+  ]
 }
 ```
+
