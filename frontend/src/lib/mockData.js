@@ -134,17 +134,17 @@ export const MOCK_SIMILAR_U21 = [
 ]
 
 export const MOCK_CLUSTERS = {
-  Forward: [
-    { cluster_id: 0, cluster_name: 'Clinical Finisher / Poacher', description: 'High non-penalty xG and clinical conversion', signature_stats: [{ feature: 'npxG_per90', cluster_mean: 0.412, pos_mean: 0.198, z_score_diff: 1.231 }, { feature: 'Succ_per90', cluster_mean: 0.823, pos_mean: 1.135, z_score_diff: -0.456 }] },
-    { cluster_id: 1, cluster_name: 'Dynamic Winger / Dribbler', description: 'High successful take-ons and progressive carries', signature_stats: [{ feature: 'PrgC_per90', cluster_mean: 4.013, pos_mean: 2.486, z_score_diff: 0.917 }, { feature: 'Succ_per90', cluster_mean: 1.783, pos_mean: 1.135, z_score_diff: 0.823 }] },
+  Defender: [
+    { cluster_id: 0, cluster_name: 'Ball-Playing Defender', description: 'High progressive passing and build-up vision from deep', signature_stats: [{ feature: 'KP_per90', cluster_mean: 1.128, pos_mean: 0.577, z_score_diff: 1.097 }, { feature: 'xAG_per90', cluster_mean: 0.122, pos_mean: 0.059, z_score_diff: 1.046 }, { feature: 'PrgC_per90', cluster_mean: 2.241, pos_mean: 1.274, z_score_diff: 1.006 }] },
+    { cluster_id: 1, cluster_name: 'Stopper / Defensive Destroyer', description: 'High tackles, interceptions, and defensive duel volume', signature_stats: [{ feature: 'KP_per90', cluster_mean: 0.295, pos_mean: 0.577, z_score_diff: -0.561 }, { feature: 'xAG_per90', cluster_mean: 0.026, pos_mean: 0.059, z_score_diff: -0.535 }, { feature: 'PrgC_per90', cluster_mean: 0.781, pos_mean: 1.274, z_score_diff: -0.514 }] },
   ],
   Midfielder: [
-    { cluster_id: 0, cluster_name: 'Deep-Lying Playmaker', description: 'High progressive passes and key passes', signature_stats: [{ feature: 'PrgP_per90', cluster_mean: 5.201, pos_mean: 3.412, z_score_diff: 0.892 }, { feature: 'KP_per90', cluster_mean: 1.890, pos_mean: 1.201, z_score_diff: 0.781 }] },
-    { cluster_id: 1, cluster_name: 'Box-to-Box Carrier', description: 'Balanced attacking and defensive output', signature_stats: [{ feature: 'PrgC_per90', cluster_mean: 3.456, pos_mean: 2.101, z_score_diff: 0.712 }, { feature: 'Tkl_per90', cluster_mean: 2.345, pos_mean: 1.890, z_score_diff: 0.456 }] },
+    { cluster_id: 0, cluster_name: 'Deep-Lying Playmaker', description: 'High key passes, press resistance, and progressive distribution', signature_stats: [{ feature: 'xAG_per90', cluster_mean: 0.179, pos_mean: 0.112, z_score_diff: 0.873 }, { feature: 'KP_per90', cluster_mean: 1.677, pos_mean: 1.141, z_score_diff: 0.86 }, { feature: 'PrgC_per90', cluster_mean: 2.578, pos_mean: 1.665, z_score_diff: 0.852 }] },
+    { cluster_id: 1, cluster_name: 'Box-to-Box / Pressing Engine', description: 'High tackles, transition carries, and box arrivals', signature_stats: [{ feature: 'xAG_per90', cluster_mean: 0.071, pos_mean: 0.112, z_score_diff: -0.538 }, { feature: 'KP_per90', cluster_mean: 0.81, pos_mean: 1.141, z_score_diff: -0.53 }, { feature: 'PrgC_per90', cluster_mean: 1.102, pos_mean: 1.665, z_score_diff: -0.526 }] },
   ],
-  Defender: [
-    { cluster_id: 0, cluster_name: 'Stopper / Defensive Destroyer', description: 'High tackles and interceptions', signature_stats: [{ feature: 'Tkl_per90', cluster_mean: 2.891, pos_mean: 1.678, z_score_diff: 0.934 }, { feature: 'Int_per90', cluster_mean: 1.567, pos_mean: 0.998, z_score_diff: 0.812 }] },
-    { cluster_id: 1, cluster_name: 'Ball-Playing Defender', description: 'High progressive passes and carries from deep', signature_stats: [{ feature: 'PrgP_per90', cluster_mean: 4.567, pos_mean: 3.012, z_score_diff: 0.823 }, { feature: 'PrgC_per90', cluster_mean: 1.234, pos_mean: 0.789, z_score_diff: 0.678 }] },
+  Forward: [
+    { cluster_id: 0, cluster_name: 'Clinical Finisher / Poacher', description: 'High non-penalty expected goals (npxG) and box presence', signature_stats: [{ feature: 'PrgC_per90', cluster_mean: 1.491, pos_mean: 2.486, z_score_diff: -0.598 }, { feature: 'Succ_per90', cluster_mean: 0.712, pos_mean: 1.135, z_score_diff: -0.536 }, { feature: 'KP_per90', cluster_mean: 0.946, pos_mean: 1.252, z_score_diff: -0.509 }] },
+    { cluster_id: 1, cluster_name: 'Dynamic Winger / Dribbler', description: 'High successful take-ons and progressive carries in the final third', signature_stats: [{ feature: 'PrgC_per90', cluster_mean: 4.013, pos_mean: 2.486, z_score_diff: 0.917 }, { feature: 'Succ_per90', cluster_mean: 1.783, pos_mean: 1.135, z_score_diff: 0.823 }, { feature: 'KP_per90', cluster_mean: 1.72, pos_mean: 1.252, z_score_diff: 0.781 }] },
   ],
 }
 

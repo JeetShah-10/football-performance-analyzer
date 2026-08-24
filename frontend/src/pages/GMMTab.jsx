@@ -1,115 +1,398 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Brain } from 'lucide-react';
-import { fetchClusters } from '../lib/api';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  Search,
+  ArrowLeft,
+  ChevronDown,
+} from 'lucide-react';
+import {
+  PitchQuadrantIcon,
+  WonderkidReticleIcon,
+  TacticalTwinsIcon,
+  GMMCurveIcon,
+  TerminalPromptIcon,
+} from '../components/icons/TacticalIcons';
+import GMMArchetypeCanvas from '../components/GMMArchetypeCanvas';
+import GMMRosterDeck from '../components/GMMRosterDeck';
+import { fetchClusters, fetchPlayers } from '../lib/api';
+import { MOCK_PLAYERS, MOCK_CLUSTERS } from '../lib/mockData';
+import { getPlayerImage } from '../lib/playerImages';
+import { getClusterTheme } from '../lib/gmmUtils';
+import elevenLogo from '../assets/Eleven-logo-2.webp';
 
-const CLUSTER_DESCRIPTIONS = {
-  'Dynamic Winger / Dribbler': 'High progressive carry volume, key pass generation, and successful take-ons in the final third.',
-  'Deep-Lying Playmaker': 'Exceptional progressive pass distribution, press-resistant tempo control, and deep buildup involvement.',
-  'Clinical Finisher / Poacher': 'High npxG per 90, box presence, and efficient conversion rate inside the 18-yard box.',
-  'Box-to-Box Engine': 'Balanced output combining defensive tackles/interceptions with progressive transition carries.',
-  'Aggressive Ball-Winner': 'High tackle and interception counts per 90 with intensive defensive duel success.',
-  'Wide Playmaker / Inverted Winger': 'Creative chance creation from wide areas combining key passes with expected assists (xAG).',
-  'Central Target Forward': 'High aerial duel involvement, hold-up play, and progressive link-up passing.',
-};
+const POSITIONS = [
+  { id: 'Midfielder', label: 'Midfielders' },
+  { id: 'Forward', label: 'Forwards' },
+  { id: 'Defender', label: 'Defenders' },
+];
 
 export default function GMMTab() {
-  const [positionGroup, setPositionGroup] = useState('Midfielder');
-  const [clusters, setClusters] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
 
+  // State
+  const [positionGroup, setPositionGroup] = useState(() => searchParams.get('pos') || 'Midfielder');
+  const [clustersMap, setClustersMap] = useState({});
+  const [allPlayers, setAllPlayers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedClusterId, setSelectedClusterId] = useState(() => {
+    const cParam = searchParams.get('cluster');
+    return cParam ? Number(cParam) : null;
+  });
+
+  // Keep URL in sync
   useEffect(() => {
-    async function load() {
-      const res = await fetchClusters(positionGroup);
-      if (res.data) {
-        const list = Array.isArray(res.data) ? res.data : (res.data.clusters || []);
-        setClusters(list);
+    const params = {};
+    if (positionGroup) params.pos = positionGroup;
+    if (selectedClusterId !== null && selectedClusterId !== undefined) params.cluster = selectedClusterId;
+    setSearchParams(params, { replace: true });
+  }, [positionGroup, selectedClusterId, setSearchParams]);
+
+  // Spotlight & Selection
+  const [search, setSearch] = useState('');
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
+  const [showSearchDropdown, setShowSearchDropdown] = useState(false);
+  const searchRef = useRef(null);
+
+  // Tactical Nav Dropdown Menu State
+  const [navMenuOpen, setNavMenuOpen] = useState(false);
+  const navTimerRef = useRef(null);
+
+  const handleNavEnter = () => {
+    if (navTimerRef.current) clearTimeout(navTimerRef.current);
+    setNavMenuOpen(true);
+  };
+
+  const handleNavLeave = () => {
+    navTimerRef.current = setTimeout(() => {
+      setNavMenuOpen(false);
+    }, 300);
+  };
+
+  // Load Clusters & Players
+  useEffect(() => {
+    let isMounted = true;
+    async function loadData() {
+      setLoading(true);
+      const [clustersRes, playersRes] = await Promise.all([
+        fetchClusters(),
+        fetchPlayers({ limit: 2000 }),
+      ]);
+
+      if (!isMounted) return;
+
+      if (clustersRes.data && Object.keys(clustersRes.data).length > 0) {
+        setClustersMap(clustersRes.data);
+      } else {
+        setClustersMap(MOCK_CLUSTERS);
+      }
+      if (playersRes.data && playersRes.data.length > 0) {
+        setAllPlayers(playersRes.data);
+      } else {
+        setAllPlayers(MOCK_PLAYERS);
+      }
+
+      setLoading(false);
+    }
+
+    loadData();
+    return () => { isMounted = false; };
+  }, []);
+
+  // Clusters for current position group
+  const currentClusters = useMemo(() => {
+    const list = clustersMap[positionGroup] || [];
+    return list;
+  }, [clustersMap, positionGroup]);
+
+  // Set default selected cluster when position group changes
+  useEffect(() => {
+    if (currentClusters.length > 0) {
+      setSelectedClusterId(currentClusters[0].cluster_id);
+    }
+  }, [currentClusters, positionGroup]);
+
+  // Selected Cluster Object
+  const selectedCluster = useMemo(() => {
+    if (!currentClusters.length) return null;
+    return currentClusters.find((c) => c.cluster_id === selectedClusterId) || currentClusters[0];
+  }, [currentClusters, selectedClusterId]);
+
+  // Position-filtered players
+  const positionPlayers = useMemo(() => {
+    return allPlayers.filter((p) => {
+      const g = (p.position_group || '').toLowerCase();
+      return g.includes(positionGroup.toLowerCase());
+    });
+  }, [allPlayers, positionGroup]);
+
+  // Players belonging to the active cluster
+  const clusterPlayers = useMemo(() => {
+    if (!selectedCluster) return [];
+    return positionPlayers.filter((p) => p.cluster_name === selectedCluster.cluster_name);
+  }, [positionPlayers, selectedCluster]);
+
+  // Autocomplete search
+  const searchResults = useMemo(() => {
+    if (!search.trim()) return [];
+    const q = search.toLowerCase();
+    return allPlayers
+      .filter((p) => p.player_name.toLowerCase().includes(q) || p.squad?.toLowerCase().includes(q))
+      .slice(0, 6);
+  }, [search, allPlayers]);
+
+  // Close search dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (searchRef.current && !searchRef.current.contains(e.target)) {
+        setShowSearchDropdown(false);
       }
     }
-    load();
-  }, [positionGroup]);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
-    <div className="flex flex-col gap-8 max-w-[1536px] mx-auto px-4 sm:px-6 pt-6 pb-16">
+    <div className="h-[100dvh] max-h-[100dvh] w-full overflow-hidden flex flex-col p-3 sm:p-4 gap-2.5 bg-[#01080E] text-slate-100 select-none">
       
-      {/* Header Banner */}
-      <div className="glass-card rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 border-zinc-800">
-        <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400 text-xs font-semibold uppercase tracking-wider mb-2">
-            <Brain className="w-3.5 h-3.5" />
-            <span>Gaussian Mixture Model (GMM) Machine Learning Architecture</span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white font-heading tracking-tight">
-            Tactical Archetypes & Soft-Clustering Matrix
-          </h1>
-          <p className="text-xs sm:text-sm text-zinc-400 mt-1 max-w-2xl">
-            Unsupervised GMM soft-clustering categorizes 1,802 players into distinct tactical roles based on standardized per-90 metrics, allowing probability assignment across multiple archetypes.
-          </p>
-        </div>
-
-        {/* Position Selector Tabs */}
-        <div className="flex items-center gap-1.5 bg-[#090d18] p-1.5 rounded-xl border border-zinc-800">
-          {['Defender', 'Midfielder', 'Forward'].map((pos) => (
-            <button
-              key={pos}
-              onClick={() => setPositionGroup(pos)}
-              className={`px-4 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                positionGroup === pos
-                  ? 'bg-gradient-to-r from-purple-600 to-cyan-500 text-white shadow-lg'
-                  : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50'
-              }`}
+      {/* 1. TOP COMPACT COCKPIT BAR */}
+      <header className="flex flex-wrap items-center justify-between gap-2 shrink-0 z-40">
+        
+        {/* Left: Floating Brand Back Pill with Hover Navigation Dropdown Menu */}
+        <div
+          className="relative z-50 shrink-0"
+          onMouseEnter={handleNavEnter}
+          onMouseLeave={handleNavLeave}
+        >
+          <div className="flex items-center gap-1.5">
+            <Link
+              to="/"
+              className="flex items-center gap-3 px-3.5 py-1.5 rounded-2xl bg-[#03151F]/90 hover:bg-[#03151F] border border-white/15 hover:border-[#38B6FF]/50 text-white shadow-xl transition-all active:scale-95 cursor-pointer backdrop-blur-xl group/btn"
+              title="Return to Overview"
             >
-              {pos}s
+              <ArrowLeft className="w-4 h-4 text-[#38B6FF] group-hover/btn:-translate-x-0.5 transition-transform" />
+              <img
+                src={elevenLogo}
+                alt="Eleven Logo"
+                className="h-7 w-auto object-contain brightness-110 drop-shadow-[0_0_14px_rgba(255,78,50,0.35)]"
+              />
+              <span className="font-heading font-extrabold tracking-[0.22em] text-xs sm:text-sm text-white hidden sm:inline">
+                ELEVEN
+              </span>
+              <span className="text-[9.5px] font-mono text-[#A855F7] bg-[#A855F7]/20 px-2 py-0.5 rounded-lg border border-[#A855F7]/40 font-bold">
+                GMM MATRIX
+              </span>
+            </Link>
+
+            <button
+              type="button"
+              onClick={() => setNavMenuOpen((prev) => !prev)}
+              className="p-2 rounded-2xl bg-[#03151F]/90 hover:bg-[#03151F] border border-white/15 hover:border-[#38B6FF]/50 text-white shadow-xl transition-all active:scale-95 cursor-pointer backdrop-blur-xl"
+              title="Toggle Tactical Navigation"
+            >
+              <ChevronDown className={`w-3.5 h-3.5 text-[#8FA3AD] transition-transform duration-300 ${navMenuOpen ? 'rotate-180 text-[#38B6FF]' : ''}`} />
             </button>
-          ))}
-        </div>
-      </div>
+          </div>
 
-      {/* Cluster Archetype Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {clusters.map((c, idx) => (
-          <motion.div
-            key={c.cluster_id}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.1 }}
-            className="glass-card glass-card-hover rounded-2xl p-6 flex flex-col justify-between gap-5 border-zinc-800"
+          {/* Hover Menu */}
+          <div
+            className={`absolute top-full left-0 pt-2 w-60 transition-all duration-300 z-50 ${
+              navMenuOpen
+                ? 'opacity-100 translate-y-0 pointer-events-auto'
+                : 'opacity-0 translate-y-2 pointer-events-none'
+            }`}
           >
-            <div>
-              <div className="flex items-center justify-between gap-2 mb-2">
-                <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded bg-purple-500/10 text-purple-400 border border-purple-500/30">
-                  CLUSTER ID: #{c.cluster_id}
-                </span>
-                <span className="text-xs font-mono font-bold text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded border border-cyan-500/30">
-                  {c.member_count || 120} Players ({((c.member_count || 120) / 18.02).toFixed(1)}%)
-                </span>
+            <div className="p-1.5 rounded-2xl bg-[#03151F]/98 backdrop-blur-2xl border border-white/15 shadow-2xl divide-y divide-white/[0.06] relative before:absolute before:-top-3 before:inset-x-0 before:h-4 before:content-['']">
+              <div className="p-2 text-[10px] font-mono uppercase text-[#8FA3AD] tracking-widest font-bold">
+                Tactical Navigation
               </div>
-
-              <h3 className="text-xl font-extrabold text-white font-heading tracking-tight mt-1">
-                {c.cluster_name}
-              </h3>
-
-              <p className="text-xs text-zinc-400 mt-2 leading-relaxed">
-                {CLUSTER_DESCRIPTIONS[c.cluster_name] || 'High percentile output across core positional metrics with specialized tactical role assignment.'}
-              </p>
-            </div>
-
-            {/* Key Metric Averages */}
-            <div className="grid grid-cols-3 gap-2 pt-4 border-t border-zinc-800/80 text-center">
-              <div className="p-2 rounded-xl bg-[#090d18]">
-                <div className="text-[10px] text-zinc-500 uppercase tracking-wider">KP / 90</div>
-                <div className="text-sm font-mono font-bold text-white mt-0.5">88.4%</div>
-              </div>
-              <div className="p-2 rounded-xl bg-[#090d18]">
-                <div className="text-[10px] text-zinc-500 uppercase tracking-wider">PrgP / 90</div>
-                <div className="text-sm font-mono font-bold text-cyan-400 mt-0.5">92.1%</div>
-              </div>
-              <div className="p-2 rounded-xl bg-[#090d18]">
-                <div className="text-[10px] text-zinc-500 uppercase tracking-wider">xAG / 90</div>
-                <div className="text-sm font-mono font-bold text-emerald-400 mt-0.5">84.7%</div>
+              <div className="flex flex-col gap-0.5 pt-1">
+                {[
+                  { path: '/', label: 'Overview Home', icon: PitchQuadrantIcon },
+                  { path: '/explorer', label: 'Player Explorer', icon: WonderkidReticleIcon },
+                  { path: '/compare', label: 'Compare Arena', icon: TacticalTwinsIcon },
+                  { path: '/u21-scouting', label: 'U21 Tactical Scouting', icon: WonderkidReticleIcon },
+                  { path: '/pitch-map', label: 'Metric Studio', icon: PitchQuadrantIcon },
+                  { path: '/scout-chat', label: 'AI Scout Intelligence', icon: TerminalPromptIcon },
+                ].map((tab) => (
+                  <Link
+                    key={tab.path}
+                    to={tab.path}
+                    onClick={() => setNavMenuOpen(false)}
+                    className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-white/80 hover:text-white hover:bg-white/[0.08] transition-colors"
+                  >
+                    <tab.icon className="w-3.5 h-3.5 text-[#38B6FF]" />
+                    <span>{tab.label}</span>
+                  </Link>
+                ))}
               </div>
             </div>
-          </motion.div>
-        ))}
+          </div>
+        </div>
+
+        {/* Center: Position Group Switcher Pills */}
+        <div className="flex items-center gap-1 p-1 rounded-2xl bg-[#03151F]/90 border border-white/15 shadow-xl shrink-0">
+          {POSITIONS.map((pos) => {
+            const isSelected = positionGroup === pos.id;
+            return (
+              <button
+                key={pos.id}
+                type="button"
+                onClick={() => {
+                  setPositionGroup(pos.id);
+                  setSelectedPlayer(null);
+                }}
+                className={`px-3.5 py-1 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
+                  isSelected
+                    ? 'bg-gradient-to-r from-[#38B6FF] to-[#0088CC] text-[#000C12] shadow-[0_0_12px_rgba(56,182,255,0.4)]'
+                    : 'text-[#8FA3AD] hover:text-white'
+                }`}
+              >
+                <span>{pos.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Center-Right: Glowing Search Bar */}
+        <div ref={searchRef} className="relative flex-1 max-w-xs min-w-[180px]">
+          <div className="relative rounded-2xl p-[1.5px] overflow-hidden group shadow-[0_0_20px_rgba(168,85,247,0.15)] focus-within:shadow-[0_0_30px_rgba(168,85,247,0.35)] transition-shadow">
+            <div
+              className="absolute -inset-[150%] animate-[spin_4s_linear_infinite] opacity-60 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity pointer-events-none"
+              style={{
+                background: 'conic-gradient(from 0deg, transparent 0deg 240deg, #A855F7 290deg, #38B6FF 340deg, #A855F7 360deg)',
+              }}
+            />
+            <div className="relative bg-[#040E17]/95 rounded-2xl flex items-center px-3 py-1.5">
+              <Search className="w-3.5 h-3.5 text-[#A855F7] shrink-0 mr-2" />
+              <input
+                type="text"
+                placeholder="Inspect player GMM probabilities..."
+                value={search}
+                onFocus={() => setShowSearchDropdown(true)}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setShowSearchDropdown(true);
+                }}
+                className="w-full bg-transparent text-xs font-medium text-white placeholder-white/40 focus:outline-none"
+              />
+              {selectedPlayer && (
+                <button
+                  type="button"
+                  onClick={() => setSelectedPlayer(null)}
+                  className="text-[9.5px] font-mono text-[#A855F7] bg-[#A855F7]/15 hover:bg-[#A855F7]/25 px-1.5 py-0.5 rounded border border-[#A855F7]/30 shrink-0 cursor-pointer"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+          </div>
+
+          <AnimatePresence>
+            {showSearchDropdown && searchResults.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 6 }}
+                className="absolute top-full mt-2 inset-x-0 bg-[#000910]/98 backdrop-blur-2xl border border-white/15 rounded-2xl shadow-2xl overflow-hidden z-50 divide-y divide-white/[0.06]"
+              >
+                {searchResults.map((item) => (
+                  <button
+                    key={item.player_id}
+                    type="button"
+                    onClick={() => {
+                      setSelectedPlayer(item);
+                      setSearch('');
+                      setShowSearchDropdown(false);
+                    }}
+                    className="w-full px-3.5 py-2 flex items-center justify-between hover:bg-white/[0.08] transition-colors text-left group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="w-7 h-7 rounded-lg bg-[#000C12] border border-white/10 overflow-hidden shrink-0">
+                        <img src={getPlayerImage(item)} alt="" className="w-full h-full object-cover object-top" />
+                      </div>
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-xs font-bold text-white group-hover:text-[#38B6FF] truncate">{item.player_name}</span>
+                        <span className="text-[9.5px] text-[#8FA3AD] truncate">{item.squad} • {item.position_group}</span>
+                      </div>
+                    </div>
+                    <span className="text-[9.5px] font-mono text-[#A855F7] bg-[#A855F7]/10 px-2 py-0.5 rounded border border-[#A855F7]/20">
+                      Inspect
+                    </span>
+                  </button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Right: Archetype Selector Chips */}
+        <div className="flex items-center gap-1.5 shrink-0 overflow-x-auto max-w-full">
+          {currentClusters.map((cluster) => {
+            const isSelected = selectedCluster?.cluster_id === cluster.cluster_id;
+            const theme = getClusterTheme(cluster.cluster_name);
+
+            return (
+              <button
+                key={cluster.cluster_id}
+                type="button"
+                onClick={() => {
+                  setSelectedClusterId(cluster.cluster_id);
+                  setSelectedPlayer(null);
+                }}
+                className={`px-2.5 py-1 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer border flex items-center gap-1.5 ${
+                  isSelected
+                    ? 'shadow-md'
+                    : 'bg-[#03151F]/90 text-[#8FA3AD] hover:text-white border-white/10'
+                }`}
+                style={{
+                  backgroundColor: isSelected ? theme.bg : undefined,
+                  borderColor: isSelected ? theme.border : undefined,
+                  color: isSelected ? theme.color : undefined,
+                  boxShadow: isSelected ? `0 0 12px ${theme.glow}` : undefined,
+                }}
+              >
+                <GMMCurveIcon className="w-3 h-3" />
+                <span>{cluster.cluster_name.split('/')[0].trim()}</span>
+              </button>
+            );
+          })}
+        </div>
+
+      </header>
+
+      {/* 2. MAIN SPLIT ANALYTICAL WORKBENCH */}
+      <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-3 overflow-hidden">
+        
+        {/* Left Column (7 cols / ~60%): Archetype DNA, z-Score Matrix & Gaussian Curves */}
+        <div className="lg:col-span-7 xl:col-span-8 h-full min-h-0">
+          {loading ? (
+            <div className="h-full flex flex-col items-center justify-center text-xs font-mono text-[#8FA3AD] gap-2 rounded-3xl bg-[#000810] border border-white/[0.08]">
+              <div className="w-6 h-6 border-2 border-[#A855F7] border-t-transparent rounded-full animate-spin" />
+              <span>Calibrating Gaussian Mixture Models across 1,802 players...</span>
+            </div>
+          ) : (
+            <GMMArchetypeCanvas
+              selectedCluster={selectedCluster}
+              clusterPlayers={clusterPlayers}
+              positionPlayers={positionPlayers}
+              className="w-full h-full"
+            />
+          )}
+        </div>
+
+        {/* Right Column (5 cols / ~40%): Roster Scanner & Chameleon Explorer Deck */}
+        <div className="lg:col-span-5 xl:col-span-4 h-full min-h-0">
+          <GMMRosterDeck
+            players={positionPlayers}
+            selectedClusterName={selectedCluster?.cluster_name || ''}
+            selectedPlayer={selectedPlayer}
+            onSelectPlayer={(p) => setSelectedPlayer(p)}
+            onClearSelection={() => setSelectedPlayer(null)}
+            className="w-full h-full"
+          />
+        </div>
+
       </div>
 
     </div>

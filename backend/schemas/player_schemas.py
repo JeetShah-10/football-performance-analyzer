@@ -21,6 +21,8 @@ class PlayerSummary(BaseModel):
     cluster_name: str
     pca_x: float
     pca_y: float
+    # GMM Soft-Clustering Probabilities
+    gmm_probabilities: Optional[Dict[str, float]] = None
     # Per-90 metrics for client-side filtering
     npxG_per90: float = 0.0
     xAG_per90: float = 0.0

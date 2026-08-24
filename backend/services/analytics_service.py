@@ -117,6 +117,17 @@ class AnalyticsService:
         summaries = []
         for row in sliced.to_dict(orient='records'):
             age_val = row.get('Age', row.get('age'))
+            # Parse GMM probabilities json
+            gmm_prob_raw = row.get('gmm_probabilities_json')
+            gmm_probs_dict = {}
+            if gmm_prob_raw and isinstance(gmm_prob_raw, str):
+                try:
+                    gmm_probs_dict = json.loads(gmm_prob_raw)
+                except Exception:
+                    gmm_probs_dict = {}
+            elif isinstance(gmm_prob_raw, dict):
+                gmm_probs_dict = gmm_prob_raw
+
             summaries.append(
                 PlayerSummary(
                     player_id=str(row.get('player_id', '')),
@@ -129,6 +140,7 @@ class AnalyticsService:
                     age=int(float(age_val)) if age_val is not None and not pd.isna(age_val) else None,
                     cluster_id=int(row.get('cluster_id', 0)),
                     cluster_name=str(row.get('cluster_name', '')),
+                    gmm_probabilities=gmm_probs_dict,
                     pca_x=float(row.get('pca_x', 0.0)),
                     pca_y=float(row.get('pca_y', 0.0)),
                     npxG_per90=round(float(row.get('npxG_per90', 0.0)), 3),
