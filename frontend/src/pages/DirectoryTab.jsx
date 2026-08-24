@@ -4,7 +4,6 @@ import { Search } from 'lucide-react';
 import { fetchPlayers } from '../lib/api';
 import { MOCK_PLAYERS } from '../lib/mockData';
 import PlayerCard from '../components/PlayerCard';
-import ProTelemetryTable from '../components/ProTelemetryTable';
 import LeagueLogo, { LEAGUE_CONFIGS } from '../components/LeagueLogo';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import ErrorState from '../components/ErrorState';
@@ -36,9 +35,6 @@ export default function DirectoryTab() {
   const [positionGroup, setPositionGroup] = useState('');
   const [selectedLeague, setSelectedLeague] = useState('');
   const [u21Only, setU21Only] = useState(false);
-
-  // View Mode: 'cards' or 'table'
-  const [viewMode, setViewMode] = useState('cards');
 
   // Debounce search input
   useEffect(() => {
@@ -75,8 +71,8 @@ export default function DirectoryTab() {
     <div className="flex flex-col gap-6 max-w-[1536px] mx-auto px-4 sm:px-6 pt-28 pb-12 select-none">
       {/* 1. TOP HEADER & FILTER DECK */}
       <div className="relative rounded-3xl p-5 sm:p-6 bg-[#03151F]/95 backdrop-blur-2xl border border-white/[0.08] shadow-2xl flex flex-col gap-5">
-        {/* Title & View Switcher Row */}
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        {/* Title & Compare Arena Link */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex flex-col">
             <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#38B6FF]">
               1,802-Player Database
@@ -87,39 +83,12 @@ export default function DirectoryTab() {
             />
           </div>
 
-          {/* Right: Compare Arena Link & View Mode Switcher */}
-          <div className="flex items-center gap-3">
-            <Link
-              to="/compare"
-              className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/10 hover:bg-[#FF3C00] text-white border border-white/20 hover:border-[#FF3C00] text-xs font-mono font-bold transition-all shadow-[0_4px_16px_rgba(0,0,0,0.5)] active:scale-95 cursor-pointer"
-            >
-              <span>⚔ Compare Arena ↗</span>
-            </Link>
-
-            {/* View Mode Toggle: Cards vs Table */}
-            <div className="flex items-center p-1 rounded-2xl bg-[#000910]/90 border border-white/10 text-xs font-mono shadow-inner">
-              <button
-                onClick={() => setViewMode('cards')}
-                className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer font-bold ${
-                  viewMode === 'cards'
-                    ? 'bg-white/20 text-white shadow-sm'
-                    : 'text-[#8FA3AD] hover:text-white'
-                }`}
-              >
-                ⊞ Cards
-              </button>
-              <button
-                onClick={() => setViewMode('table')}
-                className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer font-bold ${
-                  viewMode === 'table'
-                    ? 'bg-white/20 text-white shadow-sm'
-                    : 'text-[#8FA3AD] hover:text-white'
-                }`}
-              >
-                ☰ Pro Table
-              </button>
-            </div>
-          </div>
+          <Link
+            to="/compare"
+            className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/10 hover:bg-[#FF3C00] text-white border border-white/20 hover:border-[#FF3C00] text-xs font-mono font-bold transition-all shadow-[0_4px_16px_rgba(0,0,0,0.5)] active:scale-95 cursor-pointer shrink-0"
+          >
+            <span>⚔ Compare Arena ↗</span>
+          </Link>
         </div>
 
         {/* Minimalist Search Bar with Subtle Search Icon */}
@@ -239,9 +208,6 @@ export default function DirectoryTab() {
             <p className="text-sm font-bold text-white font-mono">No players match your active filters</p>
             <p className="text-xs text-[#8FA3AD] font-mono">Try adjusting your position, league, or search criteria.</p>
           </div>
-        ) : viewMode === 'table' ? (
-          /* PRO TELEMETRY TABLE VIEW */
-          <ProTelemetryTable players={players} />
         ) : (
           /* TACTICAL CARDS GRID VIEW */
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
