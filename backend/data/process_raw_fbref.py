@@ -134,9 +134,17 @@ def process_fbref_dataset(raw_dir: str):
     df_filtered['Int_per90'] = ((df_filtered['Int'] / df_filtered['Min']) * 90).round(3)
     df_filtered['Succ_per90'] = ((df_filtered['Succ'] / df_filtered['Min']) * 90).round(3)
 
-    # 6. PERCENTILES COMPUTED WITHIN EACH POSITION GROUP
+    # 6. DUAL-SCALE PERCENTILES CALCULATION
     for col in FBREF_FEATURE_COLUMNS:
+        # Global Outfield Percentiles (Across all 1,802 Big-5 players: higher output = strictly higher percentile)
         df_filtered[f"{col}_pct"] = (
+            df_filtered[col]
+            .rank(pct=True) * 100
+        ).round(1)
+        df_filtered[f"{col}_pct_global"] = df_filtered[f"{col}_pct"]
+
+        # Positional Cohort Percentiles (Benchmark within Defender, Midfielder, Forward)
+        df_filtered[f"{col}_pct_pos"] = (
             df_filtered.groupby('position_group')[col]
             .rank(pct=True) * 100
         ).round(1)

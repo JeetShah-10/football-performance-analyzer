@@ -152,8 +152,14 @@ class AnalyticsService:
         for feat in FBREF_FEATURE_COLUMNS:
             val = float(row.get(feat, 0.0))
             pct_col = f"{feat}_pct"
+            pos_pct_col = f"{feat}_pct_pos"
             pct_val = float(row.get(pct_col, 50.0))
-            stats_dict[feat] = StatPercentile(value=round(val, 3), percentile=round(pct_val, 1))
+            pos_pct_val = float(row.get(pos_pct_col, pct_val)) if row.get(pos_pct_col) is not None else None
+            stats_dict[feat] = StatPercentile(
+                value=round(val, 3),
+                percentile=round(pct_val, 1),
+                pos_percentile=round(pos_pct_val, 1) if pos_pct_val is not None else None,
+            )
 
         # Parse GMM probabilities JSON
         gmm_probs = {}

@@ -4,7 +4,8 @@ from pydantic import BaseModel, Field
 
 class StatPercentile(BaseModel):
     value: float = Field(..., description="Raw per-90 metric value")
-    percentile: float = Field(..., description="Position-group percentile rank (0-100%)")
+    percentile: float = Field(..., description="Global outfield percentile rank (0-100%)")
+    pos_percentile: Optional[float] = Field(None, description="Position-group percentile rank (0-100%)")
 
 
 class PlayerSummary(BaseModel):

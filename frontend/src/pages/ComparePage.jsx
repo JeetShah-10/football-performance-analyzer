@@ -763,30 +763,37 @@ export default function ComparePage() {
           {RADAR_METRICS.map((m) => {
             const statA = p1?.stats?.[m.key] || null;
             const statB = p2?.stats?.[m.key] || null;
-            const pctA = statA?.percentile ?? 50;
-            const pctB = statB?.percentile ?? 50;
-            const diffPct = Math.round(pctA - pctB);
-            const p1Wins = diffPct > 0;
-            const isTie = diffPct === 0;
+            const valA = statA?.value ?? null;
+            const valB = statB?.value ?? null;
+            const hasBoth = valA !== null && valB !== null;
+            const isTie = hasBoth && valA === valB;
+            const p1Wins = hasBoth && valA > valB;
+
+            let leadPct = 0;
+            if (hasBoth && !isTie) {
+              const higher = Math.max(valA, valB);
+              const lower = Math.min(valA, valB);
+              leadPct = lower > 0 ? Math.round(((higher - lower) / lower) * 100) : (higher > 0 ? 100 : 0);
+            }
 
             return (
               <div key={m.key} className="flex-1 p-2.5 rounded-2xl bg-[#000407]/90 border border-white/[0.06] flex flex-col items-center gap-1.5 shadow-inner">
                 <span className="text-[10px] text-[#8FA3AD] font-extrabold uppercase tracking-wider">{m.label}</span>
                 <div className="flex items-center gap-2 text-xs">
-                  <span className="text-white font-bold">{statA ? statA.value?.toFixed(2) : '—'}</span>
+                  <span className="text-white font-bold">{valA !== null ? valA.toFixed(2) : '—'}</span>
                   <span className="text-[10px] text-[#5A7280]">vs</span>
-                  <span className="text-white font-bold">{statB ? statB.value?.toFixed(2) : '—'}</span>
+                  <span className="text-white font-bold">{valB !== null ? valB.toFixed(2) : '—'}</span>
                 </div>
-                {p1 && p2 ? (
+                {hasBoth ? (
                   isTie ? (
                     <span className="text-[10px] text-[#5A7280] font-bold">Tied</span>
                   ) : p1Wins ? (
                     <span className="text-[10px] font-bold text-[#FF7733] bg-[#FF3C00]/15 px-2 py-0.5 rounded-md border border-[#FF3C00]/30 shadow-[0_0_6px_rgba(255,60,0,0.3)]">
-                      +{diffPct}% (A)
+                      +{leadPct}% (A)
                     </span>
                   ) : (
                     <span className="text-[10px] font-bold text-[#38B6FF] bg-[#38B6FF]/15 px-2 py-0.5 rounded-md border border-[#38B6FF]/30 shadow-[0_0_6px_rgba(56,182,255,0.3)]">
-                      +{Math.abs(diffPct)}% (B)
+                      +{leadPct}% (B)
                     </span>
                   )
                 ) : (
