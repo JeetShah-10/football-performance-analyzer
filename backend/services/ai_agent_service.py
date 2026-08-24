@@ -26,6 +26,15 @@ class AIScoutAgentService:
         self.all_players = self.analytics_service.list_players(limit=2000)
         self.player_names_map = {p.player_name.lower(): p for p in self.all_players}
         self.player_names_list = list(self.player_names_map.keys())
+        # Pre-clean names and word sets for O(1)/O(N) single-pass lookup (Ponytail native)
+        self._indexed_players = [
+            (
+                re.sub(r'[^a-z0-9\s]', ' ', name).strip(),
+                set(part for part in re.sub(r'[^a-z0-9\s]', ' ', name).split() if len(part) > 2),
+                player
+            )
+            for name, player in self.player_names_map.items()
+        ]
 
     @classmethod
     def get_instance(cls):
@@ -64,22 +73,21 @@ class AIScoutAgentService:
             entities["position_group"] = "Forward"
 
         # 3. League Keyword Extraction
-        if "la liga" in clean_q or "laliga" in clean_q:
-            entities["league"] = "La Liga"
-        elif "premier league" in clean_q or "epl" in clean_q:
-            entities["league"] = "Premier League"
-        elif "serie a" in clean_q:
-            entities["league"] = "Serie A"
-        elif "bundesliga" in clean_q:
-            entities["league"] = "Bundesliga"
-        elif "ligue 1" in clean_q:
-            entities["league"] = "Ligue 1"
+        league_map = {
+            "la liga": "La Liga", "laliga": "La Liga",
+            "premier league": "Premier League", "epl": "Premier League",
+            "serie a": "Serie A", "bundesliga": "Bundesliga", "ligue 1": "Ligue 1"
+        }
+        for key, val in league_map.items():
+            if key in clean_q:
+                entities["league"] = val
+                break
 
         # Clean query text: strip possessives and extra punctuation
         clean_text = re.sub(r"['’]s\b", "", clean_q)
         clean_text = re.sub(r'[^a-z0-9\s]', ' ', clean_text)
         
-        # Strict stopwords list to prevent false positive single-word player matches (e.g. "young" -> Ashley Young)
+        # Stopwords list to prevent false positive single-word player matches (e.g. "young" -> Ashley Young)
         stop_words = {
             "young", "strong", "best", "top", "fast", "great", "good", "old", "new",
             "tell", "about", "style", "compare", "and", "like", "find", "show", "under", "with",
@@ -95,10 +103,9 @@ class AIScoutAgentService:
         for i in range(len(words)):
             for j in range(len(words), i + 1, -1):
                 phrase = " ".join(words[i:j])
-                if phrase in ["la liga", "premier league", "serie a", "bundesliga", "ligue 1"]:
+                if phrase in league_map:
                     continue
-                for full_name_lower, player_obj in self.player_names_map.items():
-                    name_clean = re.sub(r'[^a-z0-9\s]', ' ', full_name_lower)
+                for name_clean, _, player_obj in self._indexed_players:
                     if phrase == name_clean or (len(phrase) > 4 and phrase in name_clean):
                         if player_obj not in entities["matched_players"]:
                             entities["matched_players"].append(player_obj)
@@ -106,8 +113,7 @@ class AIScoutAgentService:
         # 4b. Single-word match ONLY using non-stopword candidate words
         if not entities["matched_players"]:
             for w in candidate_words:
-                for full_name_lower, player_obj in self.player_names_map.items():
-                    name_parts = [part for part in re.sub(r'[^a-z0-9\s]', ' ', full_name_lower).split() if len(part) > 2]
+                for _, name_parts, player_obj in self._indexed_players:
                     if w in name_parts:
                         if player_obj not in entities["matched_players"]:
                             entities["matched_players"].append(player_obj)

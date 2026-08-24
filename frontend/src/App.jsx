@@ -8,6 +8,7 @@ import HomeTab from './pages/HomeTab';
 
 // Code-split route pages to optimize bundle size and page load speed
 const DirectoryTab = lazy(() => import('./pages/DirectoryTab'));
+const ComparePage = lazy(() => import('./pages/ComparePage'));
 const PitchMapTab = lazy(() => import('./pages/PitchMapTab'));
 const GMMTab = lazy(() => import('./pages/GMMTab'));
 const U21ScoutingTab = lazy(() => import('./pages/U21ScoutingTab'));
@@ -35,6 +36,11 @@ export default function App() {
     setShowSplash(false);
   };
 
+  const hideFooter =
+    location.pathname.startsWith('/player/') ||
+    location.pathname === '/compare' ||
+    location.pathname === '/explorer';
+
   return (
     <div className="min-h-screen bg-[#000C12] text-[#F5F1EB] flex flex-col font-sans">
       {/* Initial Double Stairs Splash Preloader & Logo Reveal */}
@@ -52,6 +58,7 @@ export default function App() {
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<HomeTab />} />
             <Route path="/explorer" element={<DirectoryTab />} />
+            <Route path="/compare" element={<ComparePage />} />
             <Route path="/pitch-map" element={<PitchMapTab />} />
             <Route path="/gmm-matrix" element={<GMMTab />} />
             <Route path="/u21-scouting" element={<U21ScoutingTab />} />
@@ -62,8 +69,8 @@ export default function App() {
         </Suspense>
       </main>
 
-      {/* Full-Width PlasmaShader WebGL Footer */}
-      <Footer />
+      {/* Full-Width PlasmaShader WebGL Footer (hidden on Player Detail, Explorer, and Compare for zero scroll clutter) */}
+      {!hideFooter && <Footer />}
     </div>
   );
 }

@@ -1,11 +1,12 @@
+import { clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
 /**
- * Lightweight classNames merge helper (Ponytail native - 0 dependencies)
+ * Standard className merge helper with tailwind-merge support
  */
 export function cn(...inputs) {
-  return inputs
-    .flat()
-    .filter(Boolean)
-    .join(' ');
+  return twMerge(clsx(inputs));
 }
 
 export default cn;
+

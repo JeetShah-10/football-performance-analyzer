@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+﻿import React, { useEffect, useRef } from 'react';
 
 /**
  * ParticleSphere — Ultra-Optimized 3D Rotating Particle Globe Canvas
@@ -45,7 +45,7 @@ export default function ParticleSphere({
       isAccent[i] = Math.random() < 0.22 ? 1 : 0;
     }
 
-    const dpr = 1; // 1x DPR is crisp and saves 75% fill cost on low-end GPUs
+    const dpr = 1;
 
     const resize = () => {
       const width = canvas.parentElement?.clientWidth || 340;
@@ -90,7 +90,6 @@ export default function ParticleSphere({
       const fov = 400;
 
       for (let i = 0; i < count; i++) {
-        // 3D rotation math
         const px = posX[i];
         const py = posY[i];
         const pz = posZ[i];
@@ -101,7 +100,6 @@ export default function ParticleSphere({
         const y2 = py * cosX - z1 * sinX;
         const z2 = z1 * cosX + py * sinX;
 
-        // Perspective projection
         const scale = fov / (fov + z2 + radius);
         const screenX = centerX + x1 * scale;
         const screenY = centerY + y2 * scale;

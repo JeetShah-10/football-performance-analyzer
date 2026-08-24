@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 
 const NAV_TABS = [
   { path: '/explorer', label: 'EXPLORER' },
+  { path: '/compare', label: 'COMPARE' },
   { path: '/pitch-map', label: 'PITCH MAP' },
   { path: '/gmm-matrix', label: 'GMM MATRIX' },
   { path: '/u21-scouting', label: 'U21 SCOUTING' },

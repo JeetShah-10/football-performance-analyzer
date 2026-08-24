@@ -23,6 +23,5 @@ export function getPlayerImage(player) {
 
   if (!playerId) return null;
   
-  // Use absolute URL to point to the FastAPI backend directly
-  return `http://localhost:8000/players/${encodeURIComponent(playerId)}/image`;
+  return `/api/players/${encodeURIComponent(playerId)}/image`;
 }

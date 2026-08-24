@@ -1,41 +1,61 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Loader2, Users } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
+import { Search } from 'lucide-react';
 import { fetchPlayers } from '../lib/api';
 import { MOCK_PLAYERS } from '../lib/mockData';
 import PlayerCard from '../components/PlayerCard';
-import DualRadarCompare from '../components/DualRadarCompare';
-import ErrorState from '../components/ErrorState';
+import ProTelemetryTable from '../components/ProTelemetryTable';
+import LeagueLogo, { LEAGUE_CONFIGS } from '../components/LeagueLogo';
 import LoadingSkeleton from '../components/LoadingSkeleton';
+import ErrorState from '../components/ErrorState';
+import ShimmeringText from '../components/ui/shimmering-text';
+
+const LEAGUES = [
+  'Premier League',
+  'La Liga',
+  'Bundesliga',
+  'Serie A',
+  'Ligue 1',
+];
+
+const POSITIONS = [
+  { key: '', label: 'ALL' },
+  { key: 'Defender', label: 'DEF' },
+  { key: 'Midfielder', label: 'MID' },
+  { key: 'Forward', label: 'ATT' },
+];
 
 export default function DirectoryTab() {
   const [players, setPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   // Filters
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [positionGroup, setPositionGroup] = useState('');
-  const [league, setLeague] = useState('');
+  const [selectedLeague, setSelectedLeague] = useState('');
   const [u21Only, setU21Only] = useState(false);
+
+  // View Mode: 'cards' or 'table'
+  const [viewMode, setViewMode] = useState('cards');
 
   // Debounce search input
   useEffect(() => {
-    const timer = setTimeout(() => setDebouncedSearch(search), 300);
+    const timer = setTimeout(() => setDebouncedSearch(search), 250);
     return () => clearTimeout(timer);
   }, [search]);
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     setLoading(true);
     setError(null);
-    
+
     const { data, error: apiError } = await fetchPlayers({
       search: debouncedSearch,
-      position_group: positionGroup,
-      league: league,
+      position_group: positionGroup || undefined,
+      league: selectedLeague || undefined,
       u21_only: u21Only,
-      limit: 100
+      limit: 100,
     });
 
     if (apiError) {
@@ -43,111 +63,197 @@ export default function DirectoryTab() {
     } else {
       setPlayers(data || []);
     }
-    
+
     setLoading(false);
-  };
+  }, [debouncedSearch, positionGroup, selectedLeague, u21Only]);
 
   useEffect(() => {
     loadData();
-  }, [debouncedSearch, positionGroup, league, u21Only]);
+  }, [loadData]);
 
   return (
-    <div className="flex flex-col gap-8 max-w-[1536px] mx-auto px-4 sm:px-6 pt-6 pb-16">
-      
-      {/* Top Filter & Search Header Bar */}
-      <div className="glass-card rounded-2xl p-4 sm:p-6 flex flex-col md:flex-row gap-4 justify-between items-center border-zinc-800">
-        <div className="relative flex-1 w-full">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-cyan-400" />
+    <div className="flex flex-col gap-6 max-w-[1536px] mx-auto px-4 sm:px-6 pt-28 pb-12 select-none">
+      {/* 1. TOP HEADER & FILTER DECK */}
+      <div className="relative rounded-3xl p-5 sm:p-6 bg-[#03151F]/95 backdrop-blur-2xl border border-white/[0.08] shadow-2xl flex flex-col gap-5">
+        {/* Title & View Switcher Row */}
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="flex flex-col">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#38B6FF]">
+              1,802-Player Database
+            </span>
+            <ShimmeringText
+              text="Player Explorer & Scouting Telemetry"
+              className="text-xl sm:text-2xl font-extrabold text-white font-heading tracking-tight"
+            />
+          </div>
+
+          {/* Right: Compare Arena Link & View Mode Switcher */}
+          <div className="flex items-center gap-3">
+            <Link
+              to="/compare"
+              className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/10 hover:bg-[#FF3C00] text-white border border-white/20 hover:border-[#FF3C00] text-xs font-mono font-bold transition-all shadow-[0_4px_16px_rgba(0,0,0,0.5)] active:scale-95 cursor-pointer"
+            >
+              <span>⚔ Compare Arena ↗</span>
+            </Link>
+
+            {/* View Mode Toggle: Cards vs Table */}
+            <div className="flex items-center p-1 rounded-2xl bg-[#000910]/90 border border-white/10 text-xs font-mono shadow-inner">
+              <button
+                onClick={() => setViewMode('cards')}
+                className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer font-bold ${
+                  viewMode === 'cards'
+                    ? 'bg-white/20 text-white shadow-sm'
+                    : 'text-[#8FA3AD] hover:text-white'
+                }`}
+              >
+                ⊞ Cards
+              </button>
+              <button
+                onClick={() => setViewMode('table')}
+                className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer font-bold ${
+                  viewMode === 'table'
+                    ? 'bg-white/20 text-white shadow-sm'
+                    : 'text-[#8FA3AD] hover:text-white'
+                }`}
+              >
+                ☰ Pro Table
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Minimalist Search Bar with Subtle Search Icon */}
+        <div className="relative w-full flex items-center">
           <input
             type="text"
-            placeholder="Search 1,802 players or squads..."
-            className="w-full pl-10 pr-4 py-2.5 bg-[#090d18] border border-zinc-800 rounded-xl text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-500 transition-all"
+            placeholder="Search players, clubs, or archetypes (e.g. Saka, Rodri, Arsenal, Winger)..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            className="w-full pl-5 pr-14 py-3.5 bg-[#080C12]/85 backdrop-blur-2xl border border-white/15 focus:border-[#FF3C00]/60 rounded-2xl text-xs sm:text-sm font-medium text-white placeholder-white/40 focus:outline-none shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_15px_30px_rgba(0,0,0,0.6)] focus:shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),0_0_24px_rgba(255,60,0,0.25)] transition-all"
           />
+
+          {search && (
+            <button
+              onClick={() => setSearch('')}
+              className="absolute right-12 text-xs font-mono text-[#8FA3AD] hover:text-white cursor-pointer px-1.5 py-0.5 rounded bg-white/5 hover:bg-white/10"
+              title="Clear search"
+            >
+              ✕
+            </button>
+          )}
+
+          <button
+            onClick={() => setDebouncedSearch(search)}
+            className="absolute right-2.5 w-9 h-9 rounded-xl bg-white/10 hover:bg-[#FF3C00] text-white/80 hover:text-white border border-white/15 hover:border-[#FF3C00] transition-all flex items-center justify-center active:scale-90 cursor-pointer shadow-sm"
+            title="Search"
+          >
+            <Search className="w-4 h-4" />
+          </button>
         </div>
-        
-        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-          <select 
-            value={positionGroup} 
-            onChange={(e) => setPositionGroup(e.target.value)}
-            className="bg-[#090d18] border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-200 focus:outline-none focus:border-cyan-500"
-          >
-            <option value="">All Positions</option>
-            <option value="Defender">Defenders</option>
-            <option value="Midfielder">Midfielders</option>
-            <option value="Forward">Forwards</option>
-          </select>
 
-          <select 
-            value={league} 
-            onChange={(e) => setLeague(e.target.value)}
-            className="bg-[#090d18] border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-200 focus:outline-none focus:border-cyan-500"
-          >
-            <option value="">All Leagues</option>
-            <option value="Premier League">Premier League</option>
-            <option value="La Liga">La Liga</option>
-            <option value="Serie A">Serie A</option>
-            <option value="Bundesliga">Bundesliga</option>
-            <option value="Ligue 1">Ligue 1</option>
-          </select>
+        {/* Filter Badges Row: Prominent Studio League Badges + Position Pills + U21 */}
+        <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-white/[0.04]">
+          {/* League Badges with High-Glow Studio Crests */}
+          <div className="flex flex-wrap items-center gap-2.5">
+            <button
+              onClick={() => setSelectedLeague('')}
+              className={`px-3.5 py-2 rounded-2xl text-xs font-mono font-bold transition-all cursor-pointer ${
+                selectedLeague === ''
+                  ? 'bg-white text-[#000C12] shadow-[0_0_16px_rgba(255,255,255,0.4)]'
+                  : 'bg-[#000910]/80 text-[#8FA3AD] hover:text-white border border-white/10 hover:border-white/30'
+              }`}
+            >
+              All Leagues
+            </button>
 
-          <label className="flex items-center gap-2 px-3 py-2 bg-[#090d18] border border-zinc-800 rounded-xl cursor-pointer hover:border-zinc-700 transition-colors whitespace-nowrap">
-            <input 
-              type="checkbox" 
-              checked={u21Only} 
-              onChange={(e) => setU21Only(e.target.checked)}
-              className="w-3.5 h-3.5 rounded border-zinc-700 text-cyan-400 focus:ring-cyan-500 bg-zinc-900"
-            />
-            <span className="text-xs text-zinc-300 font-semibold">U21 Only</span>
-          </label>
+            {LEAGUES.map((lg) => {
+              const active = selectedLeague === lg;
+              const config = LEAGUE_CONFIGS[lg];
+              return (
+                <button
+                  key={lg}
+                  onClick={() => setSelectedLeague(active ? '' : lg)}
+                  className={`flex items-center gap-2.5 px-3 py-1.5 rounded-2xl text-xs font-mono font-bold transition-all cursor-pointer border ${
+                    active
+                      ? 'bg-white/20 text-white border-white/40 shadow-[0_0_16px_rgba(255,255,255,0.2)]'
+                      : 'bg-[#000910]/80 text-[#8FA3AD] hover:text-white border-white/10 hover:border-white/30'
+                  }`}
+                  style={active ? { borderColor: config.borderColor, boxShadow: `0 0 16px ${config.glow}` } : {}}
+                >
+                  <LeagueLogo leagueName={lg} size="sm" />
+                  <span className="truncate hidden sm:inline">{config.short}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Position Pills & U21 Toggle */}
+          <div className="flex items-center gap-3">
+            {/* Position Pills */}
+            <div className="flex items-center p-1 rounded-full bg-[#000910]/90 border border-white/10 text-xs font-mono">
+              {POSITIONS.map((pos) => (
+                <button
+                  key={pos.key}
+                  onClick={() => setPositionGroup(pos.key)}
+                  className={`px-3 py-1 rounded-full font-bold transition-all cursor-pointer ${
+                    positionGroup === pos.key
+                      ? 'bg-white text-[#000C12] shadow-sm'
+                      : 'text-[#8FA3AD] hover:text-white'
+                  }`}
+                >
+                  {pos.label}
+                </button>
+              ))}
+            </div>
+
+            {/* U21 Switch */}
+            <label className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#000910]/90 border border-white/10 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={u21Only}
+                onChange={(e) => setU21Only(e.target.checked)}
+                className="w-3.5 h-3.5 rounded text-[#FF3C00] bg-[#000C12] border-white/20"
+              />
+              <span className="text-xs font-mono font-bold text-white">U21 Only</span>
+            </label>
+          </div>
         </div>
       </div>
 
-      {/* Side-by-Side Dual Radar Comparison Tool */}
-      <DualRadarCompare defaultPlayerId1="bukayo_saka_eng_eng_2001_0" defaultPlayerId2="phil_foden_eng_eng_2000_0" />
-
-      {/* Player Directory Grid */}
-      <div className="glass-card rounded-2xl p-6 border-zinc-800">
-        <div className="flex justify-between items-center mb-6 pb-3 border-b border-zinc-800">
-          <h2 className="text-sm font-bold text-white font-heading uppercase tracking-wider flex items-center gap-2">
-            <Users className="w-4 h-4 text-cyan-400" />
-            <span>Player Directory ({players.length})</span>
-          </h2>
-          {loading && <Loader2 className="w-4 h-4 text-cyan-400 animate-spin" />}
+      {/* 2. MAIN DATA DISPLAY (CARDS GRID OR PRO TABLE) */}
+      <div className="flex flex-col gap-4">
+        {/* Results Count & Active Filters Indicator */}
+        <div className="flex items-center justify-between px-2 text-xs font-mono text-[#8FA3AD]">
+          <span>Showing {players.length} matched players</span>
         </div>
-        
+
         {error && !loading ? (
           <ErrorState message={error} onRetry={loadData} />
         ) : loading && players.length === 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
             <LoadingSkeleton variant="card" count={8} />
           </div>
         ) : players.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-12 text-zinc-500 gap-2">
-            <Search className="w-8 h-8 opacity-50 text-cyan-400" />
-            <p className="text-xs">No players found matching your filters.</p>
+          <div className="p-12 rounded-3xl bg-[#03151F]/90 border border-white/[0.08] text-center flex flex-col items-center justify-center gap-2">
+            <span className="text-3xl">🔍</span>
+            <p className="text-sm font-bold text-white font-mono">No players match your active filters</p>
+            <p className="text-xs text-[#8FA3AD] font-mono">Try adjusting your position, league, or search criteria.</p>
           </div>
+        ) : viewMode === 'table' ? (
+          /* PRO TELEMETRY TABLE VIEW */
+          <ProTelemetryTable players={players} />
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <AnimatePresence>
-              {players.map((player) => (
-                <motion.div
-                  key={player.player_id}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.2 }}
-                  layout
-                >
-                  <PlayerCard player={player} />
-                </motion.div>
-              ))}
-            </AnimatePresence>
+          /* TACTICAL CARDS GRID VIEW */
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
+            {players.map((player) => (
+              <PlayerCard
+                key={player.player_id || player.id}
+                player={player}
+              />
+            ))}
           </div>
         )}
       </div>
-
     </div>
   );
 }
