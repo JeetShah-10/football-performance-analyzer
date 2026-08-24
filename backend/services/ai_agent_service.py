@@ -1,5 +1,6 @@
 import os
 import re
+import time
 import joblib
 import difflib
 from typing import Dict, List, Any, Optional
@@ -122,12 +123,13 @@ class AIScoutAgentService:
         return entities
 
     def process_query(self, query: str) -> Dict[str, Any]:
-        """Full Agent Execution Pipeline: Intent Classifier -> Entity Extractor -> Analytics Lookup -> Template Synthesizer."""
+        start_time = time.perf_counter()
         predicted_intent = self.predict_intent(query)
         entities = self.extract_entities(query)
         
         backend_methods_called = []
         report_markdown = ""
+        players_data = []
 
         if predicted_intent == "find_similar":
             if entities["matched_players"]:
@@ -135,11 +137,16 @@ class AIScoutAgentService:
                 backend_methods_called.append(f"AnalyticsService.get_similar_players('{target.player_id}', n=5)")
                 similars = self.analytics_service.get_similar_players(target.player_id, n=5)
                 
+                players_data = [
+                    s.model_dump() if hasattr(s, "model_dump") else s.dict()
+                    for s in similars
+                ]
+                
                 rows_text = ""
                 for s in similars:
                     rows_text += f"- **{s.player_name}** ({s.squad}, {s.league}) — Style: *{s.cluster_name}* (Similarity: **{s.similarity_score}%**)\n"
 
-                report_markdown = f"""### 🔍 Scouting Report: Tactical Replacements for {target.player_name}
+                report_markdown = f"""### Scouting Report: Tactical Replacements for {target.player_name}
 **Target Player**: {target.player_name} ({target.squad}, {target.position_group})  
 **Archetype**: *{target.cluster_name}*  
 
@@ -161,7 +168,12 @@ class AIScoutAgentService:
                 p1 = self.analytics_service.get_player_by_id(p1_summary.player_id)
                 p2 = self.analytics_service.get_player_by_id(p2_summary.player_id)
 
-                report_markdown = f"""### ⚔️ Side-by-Side Player Comparison
+                players_data = [
+                    p1.model_dump() if hasattr(p1, "model_dump") else p1.dict(),
+                    p2.model_dump() if hasattr(p2, "model_dump") else p2.dict(),
+                ]
+
+                report_markdown = f"""### Side-by-Side Player Comparison
 **Player 1**: {p1.player_name} ({p1.squad}, {p1.position_group}) — Archetype: *{p1.cluster_name}*  
 **Player 2**: {p2.player_name} ({p2.squad}, {p2.position_group}) — Archetype: *{p2.cluster_name}*  
 
@@ -180,7 +192,11 @@ class AIScoutAgentService:
                 backend_methods_called.append(f"AnalyticsService.get_player_by_id('{target_summary.player_id}')")
                 p = self.analytics_service.get_player_by_id(target_summary.player_id)
                 
-                report_markdown = f"""### 📊 Tactical Breakdown: {p.player_name}
+                players_data = [
+                    p.model_dump() if hasattr(p, "model_dump") else p.dict()
+                ]
+
+                report_markdown = f"""### Tactical Breakdown: {p.player_name}
 **Squad**: {p.squad} ({p.league})  
 **Position Group**: {p.position_group} ({p.position})  
 **Archetype Assignment**: *{p.cluster_name}* (Cluster ID: {p.cluster_id})  
@@ -216,17 +232,24 @@ class AIScoutAgentService:
                 limit=5
             )
             
+            players_data = [
+                p.model_dump() if hasattr(p, "model_dump") else p.dict()
+                for p in players
+            ]
+
             rows_text = ""
             for p in players:
                 age_str = f", Age {p.age}" if p.age is not None else ""
                 rows_text += f"- **{p.player_name}** ({p.squad}, {p.league}{age_str}) — Archetype: *{p.cluster_name}*\n"
 
-            report_markdown = f"""### 🎯 Criteria Scouting Results: {pos or 'All Positions'}
+            report_markdown = f"""### Criteria Scouting Results: {pos or 'All Positions'}
 **Applied Filters**: Position Group: `{pos or 'Any'}`, League: `{league or 'Any'}`, Max Age: `{max_age or 'Any'}`  
 
 #### Matched Player Candidates:
 {rows_text}
 """
+
+        latency_ms = round((time.perf_counter() - start_time) * 1000, 2)
 
         entities_dict = {
             "matched_players": [p.player_name for p in entities["matched_players"]],
@@ -243,6 +266,8 @@ class AIScoutAgentService:
             "entities": entities_dict,
             "backend_methods_called": backend_methods_called,
             "report_markdown": report_markdown,
-            "synthesized_response": report_markdown
+            "synthesized_response": report_markdown,
+            "players_data": players_data,
+            "latency_ms": latency_ms
         }
 

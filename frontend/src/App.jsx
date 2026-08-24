@@ -39,14 +39,16 @@ export default function App() {
   const hideNavbar =
     location.pathname === '/u21-scouting' ||
     location.pathname === '/pitch-map' ||
-    location.pathname === '/gmm-matrix';
+    location.pathname === '/gmm-matrix' ||
+    location.pathname === '/scout-chat';
   const hideFooter =
     location.pathname.startsWith('/player/') ||
     location.pathname === '/compare' ||
     location.pathname === '/explorer' ||
     location.pathname === '/u21-scouting' ||
     location.pathname === '/pitch-map' ||
-    location.pathname === '/gmm-matrix';
+    location.pathname === '/gmm-matrix' ||
+    location.pathname === '/scout-chat';
 
   return (
     <div className="min-h-screen bg-[#000C12] text-[#F5F1EB] flex flex-col font-sans">

@@ -18,6 +18,8 @@ class ScoutAgentResponse(BaseModel):
     intent: Optional[str] = None
     entities: Optional[Dict[str, Any]] = None
     synthesized_response: Optional[str] = None
+    players_data: Optional[List[Dict[str, Any]]] = None
+    latency_ms: Optional[float] = None
 
 
 @router.post("/scout-agent/query", response_model=ScoutAgentResponse)
