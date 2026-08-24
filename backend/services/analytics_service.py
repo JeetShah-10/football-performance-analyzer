@@ -65,8 +65,8 @@ class AnalyticsService:
         self.scaled_feature_cols = [f"{c}_scaled" for c in FBREF_FEATURE_COLUMNS]
 
     @classmethod
-    def get_instance(cls) -> 'AnalyticsService':
-        if cls._instance is None or 'gmm_probabilities_json' not in cls._instance.df.columns:
+    def get_instance(cls, force_reload: bool = False) -> 'AnalyticsService':
+        if cls._instance is None or force_reload or 'Int_per90_pct_pos' not in cls._instance.df.columns:
             cls._instance = cls()
         return cls._instance
 

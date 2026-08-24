@@ -76,8 +76,9 @@ async def custom_500_handler(request: Request, exc: Exception):
     )
 
 
-# Health check endpoint
+# Health check endpoints
 @app.get("/health", response_model=HealthResponse, tags=["Health"])
+@app.get("/api/health", response_model=HealthResponse, tags=["Health"], include_in_schema=False)
 def health_check():
     total_players = 0
     try:
@@ -93,8 +94,14 @@ def health_check():
     )
 
 
-# Include Routers
+# Include Routers (Canonical bare paths + /api compatibility aliases)
 app.include_router(players.router)
 app.include_router(clusters.router)
 app.include_router(similarity.router)
 app.include_router(scout_agent.router)
+
+app.include_router(players.router, prefix="/api", include_in_schema=False)
+app.include_router(clusters.router, prefix="/api", include_in_schema=False)
+app.include_router(similarity.router, prefix="/api", include_in_schema=False)
+app.include_router(scout_agent.router, prefix="/api", include_in_schema=False)
+
