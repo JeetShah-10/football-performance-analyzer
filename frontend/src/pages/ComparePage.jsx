@@ -226,10 +226,33 @@ export default function ComparePage() {
   const leagueConfig2 = p2 ? getLeagueConfig(p2.league) : { glow: 'rgba(56, 182, 255, 0.2)' };
 
   return (
-    <div className="min-h-[calc(100dvh-5rem)] max-w-[1536px] mx-auto px-4 sm:px-6 pt-28 pb-8 flex flex-col justify-between gap-5 select-none">
+    <div className="relative min-h-[calc(100dvh-5rem)] w-full select-none overflow-x-hidden">
       
-      {/* 1. TOP DUAL SEARCH DECK WITH SUBTLE ICONS & ZERO CLUTTER */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3.5 items-center relative z-40">
+      {/* Ambient Prominent Orangish Atmospheric Aura */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        {/* Warm Orangish Tactical Gradient Glow Layers */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `
+              radial-gradient(1200px 750px at 50% 10%, rgba(255, 60, 0, 0.24), transparent 70%),
+              radial-gradient(950px 650px at 8% 45%, rgba(255, 80, 0, 0.18), transparent 60%),
+              radial-gradient(950px 650px at 92% 45%, rgba(255, 60, 0, 0.18), transparent 60%),
+              radial-gradient(1200px 800px at 50% 92%, rgba(255, 60, 0, 0.22), transparent 65%),
+              linear-gradient(180deg, #0d0a10 0%, #170d0b 45%, #09090f 100%)
+            `,
+          }}
+        />
+        {/* Warm Overlay Glow */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-[#FF3C00]/[0.14] via-transparent to-[#FF6A00]/[0.10] mix-blend-screen" />
+        {/* Soft Obsidian Glass Vignette */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#000C12]/60 via-transparent to-[#000C12]/30" />
+      </div>
+
+      <div className="relative z-10 max-w-[1536px] mx-auto px-4 sm:px-6 pt-28 pb-8 flex flex-col justify-between gap-5">
+        
+        {/* 1. TOP DUAL SEARCH DECK WITH SUBTLE ICONS & ZERO CLUTTER */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3.5 items-center relative z-40">
         {/* Search Slot A (Crimson) */}
         <div ref={searchARef} className="md:col-span-5 relative">
           <div className="relative flex items-center">
@@ -803,6 +826,8 @@ export default function ComparePage() {
             );
           })}
         </div>
+      </div>
+
       </div>
 
     </div>
