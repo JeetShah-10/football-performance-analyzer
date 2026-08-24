@@ -21,14 +21,15 @@ This project serves as a comprehensive dual university mini-project submission:
 
 ---
 
-## 👥 Multi-Developer Team Matrix & Domain Ownership
+## 👥 Team Member Roles & Work Distribution
 
-| Team Member | Domain & Ownership | Git Branch | Core Deliverables & Responsibilities |
-| :--- | :--- | :--- | :--- |
-| **Jeet Shah** | Lead & ML Specialist | `feature/ds-pipeline` | Data cleaning, per-90 feature engineering, GMM soft clustering, PCA 2D projections, Cosine similarity twin engine, TF-IDF intent routing. |
-| **Dev** | Backend & Security Lead | `feature/fastapi-api` | FastAPI REST endpoints (`/players`, `/clusters`, `/similar`, `/scout-agent/query`), Pydantic schemas, OWASP headers, SlowAPI rate limiting, error masking. |
-| **Pooja** | Frontend & UI/UX Lead | `feature/react-ui` | React 19 dashboard, Tailwind CSS design system, PCA Pitch Map Studio, GMM Gaussian Lab, Split Compare Arena, U21 Scouting Engine. |
-| **Vishvam** | Documentation & Non-Tech Lead | `docs/` | PRD maintenance, viva documentation, 5 formal Architecture Decision Records (ADRs), dataset guide, presentation materials. |
+| Team Member | Domain & Ownership | Core Deliverables & Responsibilities |
+| :--- | :--- | :--- |
+| **Jeet Shah** | Project Lead, ML, Security, Full Frontend & Docs | Data Science & ML pipeline (GMM Soft Clustering, PCA, Cosine Twin Engine, TF-IDF Intent Classifier), full frontend architecture & visual engineering (React 19, Motion, Tactical Radars, Pitch Map & Scout Terminal), OWASP security hardening, 52-test invariant test suite, and technical documentation & ADRs. |
+| **Dev** | Backend & Security Contributor | FastAPI REST API development (`/players`, `/clusters`, `/similar`, `/scout-agent/query`), router modularization, Pydantic schemas, and backend rate limiting & CORS security integration. |
+| **Pooja** | Frontend Contributor | Foundational frontend scaffolding, initial UI component wireframing, and base layout setup. |
+| **Vishvam** | Data & Asset Acquisition | Player face photo retrieval, image extraction from Transfermarkt/FBref datasets, and asset cataloging for the player headshot archive. |
+
 
 ---
 

@@ -1,7 +1,7 @@
-# Data Science Lead Rules (Member 1)
+# Data Science & Project Lead Rules (Jeet Shah)
 
 ## Scope
-- Focus Area: `notebooks/`, `backend/clustering/`
+- Focus Area: `notebooks/`, `backend/clustering/`, `backend/services/`, `frontend/`, `docs/`
 - Branch: `feature/ds-pipeline`
 
 ## Guidelines for Antigravity AI

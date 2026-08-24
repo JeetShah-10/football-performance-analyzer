@@ -17,10 +17,10 @@ This project serves as a dual university mini-project submission:
 
 | Team Member | Primary Focus Area | Secondary Focus Area | Key Deliverables & Responsibilities |
 | :--- | :--- | :--- | :--- |
-| **Jeet Shah (Lead & ML Spec)** | Data Science & ML Pipeline | Full-Stack Guidance | Raw data cleaning, per-90 metric engineering, K-Means clustering, PCA, model evaluation, `.pkl` export, cross-stack integration oversight. |
-| **Dev** | Backend API & Security | Server Infrastructure | FastAPI REST endpoints (`/players`, `/clusters`, `/similar`), Pydantic schemas, CORS, rate limiting, error masking. |
-| **Pooja** | Frontend & UI/UX | Visual Analytics | React UI components (PCA 2D Plot, Radar Charts, Compare View), dashboard styling (Tailwind + `shadcn/ui`), client-side state. |
-| **Vishvam** | Documentation & Non-Tech | Project Management | Project PRD maintenance, viva documentation, report generation, system architecture diagrams, user guides. |
+| **Jeet Shah** | Project Lead, ML & Architecture | Frontend & Security & Docs | Data Science & ML pipeline (GMM Soft Clustering, PCA, Cosine Engine, TF-IDF Intent Classifier), full frontend architecture & visual engineering (React 19, Motion, Tactical Radars, Pitch Map & Scout Terminal), OWASP security hardening, 52-test invariant test suite, and technical documentation & ADRs. |
+| **Dev** | Backend API & Routing | Server Security | FastAPI REST endpoints (`/players`, `/clusters`, `/similar`, `/scout-agent/query`), Pydantic schemas, routing modularization, rate limiting, and CORS configuration. |
+| **Pooja** | Frontend Development | UI Components | Initial frontend wireframing, baseline UI layout setup, and base component scaffolding. |
+| **Vishvam** | Asset Acquisition & Data Support | Image Cataloging | Player face photo retrieval, headshot image dataset extraction, and asset cataloging for the player image archive. |
 
 ---
 
@@ -76,14 +76,19 @@ This project serves as a dual university mini-project submission:
 - **Report Synthesizer**: Template-based Markdown report generation over real retrieved `AnalyticsService` metrics.
 - **Supervised Position Classifier**: `LogisticRegression` classifier (81.16% test accuracy) trained on 8 per-90 metrics predicting position groups (`Defender`, `Midfielder`, `Forward`), with confusion matrix evaluation saved in `position_classifier_report.json`.
 
-### FR-5: React Frontend Dashboard (Pooja)
+### FR-5: React Frontend Dashboard & Visual Analytics (Jeet & Pooja)
 - **Overview Screen**: Interactive PCA 2D Scatter Plot colored by cluster archetype with search and position filters.
 - **Player Detail Screen**: Metric Radar Chart comparing individual player stats against their cluster centroid average.
 - **Compare View**: Side-by-side radar and statistical metric comparison between two players.
+- **Scout Intelligence Terminal**: 100dvh zero-scroll telemetry cockpit with interactive candidate cards.
 
-### FR-6: Documentation & Viva Deliverables (Vishvam)
-- Comprehensive README with setup guides and architecture diagrams.
-- Viva Report covering data distribution, clustering validation graphs (Elbow/Silhouette), and API benchmarks.
+### FR-6: Player Image Retrieval & Dataset Support (Vishvam)
+- Acquisition and extraction of 1,711 player face photos from Transfermarkt/FBref archives.
+- Cataloging player headshot file associations with unique player identifiers.
+
+### FR-7: Documentation, Security & Testing (Jeet & Dev)
+- 5 formal Architecture Decision Records (ADRs) in `docs/decisions/`.
+- 52-test automated suite covering API contracts, mathematical invariants, and OWASP security headers.
 
 ---
 

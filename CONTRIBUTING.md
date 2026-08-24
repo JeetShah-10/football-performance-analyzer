@@ -4,14 +4,14 @@ Welcome to the **Football Player Style Dashboard** project repository! This proj
 
 ---
 
-## 👥 Team Member Roles & Matrix
+## 👥 Team Member Roles & Work Distribution
 
 | Team Member | Domain & Ownership | Feature Branch | Core Deliverable |
 | :--- | :--- | :--- | :--- |
-| **Jeet Shah** | Data Science & ML Lead + Cross-Stack Architect | `feature/ds-pipeline` | Data cleaning, per-90 metrics, K-Means, PCA, similarity engine, `.pkl` exports. |
-| **Dev** | Backend Lead Developer | `feature/fastapi-api` | FastAPI REST API, Pydantic schemas, CORS, rate limiting, error masking. |
-| **Pooja** | Frontend Lead Developer | `feature/react-ui` | React UI, Tailwind CSS, Recharts Radar charts, Player Compare view, UI polish. |
-| **Vishvam** | Documentation & Non-Tech Lead | `main` / `docs` | PRD maintenance, viva documentation, report generation, system diagrams. |
+| **Jeet Shah** | Project Lead, ML, Security, Full Frontend & Docs | `feature/ds-pipeline` | Data Science & ML pipeline, full React 19 frontend architecture, OWASP security hardening, 52-test test suite, and ADRs. |
+| **Dev** | Backend & Security Contributor | `feature/fastapi-api` | FastAPI REST API, routing architecture, Pydantic schemas, CORS, and rate limiting. |
+| **Pooja** | Frontend Contributor | `feature/react-ui` | Baseline frontend scaffolding, initial UI layout setup, and base component styling. |
+| **Vishvam** | Asset Acquisition & Data Support | `main` / `docs` | Player face photo retrieval, headshot image extraction, and dataset asset management. |
 
 ---
 

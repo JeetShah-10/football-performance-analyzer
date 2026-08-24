@@ -9,13 +9,13 @@
 
 ---
 
-## 👥 Multi-Developer Team Matrix & Safety Contracts
-This project is worked on by 4 team members:
+## 👥 Team Matrix & Roles
+This project was developed with the following work distribution:
 
-1. **Jeet Shah (Lead & ML Spec)**: Data Science & ML Pipeline (`feature/ds-pipeline`)
-2. **Dev (Backend Lead)**: Backend FastAPI, REST API & Security (`feature/fastapi-api`)
-3. **Pooja (Frontend Lead)**: React Dashboard, Tailwind UI & Visualizations (`feature/react-ui`)
-4. **Vishvam (Docs & Non-Tech Lead)**: Documentation, PRD, & Viva Reports (`docs/`, `PRD.md`)
+1. **Jeet Shah (Project Lead, ML, Security, Full Frontend & Docs)**: Data Science & ML Pipeline, Full React 19 Frontend Architecture & Visuals, OWASP Security Hardening & Invariant Tests, Core Documentation & ADRs.
+2. **Dev (Backend & Security Contributor)**: FastAPI REST API, Routing Architecture & Endpoints, CORS & Rate Limiting.
+3. **Pooja (Frontend Contributor)**: Baseline Frontend Scaffolding & Base UI Layout Setup.
+4. **Vishvam (Asset Acquisition & Data Support)**: Player Headshot & Face Image Acquisition and Cataloging.
 
 ### Reference Documents:
 - **Design Taste & Anti-Slop**: Refer to [DESIGN.md](../DESIGN.md) & [design-taste.md](rules/design-taste.md)

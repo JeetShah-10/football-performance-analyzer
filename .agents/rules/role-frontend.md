@@ -1,7 +1,7 @@
-# Frontend Lead Rules (Member 3)
+# Frontend Contributor Rules (Pooja)
 
 ## Scope
-- Focus Area: `frontend/`
+- Focus Area: `frontend/` (Foundational Scaffolding & Base UI Layouts)
 - Branch: `feature/react-ui`
 
 ## Guidelines for Antigravity AI

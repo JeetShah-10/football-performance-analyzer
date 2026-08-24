@@ -1,7 +1,7 @@
-# Backend Lead Rules (Member 2)
+# Backend & Security Contributor Rules (Dev)
 
 ## Scope
-- Focus Area: `backend/main.py`, `backend/api/`
+- Focus Area: `backend/main.py`, `backend/routers/`, `backend/schemas/`
 - Branch: `feature/fastapi-api`
 
 ## Guidelines for Antigravity AI
