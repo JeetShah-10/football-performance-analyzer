@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import elevenLogo from '../assets/Eleven-logo.webp';
 
 const NAV_TABS = [
   { path: '/explorer', label: 'EXPLORER' },
@@ -39,7 +40,7 @@ export default function Navbar() {
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         aria-label="Main navigation"
-        className="relative flex items-center justify-between rounded-2xl bg-[#060A10]/60 backdrop-blur-2xl backdrop-saturate-[180%] border border-white/[0.12] border-t-white/[0.22] shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_20px_50px_rgba(0,0,0,0.7),0_2px_6px_rgba(0,0,0,0.3)] px-6 sm:px-8 lg:px-10 py-3 sm:py-3.5 transition-all overflow-hidden"
+        className="relative flex items-center justify-between rounded-2xl bg-[#060A10]/60 backdrop-blur-2xl backdrop-saturate-[180%] border border-white/[0.12] border-t-white/[0.22] shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_20px_50px_rgba(0,0,0,0.7),0_2px_6px_rgba(0,0,0,0.3)] px-6 sm:px-8 lg:px-10 py-2.5 sm:py-3 transition-all overflow-hidden"
       >
         {/* Spell: Liquid Glass Specular Spotlight Layer */}
         <div
@@ -50,37 +51,18 @@ export default function Navbar() {
           }}
         />
 
-        {/* Left: Prominent Brand "11" Monogram & Wordmark */}
+        {/* Left: Prominent Eleven Brand Logo & Wordmark */}
         <Link
           to="/"
-          className="relative z-10 flex items-center gap-3 group transition-transform active:scale-95 shrink-0"
+          className="relative z-10 flex items-center gap-3.5 group transition-transform active:scale-95 shrink-0"
           title="Eleven — Football Intelligence Platform"
         >
-          <svg
-            width="32"
-            height="28"
-            viewBox="0 0 32 28"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="text-white group-hover:text-[#FF4E32] transition-colors"
-          >
-            {/* Bold Italic 11 */}
-            <path
-              d="M 5 6 L 10 2 V 26 H 5 M 10 26 H 15"
-              stroke="currentColor"
-              strokeWidth="3.4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M 17 6 L 22 2 V 26 H 17 M 22 26 H 27"
-              stroke="currentColor"
-              strokeWidth="3.4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          <span className="font-black tracking-[0.28em] text-base sm:text-lg text-white group-hover:text-[#FF4E32] transition-colors">
+          <img
+            src={elevenLogo}
+            alt="Eleven Logo"
+            className="h-10 sm:h-11 md:h-12 w-auto object-contain brightness-110 group-hover:brightness-125 transition-all drop-shadow-[0_0_18px_rgba(255,78,50,0.35)]"
+          />
+          <span className="font-heading font-extrabold tracking-[0.24em] text-lg sm:text-xl md:text-2xl text-white group-hover:text-[#FF4E32] transition-colors">
             ELEVEN
           </span>
         </Link>
