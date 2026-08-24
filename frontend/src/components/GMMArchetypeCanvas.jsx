@@ -73,10 +73,13 @@ export default function GMMArchetypeCanvas({
       };
     });
 
+    const values = GMM_METRICS.map((m) => statsObj[m.key]?.percentile || 50);
+
     return [
       {
         label: selectedCluster?.cluster_name || 'Archetype',
         color: theme.color,
+        values,
         stats: statsObj,
       },
     ];
@@ -126,11 +129,11 @@ export default function GMMArchetypeCanvas({
 
   // SVG Geometry for Gaussian Bell Curve
   const svgWidth = 800;
-  const svgHeight = 135;
+  const svgHeight = 180;
   const svgPadLeft = 45;
   const svgPadRight = 35;
-  const svgPadTop = 18;
-  const svgPadBottom = 22;
+  const svgPadTop = 15;
+  const svgPadBottom = 25;
 
   const plotW = svgWidth - svgPadLeft - svgPadRight;
   const plotH = svgHeight - svgPadTop - svgPadBottom;
@@ -143,13 +146,13 @@ export default function GMMArchetypeCanvas({
   const clusterAreaPath = `${clusterCurvePath} L ${scaleCurveX(curveData.clusterPoints[curveData.clusterPoints.length - 1].x)} ${svgHeight - svgPadBottom} L ${scaleCurveX(curveData.clusterPoints[0].x)} ${svgHeight - svgPadBottom} Z`;
 
   return (
-    <div className={`flex flex-col h-full min-h-0 gap-2.5 overflow-hidden ${className}`}>
+    <div className={`flex flex-col h-full min-h-0 gap-3 overflow-hidden ${className}`}>
       
       {/* 1. TOP HERO: ARCHETYPE IDENTITY & BADGE */}
       <div className="p-3.5 rounded-3xl bg-[#03151F]/90 backdrop-blur-xl border border-white/10 shadow-2xl flex items-center justify-between gap-3 shrink-0">
         <div className="flex items-center gap-3 min-w-0">
           <div
-            className="w-11 h-11 rounded-2xl flex items-center justify-center border-2 shrink-0 shadow-lg"
+            className="w-10 h-10 rounded-2xl flex items-center justify-center border-2 shrink-0 shadow-lg"
             style={{
               borderColor: theme.color,
               backgroundColor: theme.bg,
@@ -178,14 +181,16 @@ export default function GMMArchetypeCanvas({
         </p>
       </div>
 
-      {/* 2. EXPANDED UPPER WORKBENCH (Generous space for 8D Radar Footprint & Statistical Divergence Matrix) */}
-      <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-12 gap-2.5 overflow-hidden">
+      {/* 2. UPPER WORKBENCH (Generous space for 8D Radar Footprint & Statistical Divergence Matrix) */}
+      <div className="h-[270px] shrink-0 grid grid-cols-1 md:grid-cols-12 gap-3 overflow-hidden">
         
-        {/* Left (5 cols): 8D Tactical Radar Centroid (Expanded size) */}
+        {/* Left (5 cols): 8D Tactical Radar Centroid */}
         <div className="md:col-span-5 h-full p-3.5 rounded-3xl bg-[#000810] border border-white/[0.08] shadow-2xl flex flex-col items-center justify-between relative overflow-hidden">
-          <div className="w-full flex items-center justify-between text-[10px] font-mono uppercase tracking-wider text-[#8FA3AD] font-bold pb-1 border-b border-white/[0.06] shrink-0">
-            <span>Tactical Radar Footprint</span>
-            <span className="text-white">8 Dimensions</span>
+          <div className="w-full flex items-center justify-between text-[10px] font-mono uppercase tracking-wider text-[#8FA3AD] font-bold pb-1.5 border-b border-white/[0.06] shrink-0">
+            <span>Archetype Centroid DNA</span>
+            <span className="font-extrabold truncate max-w-[130px]" style={{ color: theme.color }}>
+              {selectedCluster.cluster_name}
+            </span>
           </div>
 
           <div className="w-full flex-1 flex items-center justify-center pt-1 min-h-0">
@@ -193,7 +198,7 @@ export default function GMMArchetypeCanvas({
               data={radarData}
               metrics={GMM_METRICS}
               levels={3}
-              size={215}
+              size={205}
             >
               <RadarGrid showLabels={false} />
               <RadarLabels />
@@ -202,7 +207,7 @@ export default function GMMArchetypeCanvas({
           </div>
         </div>
 
-        {/* Right (7 cols): z-Score Divergence Matrix Grid (Expanded & Comfortable) */}
+        {/* Right (7 cols): z-Score Divergence Matrix Grid */}
         <div className="md:col-span-7 h-full p-3.5 rounded-3xl bg-[#000810] border border-white/[0.08] shadow-2xl flex flex-col gap-2 overflow-hidden">
           <div className="flex items-center justify-between pb-1.5 border-b border-white/[0.08] shrink-0">
             <div className="flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-white">
@@ -280,11 +285,11 @@ export default function GMMArchetypeCanvas({
 
       </div>
 
-      {/* 3. LOWER GAUSSIAN PROBABILITY STUDIO (Compact Strip with Zero Clutter & Zero Math Formula) */}
-      <div className="h-[185px] shrink-0 p-3 rounded-3xl bg-[#000810] border border-white/[0.08] shadow-2xl flex flex-col justify-between overflow-hidden">
+      {/* 3. LOWER GAUSSIAN PROBABILITY STUDIO (Spacious, Clean & Zero Clutter) */}
+      <div className="flex-1 min-h-0 p-3.5 rounded-3xl bg-[#000810] border border-white/[0.08] shadow-2xl flex flex-col justify-between overflow-hidden">
         
         {/* Studio Header & Metric Chips */}
-        <div className="flex flex-wrap items-center justify-between gap-2 shrink-0 pb-1 border-b border-white/[0.08]">
+        <div className="flex flex-wrap items-center justify-between gap-2 shrink-0 pb-1.5 border-b border-white/[0.08]">
           <div className="flex items-center gap-2">
             <GMMCurveIcon className="w-3.5 h-3.5" style={{ color: theme.color }} />
             <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-white">
@@ -318,7 +323,7 @@ export default function GMMArchetypeCanvas({
         </div>
 
         {/* Clean High-Resolution SVG Bell Curve Plot */}
-        <div className="flex-1 w-full flex items-center justify-center min-h-0 my-0.5">
+        <div className="flex-1 w-full flex items-center justify-center min-h-0 my-1">
           <svg
             viewBox={`0 0 ${svgWidth} ${svgHeight}`}
             className="w-full h-full max-h-full overflow-visible select-none"
@@ -352,7 +357,7 @@ export default function GMMArchetypeCanvas({
               return (
                 <g key={pct} transform={`translate(${tx}, ${svgHeight - svgPadBottom})`}>
                   <line y1="0" y2="4" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
-                  <text y="14" fill="rgba(255,255,255,0.4)" fontSize="8" fontFamily="monospace" textAnchor="middle">
+                  <text y="14" fill="rgba(255,255,255,0.4)" fontSize="8.5" fontFamily="monospace" textAnchor="middle">
                     {val.toFixed(2)}
                   </text>
                 </g>
@@ -400,18 +405,6 @@ export default function GMMArchetypeCanvas({
               </g>
             )}
           </svg>
-        </div>
-
-        {/* Clean Telemetry Readout */}
-        <div className="flex items-center justify-between text-[9.5px] font-mono text-[#8FA3AD] pt-1 border-t border-white/[0.06] shrink-0">
-          <div className="flex items-center gap-3">
-            <span>Archetype Mean = <strong className="text-white">{curveData.cMean.toFixed(2)}</strong></span>
-            <span>Positional Mean = <strong className="text-white">{curveData.pMean.toFixed(2)}</strong></span>
-            <span>Spread (σ) = <strong className="text-white">{curveData.stdDev.toFixed(2)}</strong></span>
-          </div>
-          <span className="font-bold px-2 py-0.5 rounded bg-white/[0.06] text-white">
-            Δz = {curveData.stat.z_score_diff >= 0 ? `+${curveData.stat.z_score_diff.toFixed(2)}` : curveData.stat.z_score_diff.toFixed(2)}σ
-          </span>
         </div>
 
       </div>

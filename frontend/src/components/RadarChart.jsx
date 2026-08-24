@@ -170,16 +170,26 @@ export function RadarLabels({ className = '' }) {
 }
 
 export function RadarArea({ index = 0, showPoints = false, className = '' }) {
-  const { data, center, radius, numAxes, angleSlice } = useContext(RadarContext);
+  const { data, center, radius, numAxes, angleSlice, metrics } = useContext(RadarContext);
   const item = data[index];
 
-  if (!item || !item.values || !numAxes) return null;
+  if (!item || !numAxes) return null;
+
+  const rawValues = item.values || (metrics ? metrics.map((m) => {
+    const key = typeof m === 'object' ? (m.key || m.id || m.feature) : m;
+    const stat = item.stats?.[key];
+    if (typeof stat === 'number') return stat;
+    if (stat && typeof stat.percentile === 'number') return stat.percentile;
+    return 50;
+  }) : null);
+
+  if (!rawValues || !rawValues.length) return null;
 
   const color = item.color || (index === 0 ? '#FFB800' : '#38B6FF');
   const filterId = `url(#bklit-glow-${index})`;
   const gradId = `url(#bklit-grad-${index})`;
 
-  const points = item.values.map((val, idx) => {
+  const points = rawValues.map((val, idx) => {
     const pct = typeof val === 'number' ? val : 50;
     const r = Math.max(0.12, Math.min(1.0, pct / 100)) * radius;
     const angle = angleSlice * idx - Math.PI / 2;

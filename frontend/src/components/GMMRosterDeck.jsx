@@ -103,10 +103,13 @@ export default function GMMRosterDeck({
       };
     });
 
+    const values = GMM_METRICS.map((m) => statsObj[m.key]?.percentile || 50);
+
     return [
       {
         label: selectedPlayer.player_name,
         color: clusterTheme.color,
+        values,
         stats: statsObj,
       },
     ];
@@ -208,14 +211,18 @@ export default function GMMRosterDeck({
               </div>
             </div>
 
-            {/* BKLit Radar Chart Snapshot */}
-            <div className="flex-1 min-h-[160px] p-2 rounded-2xl bg-[#03151F]/50 border border-white/[0.06] flex items-center justify-center relative overflow-hidden">
-              <div className="w-full h-full flex items-center justify-center scale-90">
+            {/* Player Radar Chart Snapshot */}
+            <div className="flex-1 min-h-[160px] p-2 rounded-2xl bg-[#03151F]/50 border border-white/[0.06] flex flex-col items-center justify-between relative overflow-hidden">
+              <div className="w-full flex items-center justify-between text-[9.5px] font-mono text-[#8FA3AD] pb-1 border-b border-white/[0.04] shrink-0 px-1">
+                <span>Player Tactical Profile</span>
+                <span className="font-bold text-white truncate max-w-[120px]">{selectedPlayer.player_name}</span>
+              </div>
+              <div className="w-full flex-1 flex items-center justify-center min-h-0">
                 <RadarChart
                   data={selectedRadarData}
                   metrics={GMM_METRICS}
                   levels={3}
-                  size={190}
+                  size={180}
                 >
                   <RadarGrid showLabels={false} />
                   <RadarLabels />
