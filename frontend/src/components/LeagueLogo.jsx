@@ -15,11 +15,11 @@ export const LEAGUE_CONFIGS = {
     color: '#38B6FF',
     secondaryColor: '#68C5F2',
     textColor: 'text-[#38B6FF]',
-    glow: 'rgba(56, 182, 255, 0.35)',
+    glow: 'rgba(56, 182, 255, 0.45)',
     barGradient: 'bg-gradient-to-r from-[#38B6FF] to-[#68C5F2]',
     barShadow: 'shadow-[0_0_12px_rgba(56,182,255,0.45)]',
     badge: 'bg-[#38B6FF]/15 text-[#68C5F2] border-[#38B6FF]/40',
-    padding: 'p-1.5 sm:p-2',
+    padding: 'p-1 sm:p-1.5',
   },
   'La Liga': {
     name: 'La Liga',
@@ -30,11 +30,11 @@ export const LEAGUE_CONFIGS = {
     color: '#D63A2B',
     secondaryColor: '#FF6A59',
     textColor: 'text-[#D63A2B]',
-    glow: 'rgba(214, 58, 43, 0.35)',
+    glow: 'rgba(214, 58, 43, 0.45)',
     barGradient: 'bg-gradient-to-r from-[#D63A2B] to-[#FF6A59]',
     barShadow: 'shadow-[0_0_12px_rgba(214,58,43,0.45)]',
     badge: 'bg-[#D63A2B]/15 text-[#FF6A59] border-[#D63A2B]/40',
-    padding: 'p-1.5 sm:p-2',
+    padding: 'p-1 sm:p-1.5',
   },
   'Bundesliga': {
     name: 'Bundesliga',
@@ -45,11 +45,11 @@ export const LEAGUE_CONFIGS = {
     color: '#D20515',
     secondaryColor: '#FF4D5A',
     textColor: 'text-[#D20515]',
-    glow: 'rgba(210, 5, 21, 0.35)',
+    glow: 'rgba(210, 5, 21, 0.45)',
     barGradient: 'bg-gradient-to-r from-[#D20515] to-[#FF4D5A]',
     barShadow: 'shadow-[0_0_12px_rgba(210,5,21,0.45)]',
     badge: 'bg-[#D20515]/15 text-[#FF4D5A] border-[#D20515]/40',
-    padding: 'p-1.5 sm:p-2',
+    padding: 'p-1 sm:p-1.5',
   },
   'Serie A': {
     name: 'Serie A',
@@ -60,11 +60,11 @@ export const LEAGUE_CONFIGS = {
     color: '#0066FF',
     secondaryColor: '#4D94FF',
     textColor: 'text-[#0066FF]',
-    glow: 'rgba(0, 102, 255, 0.35)',
+    glow: 'rgba(0, 102, 255, 0.45)',
     barGradient: 'bg-gradient-to-r from-[#0066FF] to-[#4D94FF]',
     barShadow: 'shadow-[0_0_12px_rgba(0,102,255,0.45)]',
     badge: 'bg-[#0066FF]/15 text-[#4D94FF] border-[#0066FF]/40',
-    padding: 'p-1 sm:p-1.5',
+    padding: 'p-0.5 sm:p-1',
   },
   'Ligue 1': {
     name: 'Ligue 1',
@@ -75,11 +75,11 @@ export const LEAGUE_CONFIGS = {
     color: '#A3E635',
     secondaryColor: '#BEF264',
     textColor: 'text-[#A3E635]',
-    glow: 'rgba(163, 230, 53, 0.18)',
+    glow: 'rgba(163, 230, 53, 0.35)',
     barGradient: 'bg-gradient-to-r from-[#84CC16] to-[#A3E635]',
     barShadow: 'shadow-[0_0_8px_rgba(163,230,53,0.3)]',
     badge: 'bg-[#A3E635]/15 text-[#BEF264] border-[#A3E635]/40',
-    padding: 'p-1.5 sm:p-2',
+    padding: 'p-1 sm:p-1.5',
   },
 };
 
@@ -132,14 +132,14 @@ export default function LeagueLogo({ leagueName, size = 'lg', className = '' }) 
   const config = getLeagueConfig(leagueName);
 
   const sizeClasses = {
-    xs: 'w-6 h-6',
-    sm: 'w-8 h-8',
-    md: 'w-10 h-10 sm:w-11 sm:h-11',
-    studio: 'w-12 h-12 sm:w-14 sm:h-14',
-    lg: 'w-14 h-14 sm:w-16 sm:h-16',
-    hero: 'w-16 h-16 sm:w-20 sm:h-20',
-    xl: 'w-20 h-20 sm:w-24 sm:h-24',
-  }[size] || 'w-14 h-14 sm:w-16 sm:h-16';
+    xs: 'w-7 h-7',
+    sm: 'w-9 h-9 sm:w-10 sm:h-10',
+    md: 'w-12 h-12 sm:w-14 sm:h-14',
+    studio: 'w-14 h-14 sm:w-16 sm:h-16',
+    lg: 'w-16 h-16 sm:w-20 sm:h-20',
+    hero: 'w-20 h-20 sm:w-24 sm:h-24',
+    xl: 'w-24 h-24 sm:w-28 sm:h-28',
+  }[size] || 'w-16 h-16 sm:w-20 sm:h-20';
 
   return (
     <div
@@ -147,14 +147,14 @@ export default function LeagueLogo({ leagueName, size = 'lg', className = '' }) 
       style={{
         backgroundColor: config.bgColor,
         borderColor: config.borderColor,
-        boxShadow: `0 0 20px ${config.glow}, 0 8px 30px rgba(0, 0, 0, 0.85), inset 0 1px 1px rgba(255,255,255,0.4)`,
+        boxShadow: `0 0 24px ${config.glow}, 0 8px 30px rgba(0, 0, 0, 0.85), inset 0 1px 1px rgba(255,255,255,0.4)`,
       }}
       title={config.name}
     >
       <img
         src={config.src}
         alt={config.name}
-        className="w-full h-full object-contain select-none pointer-events-none filter drop-shadow-md"
+        className="w-full h-full object-contain select-none pointer-events-none filter drop-shadow-md scale-105"
       />
     </div>
   );

@@ -36,17 +36,22 @@ export default function App() {
     setShowSplash(false);
   };
 
+  const hideNavbar =
+    location.pathname === '/u21-scouting' ||
+    location.pathname === '/pitch-map';
   const hideFooter =
     location.pathname.startsWith('/player/') ||
     location.pathname === '/compare' ||
-    location.pathname === '/explorer';
+    location.pathname === '/explorer' ||
+    location.pathname === '/u21-scouting' ||
+    location.pathname === '/pitch-map';
 
   return (
     <div className="min-h-screen bg-[#000C12] text-[#F5F1EB] flex flex-col font-sans">
       {/* Initial Double Stairs Splash Preloader & Logo Reveal */}
       {showSplash && <SplashLoader onComplete={handleSplashComplete} />}
 
-      <Navbar />
+      {!hideNavbar && <Navbar />}
       <main className="flex-1">
         <Suspense
           fallback={
