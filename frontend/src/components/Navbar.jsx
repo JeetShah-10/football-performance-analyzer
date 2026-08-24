@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import elevenLogo from '../assets/Eleven-logo.webp';
+import elevenLogo from '../assets/Eleven-logo-2.webp';
 
 const NAV_TABS = [
   { path: '/explorer', label: 'EXPLORER' },
