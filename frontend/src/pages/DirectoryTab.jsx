@@ -76,11 +76,11 @@ export default function DirectoryTab() {
         <img
           src={bgExplorer}
           alt=""
-          className="w-full h-full object-cover object-center opacity-65 filter brightness-100 contrast-105 saturate-130"
+          className="w-full h-full object-cover object-center opacity-40 filter brightness-90 contrast-105 saturate-120"
         />
         {/* Calibrated dark-to-translucent gradient overlays for optimal card contrast */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#000C12]/60 via-[#000C12]/35 to-[#000C12]/85" />
-        <div className="absolute inset-0 bg-gradient-to-tr from-[#FF3C00]/[0.16] via-transparent to-[#FF6A00]/[0.08] mix-blend-screen" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#000C12]/75 via-[#000C12]/50 to-[#000C12]/90" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-[#FF3C00]/[0.10] via-transparent to-[#FF6A00]/[0.05] mix-blend-screen" />
       </div>
 
       <div className="relative z-10 flex flex-col gap-6 max-w-[1536px] w-full mx-auto px-4 sm:px-6 pt-28 pb-12">
