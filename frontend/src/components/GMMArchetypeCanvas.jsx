@@ -82,7 +82,7 @@ export default function GMMArchetypeCanvas({
     ];
   }, [liveStats, selectedCluster, theme]);
 
-  // Active metric curve calculation for the Expanded Gaussian Studio
+  // Active metric curve calculation for the Gaussian Studio
   const curveData = useMemo(() => {
     const stat = liveStats.find((s) => s.feature === activeCurveMetric) || liveStats[0] || {
       cluster_mean: 2.0,
@@ -124,13 +124,13 @@ export default function GMMArchetypeCanvas({
     );
   }
 
-  // SVG Geometry for Expanded Bell Curve
+  // SVG Geometry for Gaussian Bell Curve
   const svgWidth = 800;
-  const svgHeight = 220;
+  const svgHeight = 135;
   const svgPadLeft = 45;
   const svgPadRight = 35;
-  const svgPadTop = 25;
-  const svgPadBottom = 35;
+  const svgPadTop = 18;
+  const svgPadBottom = 22;
 
   const plotW = svgWidth - svgPadLeft - svgPadRight;
   const plotH = svgHeight - svgPadTop - svgPadBottom;
@@ -145,7 +145,7 @@ export default function GMMArchetypeCanvas({
   return (
     <div className={`flex flex-col h-full min-h-0 gap-2.5 overflow-hidden ${className}`}>
       
-      {/* 1. TOP HERO: ARCHETYPE IDENTITY & RADAR PROFILE */}
+      {/* 1. TOP HERO: ARCHETYPE IDENTITY & BADGE */}
       <div className="p-3.5 rounded-3xl bg-[#03151F]/90 backdrop-blur-xl border border-white/10 shadow-2xl flex items-center justify-between gap-3 shrink-0">
         <div className="flex items-center gap-3 min-w-0">
           <div
@@ -178,21 +178,22 @@ export default function GMMArchetypeCanvas({
         </p>
       </div>
 
-      {/* 2. MIDDLE SPLIT: 8D RADAR FOOTPRINT + STATISTICAL DIVERGENCE MATRIX */}
-      <div className="h-[210px] shrink-0 grid grid-cols-1 md:grid-cols-12 gap-2.5 overflow-hidden">
+      {/* 2. EXPANDED UPPER WORKBENCH (Generous space for 8D Radar Footprint & Statistical Divergence Matrix) */}
+      <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-12 gap-2.5 overflow-hidden">
         
-        {/* Left (4 cols): 8D Tactical Radar Centroid */}
-        <div className="md:col-span-4 h-full p-2.5 rounded-3xl bg-[#000810] border border-white/[0.08] shadow-2xl flex flex-col items-center justify-center relative overflow-hidden">
-          <div className="absolute top-2.5 left-3 text-[9.5px] font-mono uppercase tracking-wider text-[#8FA3AD] font-bold">
-            Tactical Footprint
+        {/* Left (5 cols): 8D Tactical Radar Centroid (Expanded size) */}
+        <div className="md:col-span-5 h-full p-3.5 rounded-3xl bg-[#000810] border border-white/[0.08] shadow-2xl flex flex-col items-center justify-between relative overflow-hidden">
+          <div className="w-full flex items-center justify-between text-[10px] font-mono uppercase tracking-wider text-[#8FA3AD] font-bold pb-1 border-b border-white/[0.06] shrink-0">
+            <span>Tactical Radar Footprint</span>
+            <span className="text-white">8 Dimensions</span>
           </div>
 
-          <div className="w-full h-full flex items-center justify-center scale-90 pt-2">
+          <div className="w-full flex-1 flex items-center justify-center pt-1 min-h-0">
             <RadarChart
               data={radarData}
               metrics={GMM_METRICS}
               levels={3}
-              size={185}
+              size={215}
             >
               <RadarGrid showLabels={false} />
               <RadarLabels />
@@ -201,19 +202,19 @@ export default function GMMArchetypeCanvas({
           </div>
         </div>
 
-        {/* Right (8 cols): z-Score Divergence Matrix Grid */}
-        <div className="md:col-span-8 h-full p-3 rounded-3xl bg-[#000810] border border-white/[0.08] shadow-2xl flex flex-col gap-2 overflow-hidden">
-          <div className="flex items-center justify-between pb-1 border-b border-white/[0.08] shrink-0">
+        {/* Right (7 cols): z-Score Divergence Matrix Grid (Expanded & Comfortable) */}
+        <div className="md:col-span-7 h-full p-3.5 rounded-3xl bg-[#000810] border border-white/[0.08] shadow-2xl flex flex-col gap-2 overflow-hidden">
+          <div className="flex items-center justify-between pb-1.5 border-b border-white/[0.08] shrink-0">
             <div className="flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-white">
               <PitchProgressionIcon className="w-3.5 h-3.5 text-[#38B6FF]" />
               <span>Statistical Divergence Matrix (z-Score Δ)</span>
             </div>
             <span className="text-[9.5px] font-mono text-[#8FA3AD]">
-              Click metric to inspect Gaussian curve
+              Click metric to preview bell curve
             </span>
           </div>
 
-          <div className="flex-1 grid grid-cols-2 gap-1.5 overflow-y-auto custom-scrollbar pr-1">
+          <div className="flex-1 grid grid-cols-2 gap-2 overflow-y-auto custom-scrollbar pr-1">
             {liveStats.map((stat) => {
               const zVal = Number(stat.z_score_diff || 0);
               const isPositive = zVal >= 0;
@@ -225,39 +226,44 @@ export default function GMMArchetypeCanvas({
                   key={stat.feature}
                   type="button"
                   onClick={() => setActiveCurveMetric(stat.feature)}
-                  className={`p-1.5 px-2 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
+                  className={`p-2 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
                     isSelected
-                      ? 'bg-[#03151F] border-[#38B6FF]/60 shadow-sm'
+                      ? 'bg-[#03151F] border-[#38B6FF]/60 shadow-md'
                       : 'bg-[#000C12]/80 hover:bg-[#000C12] border-white/[0.06] hover:border-white/15'
                   }`}
                 >
-                  <div className="flex items-center justify-between text-[11px] font-mono">
+                  <div className="flex items-center justify-between text-xs font-mono">
                     <span className={`font-bold truncate ${isSelected ? 'text-[#38B6FF]' : 'text-white'}`}>
                       {stat.short}
                     </span>
                     <span
-                      className="text-[10px] font-extrabold font-mono"
+                      className="text-[11px] font-extrabold font-mono"
                       style={{ color: isPositive ? theme.color : '#8FA3AD' }}
                     >
                       {isPositive ? `+${zVal.toFixed(2)}σ` : `${zVal.toFixed(2)}σ`}
                     </span>
                   </div>
 
+                  <div className="flex items-center justify-between text-[9px] font-mono text-[#8FA3AD] mt-1">
+                    <span>Avg: <strong className="text-white">{stat.cluster_mean.toFixed(2)}</strong></span>
+                    <span>Pos: {stat.pos_mean.toFixed(2)}</span>
+                  </div>
+
                   {/* Dual-Direction z-Score Bar */}
-                  <div className="h-1.5 w-full bg-[#000407] rounded-full overflow-hidden relative flex mt-1">
+                  <div className="h-1.5 w-full bg-[#000407] rounded-full overflow-hidden relative flex mt-1.5">
                     <div className="w-1/2 h-full flex justify-end relative">
                       {!isPositive && (
                         <div
-                          className="h-full bg-[#5A7280]/80 rounded-l-full"
+                          className="h-full bg-[#5A7280]/80 rounded-l-full transition-all duration-300"
                           style={{ width: `${barPct}%` }}
                         />
                       )}
                     </div>
-                    <div className="w-[1px] h-full bg-white/30 z-10" />
+                    <div className="w-[1.5px] h-full bg-white/30 z-10" />
                     <div className="w-1/2 h-full flex justify-start relative">
                       {isPositive && (
                         <div
-                          className="h-full rounded-r-full"
+                          className="h-full rounded-r-full transition-all duration-300 shadow-sm"
                           style={{
                             width: `${barPct}%`,
                             backgroundColor: theme.color,
@@ -274,17 +280,17 @@ export default function GMMArchetypeCanvas({
 
       </div>
 
-      {/* 3. EXPANDED GAUSSIAN PROBABILITY DENSITY STUDIO (Large, Prominent Canvas) */}
-      <div className="flex-1 min-h-0 p-3.5 rounded-3xl bg-[#000810] border border-white/[0.08] shadow-2xl flex flex-col justify-between overflow-hidden">
+      {/* 3. LOWER GAUSSIAN PROBABILITY STUDIO (Compact Strip with Zero Clutter & Zero Math Formula) */}
+      <div className="h-[185px] shrink-0 p-3 rounded-3xl bg-[#000810] border border-white/[0.08] shadow-2xl flex flex-col justify-between overflow-hidden">
         
         {/* Studio Header & Metric Chips */}
-        <div className="flex flex-wrap items-center justify-between gap-2 shrink-0 pb-1.5 border-b border-white/[0.08]">
+        <div className="flex flex-wrap items-center justify-between gap-2 shrink-0 pb-1 border-b border-white/[0.08]">
           <div className="flex items-center gap-2">
-            <GMMCurveIcon className="w-4 h-4" style={{ color: theme.color }} />
-            <span className="text-xs font-mono font-bold uppercase tracking-wider text-white">
-              Gaussian Probability Density Studio
+            <GMMCurveIcon className="w-3.5 h-3.5" style={{ color: theme.color }} />
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-white">
+              Gaussian Probability Density Curve
             </span>
-            <span className="text-[10px] font-mono text-[#38B6FF] bg-[#38B6FF]/10 px-2 py-0.5 rounded border border-[#38B6FF]/20">
+            <span className="text-[9.5px] font-mono text-[#38B6FF] bg-[#38B6FF]/10 px-2 py-0.5 rounded border border-[#38B6FF]/20">
               {GMM_METRIC_MAP[activeCurveMetric]?.short}
             </span>
           </div>
@@ -298,7 +304,7 @@ export default function GMMArchetypeCanvas({
                   key={m.key}
                   type="button"
                   onClick={() => setActiveCurveMetric(m.key)}
-                  className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold transition-all cursor-pointer ${
+                  className={`px-2 py-0.5 rounded-lg text-[9.5px] font-mono font-bold transition-all cursor-pointer ${
                     isSelected
                       ? 'bg-[#38B6FF] text-[#000C12] shadow-sm'
                       : 'bg-white/[0.04] text-[#8FA3AD] hover:text-white'
@@ -311,8 +317,8 @@ export default function GMMArchetypeCanvas({
           </div>
         </div>
 
-        {/* Big High-Resolution SVG Bell Curve Plot */}
-        <div className="flex-1 w-full flex items-center justify-center min-h-0 my-1">
+        {/* Clean High-Resolution SVG Bell Curve Plot */}
+        <div className="flex-1 w-full flex items-center justify-center min-h-0 my-0.5">
           <svg
             viewBox={`0 0 ${svgWidth} ${svgHeight}`}
             className="w-full h-full max-h-full overflow-visible select-none"
@@ -346,7 +352,7 @@ export default function GMMArchetypeCanvas({
               return (
                 <g key={pct} transform={`translate(${tx}, ${svgHeight - svgPadBottom})`}>
                   <line y1="0" y2="4" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
-                  <text y="14" fill="rgba(255,255,255,0.4)" fontSize="8.5" fontFamily="monospace" textAnchor="middle">
+                  <text y="14" fill="rgba(255,255,255,0.4)" fontSize="8" fontFamily="monospace" textAnchor="middle">
                     {val.toFixed(2)}
                   </text>
                 </g>
@@ -371,18 +377,18 @@ export default function GMMArchetypeCanvas({
             {/* Positional Mean */}
             <g transform={`translate(${scaleCurveX(curveData.pMean)}, 0)`}>
               <line y1={svgPadTop} y2={svgHeight - svgPadBottom} stroke="#5A7280" strokeWidth="1.5" strokeDasharray="3,3" />
-              <rect x="-35" y={svgPadTop - 14} width="70" height="13" rx="3" fill="#000C12" stroke="#5A7280" strokeWidth="1" />
-              <text x="0" y={svgPadTop - 4} fill="#8FA3AD" fontSize="7.5" fontFamily="monospace" textAnchor="middle">
-                Pos μ: {curveData.pMean.toFixed(2)}
+              <rect x="-32" y={svgPadTop - 13} width="64" height="12" rx="3" fill="#000C12" stroke="#5A7280" strokeWidth="1" />
+              <text x="0" y={svgPadTop - 4} fill="#8FA3AD" fontSize="7" fontFamily="monospace" textAnchor="middle">
+                Pos: {curveData.pMean.toFixed(2)}
               </text>
             </g>
 
             {/* Archetype Centroid Mean */}
             <g transform={`translate(${scaleCurveX(curveData.cMean)}, 0)`}>
               <line y1={svgPadTop} y2={svgHeight - svgPadBottom} stroke={theme.color} strokeWidth="2" />
-              <rect x="-42" y={svgPadTop - 14} width="84" height="13" rx="3" fill="#000C12" stroke={theme.color} strokeWidth="1" />
-              <text x="0" y={svgPadTop - 4} fill={theme.color} fontSize="7.5" fontFamily="monospace" fontWeight="bold" textAnchor="middle">
-                Archetype μ: {curveData.cMean.toFixed(2)}
+              <rect x="-38" y={svgPadTop - 13} width="76" height="12" rx="3" fill="#000C12" stroke={theme.color} strokeWidth="1" />
+              <text x="0" y={svgPadTop - 4} fill={theme.color} fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle">
+                Archetype: {curveData.cMean.toFixed(2)}
               </text>
             </g>
 
@@ -390,25 +396,22 @@ export default function GMMArchetypeCanvas({
             {hoveredCurveX !== null && (
               <g transform={`translate(${scaleCurveX(hoveredCurveX)}, 0)`}>
                 <line y1={svgPadTop} y2={svgHeight - svgPadBottom} stroke="#38B6FF" strokeWidth="1" strokeDasharray="2,2" />
-                <circle cx="0" cy={scaleCurveY(curveData.clusterPoints.find((p) => Math.abs(p.x - hoveredCurveX) < 0.2)?.y || 0)} r="4" fill="#38B6FF" />
+                <circle cx="0" cy={scaleCurveY(curveData.clusterPoints.find((p) => Math.abs(p.x - hoveredCurveX) < 0.2)?.y || 0)} r="3.5" fill="#38B6FF" />
               </g>
             )}
           </svg>
         </div>
 
-        {/* Mathematical Telemetry Footer */}
-        <div className="flex items-center justify-between text-[10px] font-mono text-[#8FA3AD] pt-1 border-t border-white/[0.06] shrink-0">
+        {/* Clean Telemetry Readout */}
+        <div className="flex items-center justify-between text-[9.5px] font-mono text-[#8FA3AD] pt-1 border-t border-white/[0.06] shrink-0">
           <div className="flex items-center gap-3">
-            <span>Archetype μ = <strong className="text-white">{curveData.cMean.toFixed(2)}</strong></span>
-            <span>Positional μ = <strong className="text-white">{curveData.pMean.toFixed(2)}</strong></span>
-            <span>σ = <strong className="text-white">{curveData.stdDev.toFixed(2)}</strong></span>
+            <span>Archetype Mean = <strong className="text-white">{curveData.cMean.toFixed(2)}</strong></span>
+            <span>Positional Mean = <strong className="text-white">{curveData.pMean.toFixed(2)}</strong></span>
+            <span>Spread (σ) = <strong className="text-white">{curveData.stdDev.toFixed(2)}</strong></span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-[#38B6FF]">f(x) = (1 / σ√(2π)) e^(-½((x-μ)/σ)²)</span>
-            <span className="font-bold px-2 py-0.5 rounded bg-white/[0.06] text-white">
-              Δz = {curveData.stat.z_score_diff >= 0 ? `+${curveData.stat.z_score_diff.toFixed(2)}` : curveData.stat.z_score_diff.toFixed(2)}σ
-            </span>
-          </div>
+          <span className="font-bold px-2 py-0.5 rounded bg-white/[0.06] text-white">
+            Δz = {curveData.stat.z_score_diff >= 0 ? `+${curveData.stat.z_score_diff.toFixed(2)}` : curveData.stat.z_score_diff.toFixed(2)}σ
+          </span>
         </div>
 
       </div>
