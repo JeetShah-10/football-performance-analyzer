@@ -31,11 +31,25 @@ Welcome to the **Football Player Style Dashboard** project repository! This proj
 
 ---
 
-## 🤖 Antigravity AI IDE Instructions for Team Members
+## 🛠️ Development Standards & Verification
 
-Antigravity IDE automatically enforces rules across `.agents/`:
-- **PRD Specification**: [PRD.md](PRD.md)
-- **AI Rules File**: [.agents/AGENTS.md](file:///.agents/AGENTS.md)
-- **Design Taste**: [DESIGN.md](DESIGN.md)
-- **Security & Hardening**: [SECURITY.md](SECURITY.md)
-- **Collaboration Contracts**: [.agents/rules/collaboration-contract.md](file:///.agents/rules/collaboration-contract.md)
+Before submitting a Pull Request, ensure all local verification checks pass:
+
+1. **Backend Tests**:
+   ```bash
+   python -m pytest backend/tests/ -v
+   ```
+   *All 52 tests covering security headers, mathematical invariants, and endpoints must pass.*
+
+2. **Frontend Build & Lint**:
+   ```bash
+   cd frontend
+   npm run build
+   ```
+   *Production build must complete with zero errors or bundle warnings.*
+
+3. **Code Style**:
+   - Adhere to the design system tokens in [`DESIGN.md`](DESIGN.md).
+   - Follow OWASP API security hardening guidelines in [`SECURITY.md`](SECURITY.md).
+   - Review architectural decisions in [`docs/decisions/`](docs/decisions/).
+

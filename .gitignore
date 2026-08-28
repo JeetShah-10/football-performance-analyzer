@@ -55,4 +55,5 @@ frontend/*.local
 .DS_Store
 Thumbs.db
 scratch/
+.agents/
 

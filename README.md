@@ -181,11 +181,23 @@ Key architectural decisions and engineering trade-offs are formally documented i
 
 ## 🚀 Quickstart & Installation
 
-### 1. Prerequisites
-* **Python 3.10+** (Tested on Python 3.12 & 3.13)
-* **Node.js 18+** & **npm**
+> [!TIP]
+> For a comprehensive walkthrough including OS-specific setup, testing instructions, and troubleshooting FAQ, check the **[Complete Setup & User Guide](docs/SETUP_GUIDE.md)**.
 
-### 2. Backend Setup
+### Option A: 1-Click Automated Launch (Windows)
+* **Command Prompt / Explorer**: Double-click [`start_app.bat`](start_app.bat)
+* **PowerShell**: Run `.\start_app.ps1`
+*(Automatically verifies Python & Node.js, polls the backend until ML models are loaded into RAM, starts the frontend, and opens the dashboard in your browser).*
+
+---
+
+### Option B: Manual Terminal Launch (All Operating Systems)
+
+#### 1. Prerequisites
+* **Python 3.10+** (Tested on Python 3.12 & 3.13)
+* **Node.js 18+** (LTS) & **npm**
+
+#### 2. Backend Setup (Terminal 1)
 ```bash
 # Clone the repository
 git clone https://github.com/JeetShah-10/football-performance-analyzer.git
@@ -198,23 +210,19 @@ venv\Scripts\activate
 # On macOS/Linux:
 source venv/bin/activate
 
-# Install dependencies
+# Install dependencies and start server
 pip install -r backend/requirements.txt
-
-# Run the FastAPI server
-uvicorn backend.main:app --reload --port 8000
+python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload
 ```
 *API documentation available at `http://localhost:8000/docs`.*
 
-### 3. Frontend Setup
+#### 3. Frontend Setup (Terminal 2)
 ```bash
 # In a separate terminal
 cd frontend
 
-# Install dependencies
+# Install dependencies and start Vite
 npm install
-
-# Start the Vite development server
 npm run dev
 ```
 *Application available at `http://localhost:5173`.*
